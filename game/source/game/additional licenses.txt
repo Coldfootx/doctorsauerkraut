@@ -1,0 +1,2 @@
+not mentioned in the licenses file
+This game <a href="https://www.gnu.org/licenses/gpl.html">newest GPL</a>.<br>
