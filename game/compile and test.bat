@@ -1,3 +1,3 @@
 call compile.bat
 
-start "compiled game" /d ".\compiled\game\" game.exe
+.\compiled\game\game.exe
