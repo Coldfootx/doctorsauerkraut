@@ -2,6 +2,7 @@ MAP_W = 1024
 MAP_H = 1024
 WINDOW_W = 1000
 WINDOW_H = 600
+SAVEFILE_NAME = "savefile"
 
 do 
     function print_to_debug(text)
@@ -14,7 +15,7 @@ do
 
         love.window.setMode(WINDOW_W, WINDOW_H)
 
-        BUFFER = require("string.buffer")
+        local buffer = require("string.buffer")
 
         MAP = {}
         for i=1,MAP_W do
@@ -26,11 +27,23 @@ do
 
         SAVE = {MAP, 5, "aac"}
 
-        local encoded_tbl = BUFFER.encode(SAVE)
+        local f = assert(io.open(SAVEFILE_NAME, "wb"))
+        f:write(buffer.encode(SAVE))
+        f:close()
+
+        f = assert(io.open(SAVEFILE_NAME, "rb"))
+        SAVE = buffer.decode(f:read())
+        f:close()
+
+
+        local encoded_tbl = buffer.encode(SAVE)
         
         --love.data.encode("base64", "string", str))
 
-        SAVE = BUFFER.decode(encoded_tbl)
+        SAVE = buffer.decode(encoded_tbl)
+        
+        --love.data.encode("base64", "string", str))
+
 
         -- love.graphics.setColor(0,1,0)
     end
