@@ -1,7 +1,7 @@
 MAPW = 1024
 MAPH = 1024
 
-map = {}
+local map = {}
 for i=1,MAPW do
     map[i] = {}     -- create x
     for j=1,MAPH do
@@ -9,34 +9,19 @@ for i=1,MAPW do
     end
 end
 
-local tab = {map}
+local save = {map}
 
-local t = {}
-for n = 1, ITEMS do
-    t[n] = {}
-end
+local datastream = love.data.pack("data", "I", save)
 
-local time = os.clock()
-for n = 1, ITEMS do
-    table.insert(tab, t[n])
-end
-print(('table.insert: %.4f'):format(os.clock() - time))
+local FilePath = SKIN:MakePathAbsolute('./save/save1')
+local File = io.open(FilePath, 'w')
+File:write(datastream)
+File:close()
 
-local time = os.clock()
-for n = ITEMS, 1, -2 do
-    table.remove(tab, n)
-end
-print(('table.remove: %.4f'):format(os.clock() - time))
+local File = io.open(FilePath, 'r')
+datastream = io.read()
+save = love.data.unpack("I", datastream, 1)
 
-local time = os.clock()
-for m = 1, ITER do
-    for n = 1, #tab do
-        assert(tab[n])
-    end
-end
-    print(('table iterate: %.4f'):format(os.clock() - time))
+love.graphics.print(save[1][1]+" "+save[1][1]+" "+save[2][2], 400, 300)
 
-function love.draw()
-    love.graphics.print("Hello World", 400, 300)
-end
 
