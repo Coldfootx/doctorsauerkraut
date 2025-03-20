@@ -1,35 +1,42 @@
-MAPW = 1024
-MAPH = 1024
-WINDOWW = 1000
-WINDOWH = 800
+MAP_W = 1024
+MAP_H = 1024
+WINDOW_W = 1000
+WINDOW_H = 600
 
 do 
+    function print_to_debug(text)
+        love.graphics.setColor(0,1,0)
+        love.graphics.printf(text, 0, WINDOW_H-50, WINDOW_W)
+    end
+
     function love.load()
         -- image = love.graphics.newImage("assets/love-ball.png")
 
-        buffer = require("string.buffer")
+        love.window.setMode(WINDOW_W, WINDOW_H)
 
-        map = {}
-        for i=1,MAPW do
-            map[i] = {}     -- create x
-            for j=1,MAPH do
-                map[i][j] = 0
+        BUFFER = require("string.buffer")
+
+        MAP = {}
+        for i=1,MAP_W do
+            MAP[i] = {}     -- create x
+            for j=1,MAP_H do
+                MAP[i][j] = 0
             end
         end
 
-        save = {map, 5, "aac"}
+        SAVE = {MAP, 5, "aac"}
 
-        local encoded_tbl = buffer.encode(save)
+        local encoded_tbl = BUFFER.encode(SAVE)
         
         --love.data.encode("base64", "string", str))
 
-        save = buffer.decode(encoded_tbl)
+        SAVE = BUFFER.decode(encoded_tbl)
 
         -- love.graphics.setColor(0,1,0)
     end
     
     function love.draw()
-       --  love.graphics.draw(image, 400, 300)
-       love.graphics.printf(tostring(save[1][1])..tostring(save[2])..tostring(save[3]), 0, WINDOWH-50, WINDOWW)
+        --  love.graphics.draw(image, 400, 300)
+        print_to_debug(tostring(SAVE[1][1])..", "..tostring(SAVE[2])..", "..tostring(SAVE[3]))
     end
 end
