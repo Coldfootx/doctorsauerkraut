@@ -6,7 +6,7 @@ WINDOW_H = 600
 do 
     function print_to_debug(text)
         love.graphics.setColor(0,1,0)
-        love.graphics.printf(text, 0, WINDOW_H-50, WINDOW_W)
+        love.graphics.printf(text, 10, WINDOW_H-45, WINDOW_W)
     end
 
     function love.load()
@@ -37,6 +37,6 @@ do
     
     function love.draw()
         --  love.graphics.draw(image, 400, 300)
-        print_to_debug(tostring(SAVE[1][1])..", "..tostring(SAVE[2])..", "..tostring(SAVE[3]))
+        print_to_debug(tostring(tonumber(SAVE[1][1]))..", "..tostring(SAVE[2])..", "..tostring(SAVE[3]))
     end
 end
