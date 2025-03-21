@@ -7,7 +7,7 @@ SAVEFILE_NAME = "savefile"
 do 
     local love = require("love")
     local lume = require("lib.lume")
-    local libCompress = require("lib.LibCompress")
+    --local LibCompress = require("lib.LibCompress")
     
     local function print_to_debug(text)
         love.graphics.setColor(0,0,0)
@@ -37,7 +37,8 @@ do
 
         Save = {map, 5, "aac"}
 
-        local compressed = CompressHuffman(lume.serialize(Save))
+        --local compressed = LibCompress.CompressHuffman(lume.serialize(Save))
+        compressed = lume.serialize(Save)
 
         local file = assert(io.open(SAVEFILE_NAME, "wb"))
         file:write(compressed)
@@ -47,7 +48,7 @@ do
         compressed = file:read()
         file:close()
 
-        Save = lume.deserialize(DecompressHuffman(compressed))
+        Save = lume.deserialize(compressed)
     end
 
     function love.draw()

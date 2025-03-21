@@ -1,6 +1,31 @@
 local tables = {} -- tables that may be cleaned have to be kept here
 local tables_to_clean = {} -- list of tables by name (string) that may be reset to {} after a timeout
 
+local bit_band = bit.band
+local bit_bor = bit.bor
+local bit_lshift = bit.lshift
+local bit_rshift = bit.rshift
+
+local string_byte = string.byte
+local string_char = string.char
+local string_len = string.len
+local string_sub = string.sub
+
+local table_concat = table.concat
+local table_insert = table.insert
+local table_remove = table.remove
+
+local LibCompress = { _version = "revision 83" }
+
+--[[ local function setCleanupTables(...)
+	timeout = 15 -- empty tables after 15 seconds
+	if not LibCompress.frame:IsShown() then
+		LibCompress.frame:Show()
+	end
+	for i = 1, select("#",...) do
+		tables_to_clean[(select(i, ...))] = true
+	end
+end ]]--
 ----------------------------------------------------------------------
 ----------------------------------------------------------------------
 --
@@ -84,7 +109,7 @@ end
 
 -- word size for this huffman algorithm is 8 bits (1 byte).
 -- this means the best compression is representing 1 byte with 1 bit, i.e. compress to 0.125 of original size.
-function CompressHuffman(uncompressed)
+function LibCompress.CompressHuffman(uncompressed)
 	if type(uncompressed) ~= "string" then
 		return nil, "Can only compress strings"
 	end
@@ -114,7 +139,7 @@ function CompressHuffman(uncompressed)
 
 	-- Enqueue all leaf nodes into the first queue (by probability in increasing order,
 	-- so that the least likely item is in the head of the queue).
-	sort(leafs, function(a, b)
+	table.sort(leafs, function(a, b)
 		if a.weight < b.weight then
 			return true
 		elseif a.weight > b.weight then
@@ -275,7 +300,7 @@ function CompressHuffman(uncompressed)
 		return "\001"..uncompressed
 	end
 
-	setCleanupTables("Huffman_compressed", "Huffman_large_compressed")
+	--setCleanupTables("Huffman_compressed", "Huffman_large_compressed")
 	return compressed_string
 end
 
@@ -386,7 +411,7 @@ end
 tables.Huffman_uncompressed = {}
 tables.Huffman_large_uncompressed = {} -- will always be as big as the largest string ever decompressed. Bad, but clearing it every time takes precious time.
 
-function DecompressHuffman(compressed)
+function LibCompress.DecompressHuffman(compressed)
 	if not type(compressed) == "string" then
 		return nil, "Can only uncompress strings"
 	end
@@ -526,6 +551,8 @@ function DecompressHuffman(compressed)
 		end
 	end
 
-	setCleanupTables("Huffman_uncompressed", "Huffman_large_uncompressed")
+	--setCleanupTables("Huffman_uncompressed", "Huffman_large_uncompressed")
 	return table_concat(large_uncompressed, "", 1, large_uncompressed_size)..table_concat(uncompressed, "", 1, uncompressed_size)
 end
+
+return LibCompress
