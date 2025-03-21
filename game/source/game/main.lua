@@ -6,17 +6,17 @@ SAVEFILE_NAME = "savefile"
 
 do 
     local love = require("love")
-    local lume = require("lume")
+    local lume = require("lib.lume")
     
     local function print_to_debug(text)
-        love.graphics.setColor(0,1,0)
-        love.graphics.printf(text, 10, WINDOW_H-45, WINDOW_W)
-
         love.graphics.setColor(0,0,0)
         love.graphics.printf(text, 10+1, WINDOW_H-45, WINDOW_W)
         love.graphics.printf(text, 10-1, WINDOW_H-45, WINDOW_W)
         love.graphics.printf(text, 10, WINDOW_H-45+1, WINDOW_W)
         love.graphics.printf(text, 10, WINDOW_H-45-1, WINDOW_W)
+
+        love.graphics.setColor(0,1,0)
+        love.graphics.printf(text, 10, WINDOW_H-45, WINDOW_W)
     end
 
     function love.load()
@@ -25,34 +25,26 @@ do
         love.window.setMode(WINDOW_W, WINDOW_H)
 
         local buffer = require("string.buffer")
-        local lume = require("lume.lib")
 
-        Map = {}
+        local map = {}
         for i=1,MAP_W do
-            Map[i] = {}     -- create x
+            map[i] = {}     -- create x
             for j=1,MAP_H do
-                Map[i][j] = 0
+                map[i][j] = 0
             end
         end
 
-        Save = {Map, 5, "aac"}
+        Save = {map, 5, "aac"}
 
-        local serialized
-
-        for i=1,MAP_W do
-            for j=1,MAP_H do
-                serialized = serialized .. table.concat(Save[1])
-            end
-        end
-        
-        local file = assert(io.open(SAVEFILE_NAME, "w"))
+        --[[ local file = assert(io.open(SAVEFILE_NAME, "w"))
         file:write(serialized)
         file:close()
 
         local file = assert(io.open(SAVEFILE_NAME, "r"))
         serialized = io.read()
-        file:close()
-    
+        file:close() ]]--
+    end
+
     function love.draw()
         --  love.graphics.draw(image, 400, 300)
         print_to_debug(tostring(tostring(Save[1][2][5]))..", "..tostring(Save[2])..", "..tostring(Save[3]))
