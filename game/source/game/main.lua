@@ -36,13 +36,13 @@ do
 
         Save = {map, 5, "aac"}
 
-        --[[ local file = assert(io.open(SAVEFILE_NAME, "w"))
-        file:write(serialized)
+        local file = assert(io.open(SAVEFILE_NAME, "wb"))
+        file:write(lume.serialize(Save))
         file:close()
 
-        local file = assert(io.open(SAVEFILE_NAME, "r"))
-        serialized = io.read()
-        file:close() ]]--
+        local file = assert(io.open(SAVEFILE_NAME, "rb"))
+        Save = lume.deserialize(file:read())
+        file:close()
     end
 
     function love.draw()
