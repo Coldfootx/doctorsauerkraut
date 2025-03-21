@@ -2,7 +2,7 @@ not mentioned in the license file
 This game 
 <a href="https://www.gnu.org/licenses/gpl.html">newest GPL</a>.<br>
 
-Libraries
+----Libraries----
 
 lume
 https://github.com/rxi/lume
@@ -30,3 +30,17 @@ MIT
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 --
+
+
+## Title: Lib: Compress
+## Notes: Compression and Decompression library
+## Author: Galmok at Stormrage-EU (Horde) and JJSheets
+## Version: r86-release
+## X-Website: http://www.wowace.com/addons/libcompress/
+## X-Category: Library
+## X-eMail: galmok AT gmail DOT com, sheets DOT jeff AT gmail DOT com
+## X-License: GPL v2
+## LoadOnDemand: 1
+
+
+----Graphics----
