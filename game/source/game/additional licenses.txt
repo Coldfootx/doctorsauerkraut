@@ -2,6 +2,8 @@ not mentioned in the license file
 This game 
 <a href="https://www.gnu.org/licenses/gpl.html">newest GPL</a>.<br>
 
+Libraries
+
 lume
 https://github.com/rxi/lume
 MIT 

@@ -36,13 +36,17 @@ do
 
         Save = {map, 5, "aac"}
 
+        local compressed = love.data.compress("string", "zlib", lume.serialize(Save), 9)
+
         local file = assert(io.open(SAVEFILE_NAME, "wb"))
-        file:write(lume.serialize(Save))
+        file:write(compressed)
         file:close()
 
-        local file = assert(io.open(SAVEFILE_NAME, "rb"))
-        Save = lume.deserialize(file:read())
+        file = assert(io.open(SAVEFILE_NAME, "rb"))
+        compressed = file:read()
         file:close()
+
+        Save = lume.deserialize(love.data.decompress("string", "zlib", compressed))
     end
 
     function love.draw()
