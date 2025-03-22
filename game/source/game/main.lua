@@ -47,6 +47,13 @@ do
             -- etc.
         end
     end
+
+    local function translatexy(x1, y1)
+        local width, height = love.graphics.getDimensions( )
+        x1 = x1*width
+        y1 = y1*height
+        return x1, y1
+    end
     
     local function print_to_debug(text)
         love.graphics.setColor(0,0,0)
@@ -55,8 +62,9 @@ do
         love.graphics.printf(text, 10, WINDOW_H-45+1, WINDOW_W)
         love.graphics.printf(text, 10, WINDOW_H-45-1, WINDOW_W)
 
+        local width, height = translatexy(0.5, 0.5)
         love.graphics.setColor(0,1,0)
-        love.graphics.printf(text, 10, WINDOW_H-45, WINDOW_W)
+        love.graphics.printf(text, width, height, 800)
     end
 
     function love.load()
@@ -74,6 +82,8 @@ do
     end
 
     function love.draw()
-        print_to_debug(tostring(tostring(Save[1][2][5]))..", "..tostring(Save[2])..", "..tostring(Save[3])..", "..tostring(Save[4][1][2]))
+        local width, height = love.graphics.getDimensions( )
+        print_to_debug(tostring(tostring(Save[1][2][5]))..", "..tostring(Save[2])..", "..tostring(Save[3])..", "..tostring(Save[4][1][2]..", "..width.."x"..height))
+        --1536x864
     end
 end
