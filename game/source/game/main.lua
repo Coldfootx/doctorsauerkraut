@@ -54,7 +54,7 @@ do
         love.graphics.printf(text, 10, WINDOW_H-45+1, WINDOW_W)
         love.graphics.printf(text, 10, WINDOW_H-45-1, WINDOW_W)
 
-        local width, height = translatexy(0.05, 0.95)
+        local width, height = translatexy(0.01, 0.95)
         love.graphics.setColor(0,1,0)
         love.graphics.printf(text, width, height, 800)
     end
@@ -71,11 +71,13 @@ do
         end
 
         Save = {map, 5, "aac", { {1,"select"}, "select2" }}
+
+        Save = {map, positionx=0, positiony= 0}
     end
 
     function love.draw()
         local width, height = love.graphics.getDimensions( )
-        print_to_debug(tostring(tostring(Save[1][2][5]))..", "..tostring(Save[2])..", "..tostring(Save[3])..", "..tostring(Save[4][1][2]..", "..width.."x"..height..", "..love.window.getVSync()))
+        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync())
         --1536x864
     end
 end
