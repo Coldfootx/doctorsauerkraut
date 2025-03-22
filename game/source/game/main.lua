@@ -25,13 +25,16 @@ do
         Save = lume.deserialize(love.data.decompress("string", COMPRESSION, contents))
     end
 
+    local function quitmessage()
+        local pressedbutton = love.window.showMessageBox("Want to Quit?", "All saved progress will be lost", {"OK", "No!", escapebutton = 1})
+        if pressedbutton == 1 then
+            love.event.quit()
+        end
+    end
+
     function love.keypressed(key, scancode, isrepeat)
-        
         if key == "escape" then
-            local pressedbutton = love.window.showMessageBox("Want to Quit?", "All saved progress will be lost", {"OK", "No!", escapebutton = 0})
-            if pressedbutton == 1 then
-                love.event.quit()
-            end
+            quitmessage()
         end
     end
 
@@ -41,7 +44,7 @@ do
         y1 = y1*height
         return x1, y1
     end
-    
+
     local function print_to_debug(text)
         love.graphics.setColor(0,0,0)
         love.graphics.printf(text, 10+1, WINDOW_H-45, WINDOW_W)
@@ -49,7 +52,7 @@ do
         love.graphics.printf(text, 10, WINDOW_H-45+1, WINDOW_W)
         love.graphics.printf(text, 10, WINDOW_H-45-1, WINDOW_W)
 
-        local width, height = translatexy(0.5, 0.5)
+        local width, height = translatexy(0.05, 0.95)
         love.graphics.setColor(0,1,0)
         love.graphics.printf(text, width, height, 800)
     end
@@ -70,7 +73,7 @@ do
 
     function love.draw()
         local width, height = love.graphics.getDimensions( )
-        print_to_debug(tostring(tostring(Save[1][2][5]))..", "..tostring(Save[2])..", "..tostring(Save[3])..", "..tostring(Save[4][1][2]..", "..width.."x"..height))
+        print_to_debug(tostring(tostring(Save[1][2][5]))..", "..tostring(Save[2])..", "..tostring(Save[3])..", "..tostring(Save[4][1][2]..", "..width.."x"..height..", "..love.window.getVSync()))
         --1536x864
     end
 end
