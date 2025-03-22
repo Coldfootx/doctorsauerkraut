@@ -7,6 +7,8 @@ COMPRESSION = "zlib"
 
 --[[
     Clean folder %APPDATA%/LOVE to save some space!
+
+    Mini tiles hand-drawn with A* clicks
 ]] --
 
 do 
