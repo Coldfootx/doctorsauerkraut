@@ -120,7 +120,7 @@ function LibCompress:CompressLZW(uncompressed)
 			ressize = ressize + #r
 			result[#result + 1] = r
 		end
-
+		
 		if (#uncompressed + 1) > ressize then
 			return table_concat(result)
 		else
