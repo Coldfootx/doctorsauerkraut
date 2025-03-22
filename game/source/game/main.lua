@@ -39,7 +39,7 @@ do
         love.filesystem.write(SAVEFILE, compressed)
         local contents, size  = love.filesystem.read(SAVEFILE)
 
-        Save = lume.deserialize(love.data.decompress("string", "zlib", compressed))
+        Save = lume.deserialize(love.data.decompress("string", "zlib", contents))
     end
 
     function love.draw()
