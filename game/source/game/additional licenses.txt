@@ -6,6 +6,8 @@ This game
 ----Libraries----
 
 lume
+A collection of functions for Lua, geared towards game development.
+Using it for serializing data before compression.
 https://github.com/rxi/lume
 MIT 
 --
@@ -31,5 +33,6 @@ MIT
 -- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 -- SOFTWARE.
 --
+
 
 ----Graphics----
