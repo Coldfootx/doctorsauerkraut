@@ -28,23 +28,10 @@ do
     function love.keypressed(key, scancode, isrepeat)
         
         if key == "escape" then
-            local pressedbutton = love.window.showMessageBox("Want to Quit?", "All saved progress will be lost", {"OK", "No!", "Help", escapebutton = 2})
+            local pressedbutton = love.window.showMessageBox("Want to Quit?", "All saved progress will be lost", {"OK", "No!", escapebutton = 0})
             if pressedbutton == 1 then
                 love.event.quit()
             end
-        end
-    end
-
-    function dialogbox(title,message,buttons)
-        local title = "This is a title"
-        local message = "This is some text"
-        local buttons = {"OK", "No!", "Help", escapebutton = 2}
-
-        local pressedbutton = love.window.showMessageBox(title, message, buttons)
-        if pressedbutton == 1 then
-            -- "OK" was pressed
-        elseif pressedbutton == 2 then
-            -- etc.
         end
     end
 
