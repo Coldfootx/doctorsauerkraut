@@ -9,9 +9,10 @@ COMPRESSION = "zlib"
     Clean folder %APPDATA%/LOVE to save some space!
 
     Mini tiles hand-drawn with A* clicks
+    -pystyy polttamaan
 ]] --
 
-do 
+do
     local love = require("love")
     local lume = require("lib.lume")
 
@@ -53,6 +54,17 @@ do
         love.graphics.printf(text, width, height, 800)
     end
 
+    local function generate_map()
+
+        local map = {}
+        for i=1,MAP_W do
+            map[i] = {}     -- create x
+            for j=1,MAP_H do
+                map[i][j] = 0
+            end
+        end
+    end
+
     function love.load()
         love.window.setMode(WINDOW_W, WINDOW_H, {fullscreen=true})
 
@@ -63,15 +75,14 @@ do
                 map[i][j] = 0
             end
         end
+        Save = {map=map, positionx=0, positiony=0}
 
-        Save = {map, 5, "aac", { {1,"select"}, "select2" }}
-
-        Save = {map, positionx=0, positiony= 0}
+        generate_map()
     end
 
     function love.draw()
         local width, height = love.graphics.getDimensions( )
-        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync())
+        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", "..Save.positionx.." - "..Save.positiony..", "..Save.map[3][5])
         --1536x864
     end
 end
