@@ -48,12 +48,6 @@ do
     end
 
     local function print_to_debug(text)
-        love.graphics.setColor(0,0,0)
-        love.graphics.printf(text, 10+1, WINDOW_H-45, WINDOW_W)
-        love.graphics.printf(text, 10-1, WINDOW_H-45, WINDOW_W)
-        love.graphics.printf(text, 10, WINDOW_H-45+1, WINDOW_W)
-        love.graphics.printf(text, 10, WINDOW_H-45-1, WINDOW_W)
-
         local width, height = translatexy(0.01, 0.95)
         love.graphics.setColor(0,1,0)
         love.graphics.printf(text, width, height, 800)
