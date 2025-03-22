@@ -2,8 +2,7 @@ MAP_W = 1024
 MAP_H = 1024
 WINDOW_W = 1000
 WINDOW_H = 600
-GAMEFILES_FOLDER= "Gamefiles"
-SAVEFILE_NAME = "savefile"
+SAVEFILE = "savefile" -- +n
 
 do 
     local love = require("love")
@@ -21,15 +20,6 @@ do
     end
 
     function love.load()
-        -- image = love.graphics.newImage("assets/love-ball.png")
-        GAMEFILES_FOLDER = love.filesystem.getSaveDirectory().."/"..GAMEFILES_FOLDER
-        if love.filesystem.getInfo(GAMEFILES_FOLDER, "directory") == nil then
-            love.filesystem.createDirectory(GAMEFILES_FOLDER)
-        end
-
-
-        SAVEFILE_NAME = GAMEFILES_FOLDER.."/"..SAVEFILE_NAME
-
         love.window.setMode(WINDOW_W, WINDOW_H)
 
         local buffer = require("string.buffer")
@@ -46,24 +36,15 @@ do
 
         local compressed = love.data.compress("string", "zlib", lume.serialize(Save), 9)
 
-        Compressed3 = compressed
+        love.filesystem.write(SAVEFILE, compressed)
+        local contents, size  = love.filesystem.read(SAVEFILE)
 
-        local file = assert(io.open(SAVEFILE_NAME, "wb"))
-        file:write(compressed)
-        file:close()
-
-        file = assert(io.open(SAVEFILE_NAME, "rb"))
-        compressed = file:read()
-        file:close()
-
-        Compressed2 = compressed
-
-        --Save = lume.deserialize(love.data.decompress("string", "zlib", compressed))
+        Save = lume.deserialize(love.data.decompress("string", "zlib", compressed))
     end
 
     function love.draw()
         --  love.graphics.draw(image, 400, 300)
-        --print_to_debug(tostring(tostring(Save[1][2][5]))..", "..tostring(Save[2])..", "..tostring(Save[3])..", "..tostring(Save[4][1][2]))
-        print_to_debug(string.len(Compressed2).." "..string.len(Compressed3))
+        print_to_debug(tostring(tostring(Save[1][2][5]))..", "..tostring(Save[2])..", "..tostring(Save[3])..", "..tostring(Save[4][1][2]))
+        --print_to_debug(string.len(Compressed2).." "..string.len(Compressed3))
     end
 end
