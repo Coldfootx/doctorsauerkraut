@@ -8,6 +8,8 @@ FPS = 60
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
 RANDOMNESSFILE = "randomness"
+
+--STATEMENTS
 STARTING_RANDOMNESS = 300
 
 --[[
@@ -29,13 +31,12 @@ do
     else
         local contents, size = love.filesystem.read(RANDOMNESSFILE)
         choice = tonumber(contents)+1
-        if choice == 9223372036854775807 then
+        if choice > 2147483646 then
             choice = 0
         end
         love.filesystem.write(RANDOMNESSFILE, tostring(choice))
     end
     local randomgen = love.math.newRandomGenerator(choice)
-
     Randomseed = choice
 
     local function savefile(save_number)
