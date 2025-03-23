@@ -1,7 +1,7 @@
 MAP_W = 1024
 MAP_H = 1024
-WINDOW_W = 1920
-WINDOW_H = 1080 -- 16:9
+WINDOW_W = 1200
+WINDOW_H = 700
 
 FPS = 60
 
@@ -25,7 +25,6 @@ STARTING_RANDOMNESS = 300
 do
     local love = require("love")
     local lume = require("lib.lume")
-    local layouter = require("lib.layouter")
 
     local choice
     if love.filesystem.getInfo(RANDOMNESSFILE) == nil then
@@ -117,27 +116,13 @@ do
     end
 
     function love.mousepressed(x, y, mouse_button, is_touch)
-        layouter.processMouse(x, y, mouse_button, is_touch)
+
     end
 
     function love.load()
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
-        local px, py = love.window.toPixels(1,1)
-        love.window.setMode(1200, 700)
-
-        layouter.initialize()
-        --layouter.add({content = 'Main Menu', font = love.graphics.newFont(25), color = {13, 46, 63}})
-        --layouter.add()
-        layouter.add({content = love.graphics.newImage('graphics/doc.png'), type = 'image', key = 'logo'})
-        layouter.add({content = 'New Game', type = 'button', callback = function() newgame() end})
-        layouter.add({content = 'Save Game', type = 'button', callback = function() savegame() end})
-        layouter.add({content = 'Load Game', type = 'button', callback = function() loadgame() end})
-        layouter.add({content = 'Help', type = 'button', callback = function() helpwindow() end})
-        layouter.add({content = 'Quit', type = 'button', callback = function() quitgame() end})
-        layouter.prepare({x = layouter.COLUMN9, y = layouter.ROW2, direction = 'vertical', spacing = 'auto'})
-        
-
+        love.window.setMode(WINDOW_W, WINDOW_H)
 
         --initialize savedata
         local map = {}
@@ -147,7 +132,7 @@ do
                 map[i][j] = 0
             end
         end
-        Save = {seed_string="abc", map=map, positionx=0, positiony=0}
+        Save = {map=map, positionx=0, positiony=0}
 
         --generate all data
         MapTotal = generate_map()
@@ -166,11 +151,11 @@ do
     end
 
     function love.draw()
-        layouter.draw()
         if State.leaf == "mainmenu" then
-            local width, height = love.graphics.getDimensions()
-            print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
-            --1536x864
+
         end
+
+        local width, height = love.graphics.getDimensions()
+        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
 end
