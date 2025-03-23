@@ -3,7 +3,7 @@ MAP_H = 1024
 WINDOW_W = 1200
 WINDOW_H = 600
 
-FPS = 60
+FPS = 75
 
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
@@ -54,7 +54,7 @@ do
     end
 
     local function quitmessage()
-        local pressedbutton = love.window.showMessageBox("Want to Quit?", "All saved progress will be lost", {"OK", "No!", escapebutton = 1})
+        local pressedbutton = love.window.showMessageBox("Want to Quit?", "All unsaved progress will be lost", {"OK", "No!", escapebutton = 1})
         if pressedbutton == 1 then
             love.event.quit()
         end
