@@ -13,6 +13,9 @@ RANDOMNESSFILE = "randomness"
 STARTING_RANDOMNESS = 300
 
 --[[
+    url,website logo,game logo and game title- only 4 places for name
+    The grid comes with 24 columns and 16 rows
+
     Clean folder %APPDATA%/LOVE to save some space!
 
     Mini tiles hand-drawn with A* clicks
@@ -93,8 +96,48 @@ do
         return maptotal
     end
 
+    local function savegame()
+
+    end
+
+    local function newgame()
+
+    end
+
+    local function loadgame()
+
+    end
+
+    local function helpwindow()
+
+    end
+
+    local function quitgame()
+
+    end
+
+    function love.mousepressed(x, y, mouse_button, is_touch)
+        layouter.processMouse(x, y, mouse_button, is_touch)
+    end
+
     function love.load()
-    love.window.setVSync(1)
+        love.window.setVSync(1)
+        love.window.setTitle("Doctor Sauerkraut")
+        local px, py = love.window.toPixels(1,1)
+        love.window.setMode(1200, 700)
+
+        layouter.initialize()
+        --layouter.add({content = 'Main Menu', font = love.graphics.newFont(25), color = {13, 46, 63}})
+        --layouter.add()
+        layouter.add({content = love.graphics.newImage('graphics/doc.png'), type = 'image', key = 'logo'})
+        layouter.add({content = 'New Game', type = 'button', callback = function() newgame() end})
+        layouter.add({content = 'Save Game', type = 'button', callback = function() savegame() end})
+        layouter.add({content = 'Load Game', type = 'button', callback = function() loadgame() end})
+        layouter.add({content = 'Help', type = 'button', callback = function() helpwindow() end})
+        layouter.add({content = 'Quit', type = 'button', callback = function() quitgame() end})
+        layouter.prepare({x = layouter.COLUMN9, y = layouter.ROW2, direction = 'vertical', spacing = 'auto'})
+        
+
 
         --initialize savedata
         local map = {}
@@ -109,7 +152,7 @@ do
         --generate all data
         MapTotal = generate_map()
 
-        --State = {leaf = "mainmenu"}
+        State = {leaf = "mainmenu"}
         --GUI = {}
         --GUI["mainmenu"] = {buttons = {text="New Game",x=MAINMENU_LEFTALIAS,y=0.40},{text="Save Game",x=MAINMENU_LEFTALIAS,y=0.45},{text="Load Game",x= MAINMENU_LEFTALIAS,y=0.5},{text="Help",x=MAINMENU_LEFTALIAS,y=0.55},{text="Quit",x=MAINMENU_LEFTALIAS,y=0.60}}
     end
@@ -123,8 +166,11 @@ do
     end
 
     function love.draw()
-        local width, height = love.graphics.getDimensions()
-        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
-        --1536x864
+        layouter.draw()
+        if State.leaf == "mainmenu" then
+            local width, height = love.graphics.getDimensions()
+            print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
+            --1536x864
+        end
     end
 end
