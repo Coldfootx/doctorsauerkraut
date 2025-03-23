@@ -1,7 +1,7 @@
 MAP_W = 1024
 MAP_H = 1024
 WINDOW_W = 1200
-WINDOW_H = 700
+WINDOW_H = 600
 
 FPS = 60
 
@@ -116,13 +116,15 @@ do
     end
 
     function love.mousepressed(x, y, mouse_button, is_touch)
-
+        --[[if x < WINDOW_W and x > WINDOW_W-25 and y > 0 and y < 25 then
+            quitmessage()
+        end]]--
     end
 
     function love.load()
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
-        love.window.setMode(WINDOW_W, WINDOW_H)
+        love.window.setMode(WINDOW_W, WINDOW_H, {resizable =false, borderless= true, centered=true})
 
         --initialize savedata
         local map = {}
@@ -155,6 +157,8 @@ do
 
         end
 
+        --[[love.graphics.setColor(1,0,0)
+        love.graphics.rectangle("fill", WINDOW_W-25, 0, 25, 25)]]--
         local width, height = love.graphics.getDimensions()
         print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
