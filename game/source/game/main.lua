@@ -54,7 +54,7 @@ do
     end
 
     local function quitmessage()
-        local pressedbutton = love.window.showMessageBox("Want to Quit?", "All unsaved progress will be lost", {"OK", "No!", escapebutton = 1})
+        local pressedbutton = love.window.showMessageBox("Want to Quit?", "All unsaved progress will be lost", {"OK", "No!", escapebutton = 1}, "warning", true)
         if pressedbutton == 1 then
             love.event.quit()
         end
