@@ -3,6 +3,8 @@ MAP_H = 1024
 WINDOW_W = 1920
 WINDOW_H = 1080 -- 16:9
 
+FPS = 60
+
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
 
@@ -20,7 +22,7 @@ do
     local love = require("love")
     local lume = require("lib.lume")
 
-    local randomgen = love.math.newRandomGenerator(debug.getinfo(1).nups)
+    local randomgen = love.math.newRandomGenerator()
 
     local function savefile(save_number)
         local compressed = love.data.compress("string", COMPRESSION, lume.serialize(Save), 9)
@@ -96,11 +98,19 @@ do
         GUI["mainmenu"] = {buttons = {text="New Game",x=MAINMENU_LEFTALIAS,y=0.40},{text="Save Game",x=MAINMENU_LEFTALIAS,y=0.45},{text="Load Game",x= MAINMENU_LEFTALIAS,y=0.5},{text="Help",x=MAINMENU_LEFTALIAS,y=0.55},{text="Quit",x=MAINMENU_LEFTALIAS,y=0.60}}
     end
 
+    function love.update(dt)
+        local timeout = 1.0/FPS - dt
+        if timeout < 0 then
+            timeout = 0
+        end
+        love.timer.sleep(timeout)
+    end
+
     function love.draw()
         if State.leaf == "mainmenu" then
             
         end
-        local width, height = love.graphics.getDimensions( )
+        local width, height = love.graphics.getDimensions()
         print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal)
         --1536x864
     end
