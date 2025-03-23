@@ -62,7 +62,9 @@ do
     end
 
     function love.keypressed(key, scancode, isrepeat)
-        if key == "escape" then
+        if key == "escape" and State.leaf ~= 0 then
+            State.leaf = 0
+        else if key == "escape" then
             quitmessage()
         end
     end
@@ -137,7 +139,8 @@ do
         --generate all data
         MapTotal = generate_map()
 
-        State = {leaf = "mainmenu"}
+        State = {leaf = 0}
+        -- leaf 0 = main menu, 1 = new game,
     end
 
     function love.update(dt)
@@ -149,7 +152,7 @@ do
     end
 
     function love.draw()
-        if State.leaf == "mainmenu" then
+        if State.leaf == 0 then
 
         end
         local width, height = love.graphics.getDimensions()
