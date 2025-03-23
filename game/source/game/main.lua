@@ -2,9 +2,13 @@ MAP_W = 1024
 MAP_H = 1024
 WINDOW_W = 1920
 WINDOW_H = 1080 -- 16:9
+
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
 
+MAINMENU_LEFTALIAS = 0.4
+BUTTONW = 0.2
+BUTTONH = 0.05
 --[[
     Clean folder %APPDATA%/LOVE to save some space!
 
@@ -15,6 +19,8 @@ COMPRESSION = "zlib"
 do
     local love = require("love")
     local lume = require("lib.lume")
+
+    local randomgen = love.math.newRandomGenerator(debug.getinfo(1).nups)
 
     local function savefile(save_number)
         local compressed = love.data.compress("string", COMPRESSION, lume.serialize(Save), 9)
@@ -51,23 +57,29 @@ do
     local function print_to_debug(text)
         local width, height = translatexy(0.01, 0.95)
         love.graphics.setColor(0,1,0)
-        love.graphics.printf(text, width, height, 800)
+        love.graphics.print(text, width, height)
     end
 
     local function generate_map()
-
         local map = {}
+        local maptotal = 0
         for i=1,MAP_W do
             map[i] = {}     -- create x
             for j=1,MAP_H do
-                map[i][j] = 0
+                map[i][j] = randomgen:random(2)-1
+                maptotal = maptotal + map[i][j]
             end
         end
+
+        Save.map = map
+
+        return maptotal
     end
 
     function love.load()
         love.window.setMode(WINDOW_W, WINDOW_H, {fullscreen=true})
 
+        --initialize savedata
         local map = {}
         for i=1,MAP_W do
             map[i] = {}     -- create x
@@ -75,14 +87,21 @@ do
                 map[i][j] = 0
             end
         end
-        Save = {map=map, positionx=0, positiony=0}
+        Save = {seed_string="abc", map=map, positionx=0, positiony=0}
 
-        generate_map()
+        --generate all data
+        MapTotal = generate_map()
+        State = {leaf = "mainmenu"}
+        GUI = {}
+        GUI["mainmenu"] = {buttons = {text="New Game",x=MAINMENU_LEFTALIAS,y=0.40},{text="Save Game",x=MAINMENU_LEFTALIAS,y=0.45},{text="Load Game",x= MAINMENU_LEFTALIAS,y=0.5},{text="Help",x=MAINMENU_LEFTALIAS,y=0.55},{text="Quit",x=MAINMENU_LEFTALIAS,y=0.60}}
     end
 
     function love.draw()
+        if State.leaf == "mainmenu" then
+            
+        end
         local width, height = love.graphics.getDimensions( )
-        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", "..Save.positionx.." - "..Save.positiony..", "..Save.map[3][5])
+        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal)
         --1536x864
     end
 end
