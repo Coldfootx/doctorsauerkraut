@@ -64,7 +64,7 @@ do
     function love.keypressed(key, scancode, isrepeat)
         if key == "escape" and State.leaf ~= 0 then
             State.leaf = 0
-        else if key == "escape" then
+        elseif key == "escape" then
             quitmessage()
         end
     end
