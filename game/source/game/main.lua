@@ -14,11 +14,11 @@ STARTING_RANDOMNESS = 300
 
 --[[
     url,website logo,game logo and game title- only 4 places for name
-    The grid comes with 24 columns and 16 rows
 
     Clean folder %APPDATA%/LOVE to save some space!
 
     Mini tiles hand-drawn with A* clicks
+    -2 places
     -pystyy polttamaan
 ]] --
 
@@ -116,9 +116,6 @@ do
     end
 
     function love.mousepressed(x, y, mouse_button, is_touch)
-        --[[if x < WINDOW_W and x > WINDOW_W-25 and y > 0 and y < 25 then
-            quitmessage()
-        end]]--
     end
 
     function love.load()
@@ -140,8 +137,6 @@ do
         MapTotal = generate_map()
 
         State = {leaf = "mainmenu"}
-        --GUI = {}
-        --GUI["mainmenu"] = {buttons = {text="New Game",x=MAINMENU_LEFTALIAS,y=0.40},{text="Save Game",x=MAINMENU_LEFTALIAS,y=0.45},{text="Load Game",x= MAINMENU_LEFTALIAS,y=0.5},{text="Help",x=MAINMENU_LEFTALIAS,y=0.55},{text="Quit",x=MAINMENU_LEFTALIAS,y=0.60}}
     end
 
     function love.update(dt)
@@ -156,9 +151,6 @@ do
         if State.leaf == "mainmenu" then
 
         end
-
-        --[[love.graphics.setColor(1,0,0)
-        love.graphics.rectangle("fill", WINDOW_W-25, 0, 25, 25)]]--
         local width, height = love.graphics.getDimensions()
         print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
