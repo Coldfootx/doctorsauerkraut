@@ -34,5 +34,10 @@ MIT
 -- SOFTWARE.
 --
 
+Layouter
+UI Grid Layout Library for LÖVE 2D Game Engine
+© Daniel Duris, dusoft@staznosti.sk, 2023+
+https://github.com/nekromoff/layouter
+License: GNU LGPL 3.0
 
 ----Graphics----

@@ -7,10 +7,9 @@ FPS = 60
 
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
+RANDOMNESSFILE = "randomness"
+STARTING_RANDOMNESS = 300
 
-MAINMENU_LEFTALIAS = 0.4
-BUTTONW = 0.2
-BUTTONH = 0.05
 --[[
     Clean folder %APPDATA%/LOVE to save some space!
 
@@ -21,8 +20,23 @@ BUTTONH = 0.05
 do
     local love = require("love")
     local lume = require("lib.lume")
+    local layouter = require("lib.layouter")
 
-    local randomgen = love.math.newRandomGenerator()
+    local choice
+    if love.filesystem.getInfo(RANDOMNESSFILE) == nil then
+        love.filesystem.write(RANDOMNESSFILE, tostring(STARTING_RANDOMNESS))
+        choice = STARTING_RANDOMNESS
+    else
+        local contents, size = love.filesystem.read(RANDOMNESSFILE)
+        choice = tonumber(contents)+1
+        if choice == 9223372036854775807 then
+            choice = 0
+        end
+        love.filesystem.write(RANDOMNESSFILE, tostring(choice))
+    end
+    local randomgen = love.math.newRandomGenerator(choice)
+
+    Randomseed = choice
 
     local function savefile(save_number)
         local compressed = love.data.compress("string", COMPRESSION, lume.serialize(Save), 9)
@@ -79,7 +93,7 @@ do
     end
 
     function love.load()
-        love.window.setMode(WINDOW_W, WINDOW_H, {fullscreen=true})
+    love.window.setVSync(1)
 
         --initialize savedata
         local map = {}
@@ -93,9 +107,10 @@ do
 
         --generate all data
         MapTotal = generate_map()
-        State = {leaf = "mainmenu"}
-        GUI = {}
-        GUI["mainmenu"] = {buttons = {text="New Game",x=MAINMENU_LEFTALIAS,y=0.40},{text="Save Game",x=MAINMENU_LEFTALIAS,y=0.45},{text="Load Game",x= MAINMENU_LEFTALIAS,y=0.5},{text="Help",x=MAINMENU_LEFTALIAS,y=0.55},{text="Quit",x=MAINMENU_LEFTALIAS,y=0.60}}
+
+        --State = {leaf = "mainmenu"}
+        --GUI = {}
+        --GUI["mainmenu"] = {buttons = {text="New Game",x=MAINMENU_LEFTALIAS,y=0.40},{text="Save Game",x=MAINMENU_LEFTALIAS,y=0.45},{text="Load Game",x= MAINMENU_LEFTALIAS,y=0.5},{text="Help",x=MAINMENU_LEFTALIAS,y=0.55},{text="Quit",x=MAINMENU_LEFTALIAS,y=0.60}}
     end
 
     function love.update(dt)
@@ -107,11 +122,8 @@ do
     end
 
     function love.draw()
-        if State.leaf == "mainmenu" then
-            
-        end
         local width, height = love.graphics.getDimensions()
-        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal)
+        print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
         --1536x864
     end
 end
