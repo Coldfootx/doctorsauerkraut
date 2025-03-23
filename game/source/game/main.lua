@@ -15,7 +15,8 @@ STARTING_RANDOMNESS = 300
 --[[
     url,website logo,game logo and game title- only 4 places for name
 
-    Clean folder %APPDATA%/LOVE to save some space!
+    Clean folder %APPDATA%/LOVE to save some space! This folder is for starting directly from code.
+    And clean folder C:\Users\user\AppData\Roaming\gamename or \game. This folder is for starting from the compiled executable.
 
     Mini tiles hand-drawn with A* clicks
     -2 places
