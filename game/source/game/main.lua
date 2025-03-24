@@ -127,22 +127,20 @@ do
 
         return maptotal
     end
-    
+
     local function mousepressed(x, y, mouse_button)
         Buttons[State.leaf][State.hoover].call()
     end
 
-    local function mousemoved( x, y, dx, dy, istouch )
-        if State.leaf == 1 then
-            local len = table_len(Buttons[State.leaf])
-            for i=1,len do
-                local button = Buttons[State.leaf][i]
-                if x > button.x and x < button.x + button.width and y > button.y and y < button.y + button.height then
-                    State.hoover = i
-                    break
-                else
-                    State.hoover = 0
-                end
+    function love.mousemoved(x, y, dx, dy, istouch )
+        local len = table_len(Buttons[State.leaf])
+        for i=1,len do
+            local button = Buttons[State.leaf][i]
+            if x > button.x and x < button.x + button.width and y > button.y and y < button.y + button.height then
+                State.hoover = i
+                break
+            else
+                State.hoover = 0
             end
         end
     end
@@ -201,11 +199,6 @@ do
     end
 
     function love.update(dt)
-        local mx = love.mouse.getX()
-        local my = love.mouse.getY()
-
-        mousemoved(mx, my)
-
         local timeout = 1.0/FPS - dt
         if timeout < 0 then
             timeout = 0
