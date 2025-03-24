@@ -1,7 +1,5 @@
 MAP_W = 1024
 MAP_H = 1024
-WINDOW_W = 1200
-WINDOW_H = 600
 
 FPS = 75
 
@@ -17,6 +15,7 @@ STARTING_RANDOMNESS = 300
 
     Clean folder %APPDATA%/LOVE to save some space! This folder is for starting directly from code.
     And clean folder C:\Users\user\AppData\Roaming\gamename or \game. This folder is for starting from the compiled executable.
+    If you delete the file RANDOMNESSFILE (see above) you might generate old maps unless you add your own number to the new file the game creates containing STARTING_RANDOMNESS
 
     Mini tiles hand-drawn with A* clicks
     -2 places
@@ -101,7 +100,7 @@ do
     end
 
     local function translatexy(x1, y1)
-        local width, height = gfx.getDimensions( )
+        local width, height = gfx.getDimensions()
         x1 = x1*width
         y1 = y1*height
         return x1, y1
@@ -148,7 +147,9 @@ do
     function love.load()
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
-        love.window.setMode(WINDOW_W, WINDOW_H, {resizable =false, borderless= true, centered=true})
+        ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
+        local xd, yd = translatexy(0.1, 0.1)
+        love.window.setMode(ScreenWidth-xd, ScreenHeight-yd, {resizable =false, borderless= true})
 
         --initialize savedata
         local map = {}
@@ -162,13 +163,12 @@ do
 
         --generate all data
         MapTotal = generate_map()
-        local newgamebuttonh = 50
-        local newgamebuttonw = 300
-        local newbuttonstarth = 200
-        local newgamebuttonpadding = 10
+        local newgamebuttonw, newgamebuttonh = translatexy(0.25, 0.07)
+        local newbuttonstartw, newbuttonstarth = translatexy(0.5, 0.3)
+        local wt, newgamebuttonpadding = translatexy(0.5, 0.02)
         Buttons = { 
             {
-                {text="New Game", x = WINDOW_W/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = WINDOW_W/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = WINDOW_W/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = WINDOW_W/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = WINDOW_W/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}
+                {text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}
                 },
                 {
             },
