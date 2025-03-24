@@ -11,11 +11,11 @@ RANDOMNESSFILE = "randomness"
 STARTING_RANDOMNESS = 300
 
 --[[
-    url,website logo,game logo and game title and maybe game banner. only 4 places for name
+    url,website logo,game logo and game title and maybe game banner. only 5 places for name
 
     Clean folder %APPDATA%/LOVE to save some space! This folder is for starting directly from code.
     And clean folder C:\Users\user\AppData\Roaming\gamename or \game. This folder is for starting from the compiled executable.
-    If you delete the file RANDOMNESSFILE (see above) you might generate old maps unless you add your own number to the new file the game creates containing STARTING_RANDOMNESS
+    If you delete the file RANDOMNESSFILE (see above) it is regenerated but edit its contained number to avoid same map generation. Ideally it should be accumulating forever to avoid them.
 
     Mini tiles hand-drawn with A* clicks
     -2 places
@@ -63,6 +63,9 @@ do
         return n
     end
 
+    local function boostrandom()
+    end
+
     local function quitmessage()
         local pressedbutton = love.window.showMessageBox("Want to Quit?", "All unsaved progress will be lost", {"OK", "No!", enterbutton = 2}, "warning", true)
         if pressedbutton == 1 then
@@ -106,9 +109,20 @@ do
     end
 
     local function print_to_debug(text)
-        local width, height = translatexy(0.01, 0.95)
-        gfx.setColor(0,1,0)
+        local width, height = translatexy(0.01, 0.97)
+        gfx.setColor(1,1,1)
+        gfx.rectangle("fill",width,height,SmallFont:getWidth(text),SmallFont:getHeight(text))
         gfx.setFont(SmallFont)
+        gfx.setColor(0,0,0)
+        gfx.print(text, width-1, height)
+        gfx.print(text, width+1, height)
+        gfx.print(text, width, height-1)
+        gfx.print(text, width, height+1)
+        gfx.print(text, width-1, height+1)
+        gfx.print(text, width+1, height-1)
+        gfx.print(text, width+1, height+1)
+        gfx.print(text, width-1, height-1)
+        gfx.setColor(1,0,0)
         gfx.print(text, width, height)
     end
 
@@ -145,12 +159,19 @@ do
         end
     end
 
+    local function debugbox(value)
+        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
+    end
+
     function love.load()
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
-        ScreenWidth, ScreenHeight = ScreenWidth*0.9, ScreenHeight*0.9
-        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true})
+        local smallxfactor = 0.9
+        local smallyfactor = 0.88
+        ScreenWidth, ScreenHeight = ScreenWidth*smallxfactor, ScreenHeight*smallyfactor
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-smallyfactor)/2.0/2.0, x=ScreenWidth*(1-smallxfactor)/2.0})
+        y, x = love.window.getDesktopDimensions()
 
         --initialize savedata
         local map = {}
@@ -175,7 +196,7 @@ do
         local wt, newgamebuttonpadding = translatexy(0.5, 0.02)
         Buttons = { 
             {
-                {text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}
+                {text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}, --[[{text="Boost Random", x = ScreenWidth-newgamebuttonw*0.66-1, y = ScreenHeight-newgamebuttonh-1, width = newgamebuttonw*0.66, height=newgamebuttonh, call = boostrandom}]]--
                 },
                 {
             },
@@ -186,10 +207,6 @@ do
         
         State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png")}
         -- leaf 1 = main menu, 2 = new game,
-    end
-
-    local function debugbox(value)
-        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
     end
 
     function love.mousereleased(x, y, button, istouch, presses)
@@ -230,13 +247,14 @@ do
                 gfx.setColor(1,1,1)
                 gfx.rectangle("line", button.x, button.y, button.width, button.height)
                 local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
-                gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
+                gfx.print(button.text, button.x+button.width/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
             else
                 gfx.setColor(1,1,1)
                 gfx.rectangle("fill", button.x, button.y, button.width, button.height)
+                gfx.rectangle("line", button.x, button.y, button.width, button.height)
                 gfx.setColor(0,0,0)
                 local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
-                gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
+                gfx.print(button.text, button.x+button.width/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
             end
         end
 
