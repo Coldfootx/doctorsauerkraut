@@ -218,27 +218,31 @@ do
 
     function love.draw()
         if State.leaf == 1 then
-            gfx.setFont(BigFont)
-            local len = table_len(Buttons[State.leaf])
-            for i=1,len do
-                local button = Buttons[State.leaf][i]
-                if State.hoover == i then
-                    gfx.setColor(0,0,0)
-                    gfx.rectangle("fill", button.x, button.y, button.width, button.height)
-                    gfx.setColor(1,1,1)
-                    gfx.rectangle("line", button.x, button.y, button.width, button.height)
-                    local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
-                    gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
-                else
-                    gfx.setColor(1,1,1)
-                    gfx.rectangle("fill", button.x, button.y, button.width, button.height)
-                    gfx.setColor(0,0,0)
-                    local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
-                    gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
-                end
-            end
-
+            local mx, my = translatexy(0, 0.2)
+            gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
+            gfx.draw(State.logo, 0, 0)
         end
+
+        gfx.setFont(BigFont)
+        local len = table_len(Buttons[State.leaf])
+        for i=1,len do
+            local button = Buttons[State.leaf][i]
+            if State.hoover == i then
+                gfx.setColor(0,0,0)
+                gfx.rectangle("fill", button.x, button.y, button.width, button.height)
+                gfx.setColor(1,1,1)
+                gfx.rectangle("line", button.x, button.y, button.width, button.height)
+                local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
+                gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
+            else
+                gfx.setColor(1,1,1)
+                gfx.rectangle("fill", button.x, button.y, button.width, button.height)
+                gfx.setColor(0,0,0)
+                local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
+                gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
+            end
+        end
+        
         local width, height = gfx.getDimensions()
         print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
