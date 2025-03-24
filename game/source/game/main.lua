@@ -11,7 +11,7 @@ RANDOMNESSFILE = "randomness"
 STARTING_RANDOMNESS = 300
 
 --[[
-    url,website logo,game logo and game title- only 4 places for name
+    url,website logo,game logo and game title and maybe game banner. only 4 places for name
 
     Clean folder %APPDATA%/LOVE to save some space! This folder is for starting directly from code.
     And clean folder C:\Users\user\AppData\Roaming\gamename or \game. This folder is for starting from the compiled executable.
@@ -109,6 +109,7 @@ do
     local function print_to_debug(text)
         local width, height = translatexy(0.01, 0.95)
         gfx.setColor(0,1,0)
+        gfx.setFont(SmallFont)
         gfx.print(text, width, height)
     end
 
@@ -136,7 +137,8 @@ do
         if State.leaf == 1 then
             local len = table_len(Buttons[State.leaf])
             for i=1,len do
-                if x > Buttons[State.leaf][i].x and x < Buttons[State.leaf][i].x + Buttons[State.leaf][i].width and y > Buttons[State.leaf][i].y and y <Buttons[State.leaf][i].y + Buttons[State.leaf][i].height then
+                local button = Buttons[State.leaf][i]
+                if x > button.x and x < button.x + button.width and y > button.y and y < button.y + button.height then
                     State.hoover = i
                     break
                 else
@@ -151,7 +153,8 @@ do
         love.window.setTitle("Doctor Sauerkraut")
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
         local xd, yd = translatexy(0.1, 0.1)
-        love.window.setMode(ScreenWidth-xd, ScreenHeight-yd, {resizable =false, borderless= true})
+        ScreenWidth, ScreenHeight = ScreenWidth-xd, ScreenHeight-yd
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true})
 
         --initialize savedata
         local map = {}
@@ -165,6 +168,12 @@ do
 
         --generate all data
         MapTotal = generate_map()
+
+        local fontsize, y = translatexy(0.01,0.01)
+        SmallFont = gfx.newFont(fontsize)
+        fontsize, y = translatexy(0.02, 0.02)
+        BigFont = gfx.newFont(fontsize)
+
         local newgamebuttonw, newgamebuttonh = translatexy(0.25, 0.07)
         local newbuttonstartw, newbuttonstarth = translatexy(0.5, 0.3)
         local wt, newgamebuttonpadding = translatexy(0.5, 0.02)
@@ -179,7 +188,7 @@ do
             }
         }
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = love.graphics.newImage("graphics/logo.png")}
         -- leaf 1 = main menu, 2 = new game,
     end
 
@@ -194,8 +203,8 @@ do
     end
 
     function love.update(dt)
-        local 	mx = love.mouse.getX()
-        local	my = love.mouse.getY()
+        local mx = love.mouse.getX()
+        local my = love.mouse.getY()
 
         mousemoved(mx, my)
 
@@ -209,18 +218,23 @@ do
 
     function love.draw()
         if State.leaf == 1 then
-            gfx.setColor(1,1,1)
+            gfx.setFont(BigFont)
             local len = table_len(Buttons[State.leaf])
-            
             for i=1,len do
+                local button = Buttons[State.leaf][i]
                 if State.hoover == i then
                     gfx.setColor(0,0,0)
-                    gfx.rectangle("fill", Buttons[State.leaf][i].x, Buttons[State.leaf][i].y, Buttons[State.leaf][i].width, Buttons[State.leaf][i].height)
+                    gfx.rectangle("fill", button.x, button.y, button.width, button.height)
                     gfx.setColor(1,1,1)
-                    gfx.rectangle("line", Buttons[State.leaf][i].x, Buttons[State.leaf][i].y, Buttons[State.leaf][i].width, Buttons[State.leaf][i].height)
+                    gfx.rectangle("line", button.x, button.y, button.width, button.height)
+                    local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
+                    gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
                 else
                     gfx.setColor(1,1,1)
-                    gfx.rectangle("fill", Buttons[State.leaf][i].x, Buttons[State.leaf][i].y, Buttons[State.leaf][i].width, Buttons[State.leaf][i].height)
+                    gfx.rectangle("fill", button.x, button.y, button.width, button.height)
+                    gfx.setColor(0,0,0)
+                    local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
+                    gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
                 end
             end
 
