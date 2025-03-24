@@ -129,12 +129,11 @@ do
         return maptotal
     end
     
-    function love.mousepressed(x, y, mouse_button, is_touch)
+    local function mousepressed(x, y, mouse_button)
         Buttons[State.leaf][State.hoover].call()
-        Randomseed = Randomseed+1
     end
 
-    function love.mousemoved( x, y, dx, dy, istouch )
+    local function mousemoved( x, y, dx, dy, istouch )
         if State.leaf == 1 then
             local len = table_len(Buttons[State.leaf])
             for i=1,len do
@@ -182,11 +181,27 @@ do
         -- leaf 1 = main menu, 2 = new game,
     end
 
+    local function debugbox(value)
+        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
+    end
+
+    function love.mousereleased(x, y, button, istouch, presses)
+        if button == 1 then 
+            Buttons[State.leaf][State.hoover].call()
+        end
+    end
+
     function love.update(dt)
+        local 	mx = love.mouse.getX()
+        local	my = love.mouse.getY()
+
+        mousemoved(mx, my)
+
         local timeout = 1.0/FPS - dt
         if timeout < 0 then
             timeout = 0
         end
+
         love.timer.sleep(timeout)
     end
 
