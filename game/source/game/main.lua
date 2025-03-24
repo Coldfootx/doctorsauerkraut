@@ -170,7 +170,7 @@ do
         local smallxfactor = 0.9
         local smallyfactor = 0.88
         ScreenWidth, ScreenHeight = ScreenWidth*smallxfactor, ScreenHeight*smallyfactor
-        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-smallyfactor)/2.0/2.0, x=ScreenWidth*(1-smallxfactor)/2.0})
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-smallyfactor)/2.0, x=ScreenWidth*(1-smallxfactor)/2.0})
         y, x = love.window.getDesktopDimensions()
 
         --initialize savedata
