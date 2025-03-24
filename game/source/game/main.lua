@@ -100,9 +100,8 @@ do
     end
 
     local function translatexy(x1, y1)
-        local width, height = gfx.getDimensions()
-        x1 = x1*width
-        y1 = y1*height
+        x1 = x1*ScreenWidth
+        y1 = y1*ScreenHeight
         return x1, y1
     end
 
@@ -152,8 +151,7 @@ do
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
-        local xd, yd = translatexy(0.1, 0.1)
-        ScreenWidth, ScreenHeight = ScreenWidth-xd, ScreenHeight-yd
+        ScreenWidth, ScreenHeight = ScreenWidth*0.9, ScreenHeight*0.9
         love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true})
 
         --initialize savedata
