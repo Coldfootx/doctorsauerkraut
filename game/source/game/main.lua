@@ -139,6 +139,8 @@ do
                 if x > Buttons[State.leaf][i].x and x < Buttons[State.leaf][i].x + Buttons[State.leaf][i].width and y > Buttons[State.leaf][i].y and y <Buttons[State.leaf][i].y + Buttons[State.leaf][i].height then
                     State.hoover = i
                     break
+                else
+                    State.hoover = 0
                 end
             end
         end
@@ -186,7 +188,7 @@ do
     end
 
     function love.mousereleased(x, y, button, istouch, presses)
-        if button == 1 then 
+        if button == 1 and State.hoover ~= 0 then
             Buttons[State.leaf][State.hoover].call()
         end
     end
