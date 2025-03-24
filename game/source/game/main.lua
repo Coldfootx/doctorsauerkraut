@@ -188,7 +188,7 @@ do
             }
         }
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = love.graphics.newImage("graphics/logo.png")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png")}
         -- leaf 1 = main menu, 2 = new game,
     end
 
@@ -218,9 +218,15 @@ do
 
     function love.draw()
         if State.leaf == 1 then
-            local mx, my = translatexy(0, 0.2)
+            gfx.setColor(0,0.5,0)
+            gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
+            gfx.setColor(255, 255, 255, 255)
+            gfx.push()
+            gfx.scale(ScreenHeight/State.bg:getHeight(), ScreenHeight/State.bg:getHeight())
+            gfx.draw(State.bg, 0,0)
+            gfx.pop()
+            local mx, my = translatexy(0, 0.1)
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
-            gfx.draw(State.logo, 0, 0)
         end
 
         gfx.setFont(BigFont)
@@ -242,7 +248,7 @@ do
                 gfx.print(button.text, ScreenWidth/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
             end
         end
-        
+
         local width, height = gfx.getDimensions()
         print_to_debug(width.."x"..height..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
