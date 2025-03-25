@@ -231,7 +231,7 @@ do
             if State.hoover == -2 then
                 State.hoover = 0
             else
-                love.window.minimize()
+                quitmessage()
             end
         elseif x > ScreenWidth-2*State.banner:getHeight() and x < ScreenWidth-State.banner:getHeight() and y > 0 and y < State.banner:getHeight() then
             if State.hoover == -2 then
