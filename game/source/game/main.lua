@@ -248,7 +248,8 @@ do
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
             gfx.setColor(255, 255, 255, 255)
             gfx.push()
-            gfx.scale(ScreenHeight/State.bg:getHeight(), ScreenHeight/State.bg:getHeight())
+            local scale = ScreenHeight/State.bg:getHeight()
+            gfx.scale(scale, scale)
             gfx.draw(State.bg, 0,0)
             gfx.pop()
             local mx, my = translatexy(0, 0.1)
@@ -294,7 +295,13 @@ do
             gfx.setColor(CommandLine.color)
         end
         gfx.rectangle("fill", CommandLine.x, CommandLine.y, CommandLine.width, CommandLine.height)
+        gfx.setColor(255, 255, 255, 255)
+        gfx.push()
+        local scale = CommandLine.height/CommandLine.button:getHeight()
+        gfx.scale(scale, scale)
+        gfx.draw(CommandLine.button, (CommandLine.x + CommandLine.width-CommandLine.button:getWidth())/scale, CommandLine.y/scale)
+        gfx.pop()
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed.." xx "..CommandLine.x + CommandLine.width-CommandLine.button:getWidth().." "..CommandLine.y)
     end
 end
