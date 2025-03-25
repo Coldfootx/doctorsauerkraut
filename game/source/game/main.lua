@@ -1,5 +1,6 @@
 SCREENSPACE = 0.88
 SMALLFONT = 0.0125
+SMALLFONTDRAWS = 6
 BIGFONT = 0.02
 
 MAP_W = 1024
@@ -117,17 +118,19 @@ do
         gfx.setColor(1,1,1)
         gfx.rectangle("fill",width,height,SmallFont:getWidth(text),SmallFont:getHeight(text))
         gfx.setFont(SmallFont)
-        --[[gfx.setColor(0,0,0)
-        gfx.print(text, width-1, height)
-        gfx.print(text, width+1, height)
-        gfx.print(text, width, height-1)
-        gfx.print(text, width, height+1)
-        gfx.print(text, width-1, height+1)
-        gfx.print(text, width+1, height-1)
-        gfx.print(text, width+1, height+1)
-        gfx.print(text, width-1, height-1)]]--
         gfx.setColor(1,0,0)
-        gfx.print(text, width, height)
+        for i=1, SMALLFONTDRAWS do
+            --[[gfx.setColor(0,0,0)
+            gfx.print(text, width-1, height)
+            gfx.print(text, width+1, height)
+            gfx.print(text, width, height-1)
+            gfx.print(text, width, height+1)
+            gfx.print(text, width-1, height+1)
+            gfx.print(text, width+1, height-1)
+            gfx.print(text, width+1, height+1)
+            gfx.print(text, width-1, height-1)]]--
+            gfx.print(text, width, height)
+        end
     end
 
     local function generate_map()
@@ -231,16 +234,6 @@ do
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
         end
 
-        --first after custom leaves is banner
-        for i=1,ScreenWidth do
-            gfx.draw(State.banner, i-1, 0)
-        end
-        local text = "Doctor Sauerkraut"
-        gfx.setColor(1,1,1)
-        for i=1, 6 do
-            gfx.print(text, ScreenWidth/2.0 - SmallFont:getWidth(text)/2.0, State.banner:getHeight()/2.0-SmallFont:getHeight(text)/2.0)
-        end
-
         gfx.setFont(BigFont)
         local len = table_len(Buttons[State.leaf])
         for i=1,len do
@@ -262,8 +255,18 @@ do
             end
         end
 
-        for i=1, 6 do
-            print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
+        --first after custom leaves is banner
+        gfx.setFont(SmallFont)
+        gfx.setColor(255, 255, 255, 255)
+        for i=1,ScreenWidth do
+            gfx.draw(State.banner, i-1, 0)
         end
+        local text = "Doctor Sauerkraut"
+        gfx.setColor(1,1,1)
+        for i=1, SMALLFONTDRAWS do
+            gfx.print(text, ScreenWidth/2.0 - SmallFont:getWidth(text)/2.0, State.banner:getHeight()/2.0-SmallFont:getHeight(text)/2.0)
+        end
+
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
 end
