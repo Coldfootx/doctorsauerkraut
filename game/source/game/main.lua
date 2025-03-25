@@ -154,16 +154,20 @@ do
     end
 
     function love.mousemoved(x, y, dx, dy, istouch )
+        if x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height and State.hoover ~= -2 then
+            State.hoover = -1
+        elseif (x < CommandLine.x or x > CommandLine.x + CommandLine.width or y < CommandLine.y or y > CommandLine.y + CommandLine.height) and State.hoover == -1 then
+            State.hoover = 0
+        end
         local len = table_len(Buttons[State.leaf])
         for i=1,len do
             local button = Buttons[State.leaf][i]
             if x > button.x and x < button.x + button.width and y > button.y and y < button.y + button.height then
                 State.hoover = i
                 break
-            else
-                State.hoover = 0
             end
         end
+
     end
 
     local function debugbox(value)
@@ -201,14 +205,21 @@ do
 
         Buttons = {{}}
         Buttons[1] = {{text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
+
+        local commandlinewidth=ScreenWidth/1.4
+        CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}}
         
         State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png"), banner = gfx.newImage("graphics/banner.png")}
         -- leaf 1 = main menu, 2 = new game,
     end
 
     function love.mousereleased(x, y, button, istouch, presses)
-        if button == 1 and State.hoover ~= 0 then
+        if button == 1 and State.hoover > 0 then
             Buttons[State.leaf][State.hoover].call()
+        elseif x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height then
+            State.hoover = -2
+        elseif (x < CommandLine.x or x > CommandLine.x + CommandLine.width or y < CommandLine.y or y > CommandLine.y + CommandLine.height) and State.hoover < 0 then
+            State.hoover = 0
         end
     end
 
@@ -266,6 +277,13 @@ do
         for i=1, SMALLFONTDRAWS do
             gfx.print(text, ScreenWidth/2.0 - SmallFont:getWidth(text)/2.0, State.banner:getHeight()/2.0-SmallFont:getHeight(text)/2.0)
         end
+
+        if State.hoover >= 0 then
+            gfx.setColor(CommandLine.color)
+        else
+            gfx.setColor(CommandLine.focusedcolor)
+        end
+        gfx.rectangle("fill", CommandLine.x, CommandLine.y, CommandLine.width, CommandLine.height)
 
         print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
