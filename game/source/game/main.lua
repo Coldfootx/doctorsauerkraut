@@ -153,21 +153,30 @@ do
         Buttons[State.leaf][State.hoover].call()
     end
 
-    function love.mousemoved(x, y, dx, dy, istouch )
-        if x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height and State.hoover ~= -2 then
-            State.hoover = -1
-        elseif (x < CommandLine.x or x > CommandLine.x + CommandLine.width or y < CommandLine.y or y > CommandLine.y + CommandLine.height) and State.hoover == -1 then
-            State.hoover = 0
-        end
-        local len = table_len(Buttons[State.leaf])
-        for i=1,len do
-            local button = Buttons[State.leaf][i]
-            if x > button.x and x < button.x + button.width and y > button.y and y < button.y + button.height then
-                State.hoover = i
-                break
+    local function find_hoovered_button(x, y)
+        local found = false
+        if State.hoover ~= -2 then
+            local len = table_len(Buttons[State.leaf])
+            for i=1,len do
+                local button = Buttons[State.leaf][i]
+                if x > button.x and x < button.x + button.width and y > button.y and y < button.y + button.height then
+                    State.hoover = i
+                    found = true
+                    break
+                end
             end
         end
+        return found
+    end
 
+    function love.mousemoved(x, y, dx, dy, istouch )
+        local found = false
+        found = find_hoovered_button(x, y)
+        if found == false and x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height and State.hoover ~= -2 then
+            State.hoover = -1
+        elseif found == false and State.hoover ~= -2 then
+            State.hoover = 0
+        end
     end
 
     local function debugbox(value)
@@ -218,7 +227,7 @@ do
             Buttons[State.leaf][State.hoover].call()
         elseif x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height then
             State.hoover = -2
-        elseif (x < CommandLine.x or x > CommandLine.x + CommandLine.width or y < CommandLine.y or y > CommandLine.y + CommandLine.height) and State.hoover < 0 then
+        else
             State.hoover = 0
         end
     end
@@ -278,10 +287,10 @@ do
             gfx.print(text, ScreenWidth/2.0 - SmallFont:getWidth(text)/2.0, State.banner:getHeight()/2.0-SmallFont:getHeight(text)/2.0)
         end
 
-        if State.hoover >= 0 then
-            gfx.setColor(CommandLine.color)
-        else
+        if State.hoover < 0 then
             gfx.setColor(CommandLine.focusedcolor)
+        else
+            gfx.setColor(CommandLine.color)
         end
         gfx.rectangle("fill", CommandLine.x, CommandLine.y, CommandLine.width, CommandLine.height)
 
