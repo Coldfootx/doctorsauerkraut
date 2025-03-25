@@ -218,7 +218,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png"), banner = gfx.newImage("graphics/banner.png")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png")}
         -- leaf 1 = main menu, 2 = new game,
     end
 
@@ -244,7 +244,7 @@ do
 
     function love.draw()
         if State.leaf == 1 then
-            gfx.setColor(0,0.5,0)
+            gfx.setColor(0.7,0.1,0.1)
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
             gfx.setColor(255, 255, 255, 255)
             gfx.push()
@@ -288,6 +288,11 @@ do
         for i=1, SMALLFONTDRAWS do
             gfx.print(text, ScreenWidth/2.0 - SmallFont:getWidth(text)/2.0, State.banner:getHeight()/2.0-SmallFont:getHeight(text)/2.0)
         end
+        gfx.push()
+        local scale = State.banner:getHeight()/State.bannerx:getHeight()
+        gfx.scale(scale, scale)
+        gfx.draw(State.bannerx, ScreenWidth/scale-State.bannerx:getWidth(), 0)
+        gfx.pop()
 
         if State.hoover < 0 then
             gfx.setColor(CommandLine.focusedcolor)
@@ -299,7 +304,7 @@ do
         gfx.push()
         local scale = CommandLine.height/CommandLine.button:getHeight()
         gfx.scale(scale, scale)
-        gfx.draw(CommandLine.button, (CommandLine.x + CommandLine.width-CommandLine.button:getWidth())/scale, CommandLine.y/scale)
+        gfx.draw(CommandLine.button, CommandLine.x/scale + CommandLine.width/scale-CommandLine.button:getWidth(), CommandLine.y/scale)
         gfx.pop()
 
         print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
