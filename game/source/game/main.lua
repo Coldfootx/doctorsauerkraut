@@ -15,7 +15,7 @@ RANDOMNESSFILE = "randomness"
 STARTING_RANDOMNESS = 300
 
 --[[
-    url,website logo,game logo and game title and maybe game banner. only 5 places for name
+    url,website logo,game logo and game title and maybe game banner's text. only 5 places for name
 
     Clean folder %APPDATA%/LOVE to save some space! This folder is for starting directly from code.
     And clean folder C:\Users\user\AppData\Roaming\gamename or \game. This folder is for starting from the compiled executable.
@@ -199,7 +199,7 @@ do
         Buttons = {{}}
         Buttons[1] = {{text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png"), banner = gfx.newImage("graphics/banner.png")}
         -- leaf 1 = main menu, 2 = new game,
     end
 
@@ -231,6 +231,16 @@ do
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
         end
 
+        --first after custom leaves is banner
+        for i=1,ScreenWidth do
+            gfx.draw(State.banner, i-1, 0)
+        end
+        local text = "Doctor Sauerkraut"
+        gfx.setColor(1,1,1)
+        for i=1, 6 do
+            gfx.print(text, ScreenWidth/2.0 - SmallFont:getWidth(text)/2.0, State.banner:getHeight()/2.0-SmallFont:getHeight(text)/2.0)
+        end
+
         gfx.setFont(BigFont)
         local len = table_len(Buttons[State.leaf])
         for i=1,len do
@@ -252,6 +262,8 @@ do
             end
         end
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
+        for i=1, 6 do
+            print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
+        end
     end
 end

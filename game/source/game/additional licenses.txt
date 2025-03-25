@@ -34,10 +34,11 @@ MIT
 -- SOFTWARE.
 --
 
-Layouter
-UI Grid Layout Library for LÖVE 2D Game Engine
-© Daniel Duris, dusoft@staznosti.sk, 2023+
-https://github.com/nekromoff/layouter
-License: GNU LGPL 3.0
 
 ----Graphics----
+
+Parrot main menu background image
+https://en.wikipedia.org/wiki/File:Hyacinth_macaw_(Anodorhynchus_hyacinthinus)_head.JPG
+By the user https://en.wikipedia.org/wiki/User:Charlesjsharp
+http://www.sharpphotography.co.uk/
+Creative Commons Attribution-Share Alike 4.0 International license
