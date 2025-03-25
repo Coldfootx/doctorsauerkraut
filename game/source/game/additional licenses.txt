@@ -46,9 +46,9 @@ http://www.sharpphotography.co.uk/
 Creative Commons Attribution-Share Alike 4.0 International license
 
 
-Game topmost banner - banner.png
-Modified to minimum to still create a banner
-https://opengameart.org/content/arkana-fts-gui
-By the user https://opengameart.org/users/pompei2
-GPLv3
+Main Menu background money notes - 100.png
+https://en.wikipedia.org/wiki/File:DAN-13-Danzig-100_Mark_(1922).jpg
+From user https://commons.wikimedia.org/wiki/User:Godot13
+Attribution National Numismatic Collection, National Museum of American History
+Creative Commons Attribution-Share Alike 4.0 International
 
