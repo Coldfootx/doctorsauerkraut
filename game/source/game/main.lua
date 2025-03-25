@@ -1,6 +1,6 @@
 SCREENSPACE = 0.88
 SMALLFONT = 0.0125
-SMALLFONTDRAWS = 6
+SMALLFONTDRAWS = 5
 BIGFONT = 0.02
 
 MAP_W = 1024
@@ -229,6 +229,7 @@ do
             State.hoover = -2
         else
             State.hoover = 0
+            find_hoovered_button(x, y)
         end
     end
 
