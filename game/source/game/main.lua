@@ -218,7 +218,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png")}
         -- leaf 1 = main menu, 2 = new game,
     end
 
@@ -227,6 +227,18 @@ do
             Buttons[State.leaf][State.hoover].call()
         elseif x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height then
             State.hoover = -2
+        elseif x > ScreenWidth-State.banner:getHeight() and x < ScreenWidth and y > 0 and y < State.banner:getHeight() then
+            if State.hoover == -2 then
+                State.hoover = 0
+            else
+                love.window.minimize()
+            end
+        elseif x > ScreenWidth-2*State.banner:getHeight() and x < ScreenWidth-State.banner:getHeight() and y > 0 and y < State.banner:getHeight() then
+            if State.hoover == -2 then
+                State.hoover = 0
+            else
+                love.window.minimize()
+            end
         else
             State.hoover = 0
             find_hoovered_button(x, y)
@@ -292,6 +304,11 @@ do
         local scale = State.banner:getHeight()/State.bannerx:getHeight()
         gfx.scale(scale, scale)
         gfx.draw(State.bannerx, ScreenWidth/scale-State.bannerx:getWidth(), 0)
+        gfx.pop()
+        gfx.push()
+        local scale = State.banner:getHeight()/State.bannerm:getHeight()
+        gfx.scale(scale, scale)
+        gfx.draw(State.bannerm, ScreenWidth/scale-2*State.bannerm:getWidth(), 0)
         gfx.pop()
 
         if State.hoover < 0 then
