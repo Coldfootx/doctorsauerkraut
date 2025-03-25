@@ -302,6 +302,6 @@ do
         gfx.draw(CommandLine.button, (CommandLine.x + CommandLine.width-CommandLine.button:getWidth())/scale, CommandLine.y/scale)
         gfx.pop()
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed.." xx "..CommandLine.x + CommandLine.width-CommandLine.button:getWidth().." "..CommandLine.y)
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
 end
