@@ -1,3 +1,7 @@
+SCREENSPACE = 0.88
+SMALLFONT = 0.0125
+BIGFONT = 0.02
+
 MAP_W = 1024
 MAP_H = 1024
 
@@ -113,7 +117,7 @@ do
         gfx.setColor(1,1,1)
         gfx.rectangle("fill",width,height,SmallFont:getWidth(text),SmallFont:getHeight(text))
         gfx.setFont(SmallFont)
-        gfx.setColor(0,0,0)
+        --[[gfx.setColor(0,0,0)
         gfx.print(text, width-1, height)
         gfx.print(text, width+1, height)
         gfx.print(text, width, height-1)
@@ -121,7 +125,7 @@ do
         gfx.print(text, width-1, height+1)
         gfx.print(text, width+1, height-1)
         gfx.print(text, width+1, height+1)
-        gfx.print(text, width-1, height-1)
+        gfx.print(text, width-1, height-1)]]--
         gfx.setColor(1,0,0)
         gfx.print(text, width, height)
     end
@@ -167,11 +171,8 @@ do
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
-        local smallxfactor = 0.9
-        local smallyfactor = 0.88
-        ScreenWidth, ScreenHeight = ScreenWidth*smallxfactor, ScreenHeight*smallyfactor
-        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-smallyfactor)/2.0, x=ScreenWidth*(1-smallxfactor)/2.0})
-        y, x = love.window.getDesktopDimensions()
+        ScreenWidth, ScreenHeight = ScreenWidth*SCREENSPACE, ScreenHeight*SCREENSPACE
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0})
 
         --initialize savedata
         local map = {}
@@ -186,24 +187,17 @@ do
         --generate all data
         MapTotal = generate_map()
 
-        local fontsize, y = translatexy(0.01,0.01)
+        local fontsize, y = translatexy(SMALLFONT,SMALLFONT)
         SmallFont = gfx.newFont(fontsize)
-        fontsize, y = translatexy(0.02, 0.02)
+        fontsize, y = translatexy(BIGFONT, BIGFONT)
         BigFont = gfx.newFont(fontsize)
 
         local newgamebuttonw, newgamebuttonh = translatexy(0.25, 0.07)
         local newbuttonstartw, newbuttonstarth = translatexy(0.5, 0.3)
         local wt, newgamebuttonpadding = translatexy(0.5, 0.02)
-        Buttons = { 
-            {
-                {text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}, --[[{text="Boost Random", x = ScreenWidth-newgamebuttonw*0.66-1, y = ScreenHeight-newgamebuttonh-1, width = newgamebuttonw*0.66, height=newgamebuttonh, call = boostrandom}]]--
-                },
-                {
-            },
-            {
 
-            }
-        }
+        Buttons = {{}}
+        Buttons[1] = {{text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
         
         State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/parrot.png")}
         -- leaf 1 = main menu, 2 = new game,
