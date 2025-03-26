@@ -6,6 +6,7 @@ SCROLLLINES = 9
 
 MAP_W = 1024
 MAP_H = 1024
+SQUARESIZE = 20
 
 FPS = 75
 
@@ -82,7 +83,7 @@ do
     end
 
     local function newgame()
-        love.window.showMessageBox("New Game", "Starting a new game", {"OK"}, "info", true)
+        State.leaf = 2
     end
 
     local function loadgame()
@@ -183,7 +184,7 @@ do
         for i=1,MAP_W do
             map[i] = {}     -- create x
             for j=1,MAP_H do
-                map[i][j] = randomgen:random(2)-1
+                map[i][j] = randomgen:random(2)
                 maptotal = maptotal + map[i][j]
             end
         end
@@ -221,11 +222,15 @@ do
         elseif found == false and State.hoover ~= -2 then
             State.hoover = 0
         end
+        Hooveredx, Hooveredy = math.floor(x/SQUARESIZE), math.floor(y/SQUARESIZE)
+        Currentx, Currenty = x,y
     end
 
     local function backtomain()
         State.leaf = 1
         State.oldleaf = 1
+        State.hoover = 0
+        find_hoovered_button(Currentx, Currenty)
     end
 
     local function scrollhelpup()
@@ -274,7 +279,15 @@ do
         Buttons = {{}}
         Buttons[1] = {{text="Continue", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = continuegame}, {text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y =  newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+5*newgamebuttonh+5*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
 
-        Buttons[2] = {{}}
+        local newbuttonwidth, newbuttonheight = translatexy(0.2,0.05)
+        local paddingx, paddingy = translatexy(0.01,0.01)
+        local startpaddingx, startpaddingy = translatexy(0.1,0.1)
+        Buttons[2] = {
+            {text="Generate Houses", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
+            {text="Generate River", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
+            {text="Exit to Main", x = 0, y = 2*newbuttonheight+2*paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = backtomain},
+        }
+
         Buttons[3] = {{}}
         Buttons[4] = {{}}
 
@@ -286,8 +299,15 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0}
         -- leaf 1 = main menu, 2 = new game,
+
+        Hooveredx, Hooveredy = 0, 0
+
+        Tiles={
+            {i = 1, name="Sparse grass", file = gfx.newImage("graphics/sparse_grass.png")}, 
+            {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")}
+        }
     end
 
     function love.mousereleased(x, y, button, istouch, presses)
@@ -350,6 +370,26 @@ do
             gfx.pop()
             local mx, my = translatexy(0, 0.1)
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
+        elseif State.leaf == 2 then
+            local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
+            local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
+            for i=1+State.xprefix, xamount+State.xprefix do
+                for j=1+State.yprefix, yamount+State.yprefix do
+                    gfx.setColor(255, 255, 255, 255)
+                    gfx.push()
+                    local imagefile = Tiles[Save.map[i][j]].file
+                    local scale = ScreenWidth/xamount/imagefile:getWidth()
+                    gfx.scale(scale, scale)
+                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
+                    gfx.pop()
+                end
+            end
+            gfx.setFont(BigFont)
+            gfx.setColor(1,1,1)
+            local padx, pady = translatexy(0.02, 0.05)
+            for i=0, 2 do
+                gfx.print("Use W, S, A, D", padx, pady)
+            end
         elseif State.leaf == 5 then
             gfx.setColor(0.1,0.7,0.1)
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
@@ -437,6 +477,6 @@ do
             end
         end
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed..", mousehoover="..Tiles[Save.map[Hooveredx+1][Hooveredy+1]].name)
     end
 end
