@@ -274,7 +274,7 @@ do
     end
 
     function love.textinput(text)
-        if State.hoover < 0 then
+        if State.hoover == -2 then
             CommandLine.text = CommandLine.text..text
         end
     end
