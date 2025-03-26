@@ -1,6 +1,6 @@
 SCREENSPACE = 0.88
 SMALLFONT = 0.0125
-SMALLFONTDRAWS = 5
+SMALLFONTDRAWS = 3
 BIGFONT = 0.02
 
 MAP_W = 1024
@@ -98,13 +98,25 @@ do
         quitmessage()
     end
 
+    local function debugbox(value)
+        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
+    end
+
     function love.keypressed(key, scancode, isrepeat)
-        if key == "escape" and State.leaf ~= 1 then
+        if key == "return" and State.hoover == -2 then
+            debugbox(CommandLine.text)
+        elseif key == "escape" and State.leaf ~= 1 then
             State.oldleaf = State.leaf
             State.leaf = 1
         elseif key == "escape" then
-            quitgame()
+            State.leaf = State.oldleaf
+        elseif key == "backspace" then
+            CommandLine.text = CommandLine.text:sub(1,-2)
         end
+    end
+
+    function love.keyreleased(key, scancode, isrepeat)
+        --debugbox(key) 
     end
 
     local function translatexy(x1, y1)
@@ -179,13 +191,10 @@ do
         end
     end
 
-    local function debugbox(value)
-        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
-    end
-
     function love.load()
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
+        love.keyboard.setKeyRepeat(true)
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
         ScreenWidth, ScreenHeight = ScreenWidth*SCREENSPACE, ScreenHeight*SCREENSPACE
         love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0})
@@ -216,7 +225,7 @@ do
         Buttons[1] = {{text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
 
         local commandlinewidth=ScreenWidth/1.4
-        CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}}
+        CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="test"}
         
         State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png")}
         -- leaf 1 = main menu, 2 = new game,
@@ -251,7 +260,23 @@ do
             timeout = 0
         end
 
+        CommandLine.focustime = CommandLine.focustime - 1/FPS
+        if CommandLine.focustime < 0 then
+            CommandLine.focustime= CommandLine.focusmax
+            if CommandLine.focusswitch == true then
+                CommandLine.focusswitch = false
+            else
+                CommandLine.focusswitch = true
+            end
+        end
+
         love.timer.sleep(timeout)
+    end
+
+    function love.textinput(text)
+        if State.hoover < 0 then
+            CommandLine.text = CommandLine.text..text
+        end
     end
 
     function love.draw()
@@ -323,6 +348,19 @@ do
         gfx.scale(scale, scale)
         gfx.draw(CommandLine.button, CommandLine.x/scale + CommandLine.width/scale-CommandLine.button:getWidth(), CommandLine.y/scale)
         gfx.pop()
+        local color
+        if State.hoover >= 0 then
+            color = CommandLine.focusedcolor
+        else
+            color = CommandLine.color
+        end
+        gfx.setColor(color)
+        for i=1, SMALLFONTDRAWS do
+            gfx.print(CommandLine.text, CommandLine.x, CommandLine.y+CommandLine.height/2.0-SmallFont:getHeight(CommandLine.text)/2.0)
+            if CommandLine.focusswitch == true then
+                gfx.print(CommandLine.focuspostfix, CommandLine.x+SmallFont:getWidth(CommandLine.text), CommandLine.y+CommandLine.height/2.0-SmallFont:getHeight(CommandLine.text)/2.0)
+            end
+        end
 
         print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed)
     end
