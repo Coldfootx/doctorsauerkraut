@@ -4,9 +4,10 @@ SMALLFONTDRAWS = 3
 BIGFONT = 0.02
 SCROLLLINES = 9
 
-MAP_W = 1024
-MAP_H = 1024
+MAP_W = 100
+MAP_H = 100
 SQUARESIZE = 20
+SCROLLLINESMAP = 1
 
 FPS = 75
 
@@ -71,6 +72,22 @@ do
     local function boostrandom()
     end
 
+    local function find_hoovered_button(x, y)
+        local found = false
+        if State.hoover ~= -2 then
+            local len = table_len(Buttons[State.leaf])
+            for i=1,len do
+                local button = Buttons[State.leaf][i]
+                if x > button.x and x < button.x + button.width and y > button.y and y < button.y + button.height then
+                    State.hoover = i
+                    found = true
+                    break
+                end
+            end
+        end
+        return found
+    end
+
     local function quitmessage()
         local pressedbutton = love.window.showMessageBox("Want to Quit?", "All unsaved progress will be lost", {"OK", "No!", enterbutton = 2}, "warning", true)
         if pressedbutton == 1 then
@@ -84,6 +101,8 @@ do
 
     local function newgame()
         State.leaf = 2
+        State.hoover = 0
+        find_hoovered_button(Currentx, Currenty)
     end
 
     local function loadgame()
@@ -125,7 +144,6 @@ do
     local function helpwindow()
         State.leaf = 5
         State.help_text = load_help_text(State.savedhelpprefix)
-        
     end
 
     local function quitgame()
@@ -133,7 +151,37 @@ do
     end
 
     function love.keypressed(key, scancode, isrepeat)
-        if key == "return" and State.hoover == -2 then
+        if key == "w" then
+            if State.leaf == 2 then
+                State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
+                if State.yprefix < 0 then
+                    State.yprefix = 0
+                end
+            end
+        elseif key == "s" then
+            if State.leaf == 2 then
+                State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
+                local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
+                if State.yprefix > check then
+                    State.yprefix = check
+                end
+            end
+        elseif key == "a" then
+            if State.leaf == 2 then
+                State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
+                if State.xprefix < 0 then
+                    State.xprefix = 0
+                end
+            end
+        elseif key == "d" then
+            if State.leaf == 2 then
+                State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
+                local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
+                if State.xprefix > check then
+                    State.xprefix = check
+                end
+            end
+        elseif key == "return" and State.hoover == -2 then
             debugbox(CommandLine.text)
         elseif key == "escape" and State.leaf ~= 1 then
             State.oldleaf = State.leaf
@@ -196,22 +244,6 @@ do
 
     local function mousepressed(x, y, mouse_button)
         Buttons[State.leaf][State.hoover].call()
-    end
-
-    local function find_hoovered_button(x, y)
-        local found = false
-        if State.hoover ~= -2 then
-            local len = table_len(Buttons[State.leaf])
-            for i=1,len do
-                local button = Buttons[State.leaf][i]
-                if x > button.x and x < button.x + button.width and y > button.y and y < button.y + button.height then
-                    State.hoover = i
-                    found = true
-                    break
-                end
-            end
-        end
-        return found
     end
 
     function love.mousemoved(x, y, dx, dy, istouch )
@@ -371,13 +403,13 @@ do
             local mx, my = translatexy(0, 0.1)
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
         elseif State.leaf == 2 then
-            local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
-            local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
-            for i=1+State.xprefix, xamount+State.xprefix do
-                for j=1+State.yprefix, yamount+State.yprefix do
+            local xamount = math.floor(ScreenWidth/SQUARESIZE)
+            local yamount = math.floor(ScreenHeight/SQUARESIZE)
+            for i=1, xamount do
+                for j=1, yamount do
                     gfx.setColor(255, 255, 255, 255)
                     gfx.push()
-                    local imagefile = Tiles[Save.map[i][j]].file
+                    local imagefile = Tiles[Save.map[i+State.xprefix][j+State.yprefix]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
                     gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
@@ -388,7 +420,7 @@ do
             gfx.setColor(1,1,1)
             local padx, pady = translatexy(0.02, 0.05)
             for i=0, 2 do
-                gfx.print("Use W, S, A, D", padx, pady)
+                gfx.print("Use W, S, A, D - click to go in and out", padx, pady)
             end
         elseif State.leaf == 5 then
             gfx.setColor(0.1,0.7,0.1)
@@ -477,6 +509,6 @@ do
             end
         end
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed..", mousehoover="..Tiles[Save.map[Hooveredx+1][Hooveredy+1]].name)
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed..", mousehoover="..Tiles[Save.map[State.xprefix+Hooveredx+1][State.yprefix+Hooveredy+1]].name)
     end
 end
