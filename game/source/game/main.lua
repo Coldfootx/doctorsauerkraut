@@ -91,7 +91,7 @@ do
     end
 
     local function helpwindow()
-
+        State.leaf = 5
     end
 
     local function quitgame()
@@ -110,7 +110,7 @@ do
             State.leaf = 1
         elseif key == "escape" then
             State.leaf = State.oldleaf
-        elseif key == "backspace" then
+        elseif key == "backspace"and State.hoover == -2 then
             CommandLine.text = CommandLine.text:sub(1,-2)
         end
     end
@@ -191,6 +191,11 @@ do
         end
     end
 
+    local function backtomain()
+        State.leaf = 1
+        State.oldleaf = 1
+    end
+
     function love.load()
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
@@ -224,10 +229,19 @@ do
         Buttons = {{}}
         Buttons[1] = {{text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
 
+        Buttons[2] = {{}}
+        Buttons[3] = {{}}
+        Buttons[4] = {{}}
+
+        local helpbuttonw, helpbuttonh = translatexy(0.3, 0.07)
+        local helpbuttonstartx, helpbuttonstarty = translatexy(0, 0.1)
+        local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
+        Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = newgame}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+9*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = newgame}}
+
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="test"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/potion.jpg")}
         -- leaf 1 = main menu, 2 = new game,
     end
 
@@ -291,6 +305,15 @@ do
             gfx.pop()
             local mx, my = translatexy(0, 0.1)
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
+        elseif State.leaf == 5 then
+            gfx.setColor(0.1,0.7,0.1)
+            gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
+            gfx.setColor(255, 255, 255, 255)
+            gfx.push()
+            local scale = ScreenHeight/State.helpbg:getHeight()
+            gfx.scale(scale, scale)
+            gfx.draw(State.helpbg, 0, 0)
+            gfx.pop()
         end
 
         gfx.setFont(BigFont)

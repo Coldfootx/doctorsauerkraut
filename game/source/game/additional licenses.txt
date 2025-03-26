@@ -1,4 +1,7 @@
-not mentioned in the license file
+Additional licenses not mentioned in the license file in the game folder 
+and folder love in the source distribution
+
+
 This game 
 <a href="https://www.gnu.org/licenses/gpl.html">newest GPL</a>.<br>
 
@@ -40,7 +43,7 @@ MIT
 
 
 Parrot main menu background image - parrot.png
-https://en.wikipedia.org/wiki/File:Hyacinth_macaw_(Anodorhynchus_hyacinthinus)_head.JPG
+en.wikipedia.org/wiki/File:Hyacinth_macaw_(Anodorhynchus_hyacinthinus)_head.JPG
 By the user https://en.wikipedia.org/wiki/User:Charlesjsharp
 http://www.sharpphotography.co.uk/
 Creative Commons Attribution-Share Alike 4.0 International license
