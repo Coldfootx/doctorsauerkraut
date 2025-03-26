@@ -151,34 +151,38 @@ do
     end
 
     function love.keypressed(key, scancode, isrepeat)
-        if key == "w" then
-            if State.leaf == 2 then
-                State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
-                if State.yprefix < 0 then
-                    State.yprefix = 0
+        if State.hoover >= 0 then
+            if key == "return" then
+                State.hoover = -2
+            elseif key == "w" then
+                if State.leaf == 2 then
+                    State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
+                    if State.yprefix < 0 then
+                        State.yprefix = 0
+                    end
                 end
-            end
-        elseif key == "s" then
-            if State.leaf == 2 then
-                State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
-                local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
-                if State.yprefix > check then
-                    State.yprefix = check
+            elseif key == "s" then
+                if State.leaf == 2 then
+                    State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
+                    local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
+                    if State.yprefix > check then
+                        State.yprefix = check
+                    end
                 end
-            end
-        elseif key == "a" then
-            if State.leaf == 2 then
-                State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
-                if State.xprefix < 0 then
-                    State.xprefix = 0
+            elseif key == "a" then
+                if State.leaf == 2 then
+                    State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
+                    if State.xprefix < 0 then
+                        State.xprefix = 0
+                    end
                 end
-            end
-        elseif key == "d" then
-            if State.leaf == 2 then
-                State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
-                local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
-                if State.xprefix > check then
-                    State.xprefix = check
+            elseif key == "d" then
+                if State.leaf == 2 then
+                    State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
+                    local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
+                    if State.xprefix > check then
+                        State.xprefix = check
+                    end
                 end
             end
         elseif key == "return" and State.hoover == -2 then
