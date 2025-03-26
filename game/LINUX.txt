@@ -1,4 +1,4 @@
-Download the the Linux AppImage from love2d.org
+Download the Linux AppImage from love2d.org
 Set it to have executable rights
 Run the command "AppImage /path/to/" main.lua source folder
 Have fun!

@@ -236,7 +236,7 @@ do
         local helpbuttonw, helpbuttonh = translatexy(0.3, 0.07)
         local helpbuttonstartx, helpbuttonstarty = translatexy(0, 0.1)
         local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
-        Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = newgame}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+9*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = newgame}}
+        Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = newgame}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = newgame}}
 
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="test"}
@@ -314,6 +314,11 @@ do
             gfx.scale(scale, scale)
             gfx.draw(State.helpbg, 0, 0)
             gfx.pop()
+            gfx.setColor(0.72,0.59,0.33)
+            local beyondbuttonw, beyondbuttonh = translatexy(0.2, 0.2)
+            gfx.rectangle("fill", Buttons[State.leaf][2].x-beyondbuttonw, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height, Buttons[State.leaf][2].width+ 2*beyondbuttonw, Buttons[State.leaf][3].y-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height))
+            gfx.setColor(1,1,1)
+            gfx.rectangle("line", Buttons[State.leaf][2].x-beyondbuttonw, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height, Buttons[State.leaf][2].width+ 2*beyondbuttonw, Buttons[State.leaf][3].y-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height))
         end
 
         gfx.setFont(BigFont)
