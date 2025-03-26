@@ -2,6 +2,7 @@ SCREENSPACE = 0.88
 SMALLFONT = 0.0125
 SMALLFONTDRAWS = 3
 BIGFONT = 0.02
+SCROLLLINES = 8
 
 MAP_W = 1024
 MAP_H = 1024
@@ -12,15 +13,14 @@ SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
 RANDOMNESSFILE = "randomness"
 
+HELP_TEXT ='Additional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game \nnewest GPL\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nMain Menu background money notes - graphics/100.jpg\nhttps://en.wikipedia.org/wiki/File:DAN-13-Danzig-100_Mark_(1922).jpg\nFrom user https://commons.wikimedia.org/wiki/User:Godot13 - Godot13\nAttribution National Numismatic Collection, National Museum of American History\nCreative Commons Attribution-Share Alike 4.0 International\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.w ikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International'
+
 --STATEMENTS
+
 STARTING_RANDOMNESS = 300
 
 --[[
     url,website logo,game logo and game title and maybe game banner's text. only 5 places for name
-
-    Clean folder %APPDATA%/LOVE to save some space! This folder is for starting directly from code.
-    And clean folder C:\Users\user\AppData\Roaming\gamename or \game. This folder is for starting from the compiled executable.
-    If you delete the file RANDOMNESSFILE (see above) it is regenerated but edit its contained number to avoid same map generation. Ideally it should be accumulating forever to avoid them.
 
     Mini tiles hand-drawn with A* clicks
     -2 places
@@ -90,16 +90,43 @@ do
 
     end
 
+    local function explode(inputstr, sep)
+        sep=sep or '%s'
+        local t={}
+        for field,s in string.gmatch(inputstr, "([^"..sep.."]*)("..sep.."?)") do
+            table.insert(t,field)  
+            if s=="" then return t
+            end
+        end
+    end
+
+
+    local function debugbox(value)
+        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
+    end
+
+    local function load_help_text(prefix)
+        local lines = explode(HELP_TEXT, "\n")
+        local fits = (Buttons[State.leaf][3].y-State.helppadding-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height+State.helppadding))/SmallFont:getHeight()
+        local sliced = {}
+        for i=0, fits do
+            sliced[i] = lines[prefix+i]
+        end
+        --debugbox(sliced[2])
+        local nstring = table.concat(sliced, "\n")
+        State.savedhelpprefix = prefix
+        --debugbox(nstring)
+        return nstring
+    end
+
     local function helpwindow()
         State.leaf = 5
+        State.help_text = load_help_text(State.savedhelpprefix)
+        
     end
 
     local function quitgame()
         quitmessage()
-    end
-
-    local function debugbox(value)
-        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
     end
 
     function love.keypressed(key, scancode, isrepeat)
@@ -196,6 +223,19 @@ do
         State.oldleaf = 1
     end
 
+    local function scrollhelpup()
+        State.savedhelpprefix = State.savedhelpprefix - SCROLLLINES
+        if State.savedhelpprefix < 0 then
+            State.savedhelpprefix = 0
+        end
+        State.help_text = load_help_text(State.savedhelpprefix)
+    end
+
+    local function scrollhelpdown()
+        State.savedhelpprefix = State.savedhelpprefix + SCROLLLINES
+        State.help_text = load_help_text(State.savedhelpprefix)
+    end
+
     function love.load()
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
@@ -236,12 +276,12 @@ do
         local helpbuttonw, helpbuttonh = translatexy(0.3, 0.07)
         local helpbuttonstartx, helpbuttonstarty = translatexy(0, 0.1)
         local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
-        Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = newgame}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = newgame}}
+        Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpup}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpdown}}
 
         local commandlinewidth=ScreenWidth/1.4
-        CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="test"}
+        CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/potion.jpg")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0}
         -- leaf 1 = main menu, 2 = new game,
     end
 
@@ -310,8 +350,9 @@ do
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
             gfx.setColor(255, 255, 255, 255)
             gfx.push()
-            local scale = ScreenHeight/State.helpbg:getHeight()
-            gfx.scale(scale, scale)
+            local scalex = ScreenWidth/State.helpbg:getWidth()
+            local scaley = ScreenHeight/State.helpbg:getHeight()
+            gfx.scale(scalex, scaley)
             gfx.draw(State.helpbg, 0, 0)
             gfx.pop()
             gfx.setColor(0.72,0.59,0.33)
@@ -319,6 +360,7 @@ do
             gfx.rectangle("fill", Buttons[State.leaf][2].x-beyondbuttonw, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height, Buttons[State.leaf][2].width+ 2*beyondbuttonw, Buttons[State.leaf][3].y-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height))
             gfx.setColor(1,1,1)
             gfx.rectangle("line", Buttons[State.leaf][2].x-beyondbuttonw, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height, Buttons[State.leaf][2].width+ 2*beyondbuttonw, Buttons[State.leaf][3].y-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height))
+            gfx.print(State.help_text, Buttons[State.leaf][2].x-beyondbuttonw+State.helppadding, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height+State.helppadding)
         end
 
         gfx.setFont(BigFont)
