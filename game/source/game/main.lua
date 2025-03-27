@@ -6,9 +6,10 @@ SCROLLLINES = 9
 
 MAP_W = 512
 MAP_H = 512
+HOUSEAMOUNT = math.floor(MAP_W*0.5859375) --- 512 is 300
 SQUARESIZE = 20
+RIVERWIDTH = 5
 SCROLLLINESMAP = 2
-HOUSEPERCENTAGE = 20
 HOUSESIZE = 10
 HOUSESIZEVARY = 5
 
@@ -190,21 +191,22 @@ do
             end
         elseif key == "return" and State.hoover == -2 then
             debugbox(CommandLine.text)
-        elseif key == "escape" and State.leaf ~= 1 then
-            State.oldleaf = State.leaf
-            State.leaf = 1
-        elseif key == "escape" then
-            if State.oldleaf == 1 then
-                quitmessage()
-            end
-            State.leaf = State.oldleaf
         elseif key == "backspace"and State.hoover == -2 then
             CommandLine.text = CommandLine.text:sub(1,-2)
         end
     end
 
     function love.keyreleased(key, scancode, isrepeat)
-        --debugbox(key) 
+        if key == "escape" and State.leaf ~= 1 then
+            State.oldleaf = State.leaf
+            State.leaf = 1
+        elseif key == "escape" then
+            if State.oldleaf == 1 then
+                quitmessage()
+            else
+                State.leaf = State.oldleaf
+            end
+        end
     end
 
     local function translatexy(x1, y1)
@@ -244,7 +246,7 @@ do
             end
         end
 
-        for times=1, math.floor(300) do
+        for times=1, math.floor(HOUSEAMOUNT) do
             local housex, housey = randomgen:random(MAP_W), randomgen:random(MAP_H)
             local housew, househ = randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY), randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY)
             local endpointx = housex+housew
@@ -286,6 +288,13 @@ do
             end
         end
 
+        local riverpositionx = math.random(MAP_W-RIVERWIDTH)
+        local riverpositiony = 1
+        for i=1, MAP_H do
+            local width = riverpositionx+RIVERWIDTH
+            for x=riverpositionx,riverpositionx+RIVERWIDTH
+        end
+
         Save.map = map
 
         return maptotal
@@ -308,8 +317,8 @@ do
     end
 
     local function backtomain()
-        State.leaf = 1
         State.oldleaf = 1
+        State.leaf = 1
         State.hoover = 0
         find_hoovered_button(Currentx, Currenty)
     end
@@ -471,7 +480,7 @@ do
             gfx.setColor(1,1,1)
             local padx, pady = translatexy(0.02, 0.05)
             for i=0, 2 do
-                gfx.print("Use W, S, A, D - click to go in and out", padx, pady)
+                gfx.print("Use W, S, A, D", padx, pady)
             end
         elseif State.leaf == 5 then
             gfx.setColor(0.1,0.7,0.1)
