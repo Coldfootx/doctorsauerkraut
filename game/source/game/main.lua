@@ -244,17 +244,29 @@ do
             end
         end
 
-        for i=1, math.floor(MAP_W*MAP_H*HOUSEPERCENTAGE) do
+        for times=1, math.floor(300) do
             local housex, housey = randomgen:random(MAP_W), randomgen:random(MAP_H)
             local housew, househ = randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY), randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY)
-            if housex-housew > MAP_W
-            for i=housex, housex+housew do
-                map[i][housey] = 3
-                map[i][housey+househ] = 3
+            local endpointx = housex+housew
+            local endpointy = housey+househ
+            if endpointx > MAP_W then
+                endpointx = MAP_W
             end
-            for j=housey, housey+househ do
+            if endpointy > MAP_H then
+                endpointy = MAP_H
+            end
+            for i=housex, endpointx do
+                map[i][housey] = 3
+                map[i][endpointy] = 3
+                for y = housey+1, endpointy-1 do
+                    for x = i+1, i+endpointx-1 do
+                        map[i][y] = 4
+                    end
+                end
+            end
+            for j=housey, endpointy do
                 map[housex][j] = 3
-                map[housex+housew][j] = 3
+                map[endpointx][j] = 3
             end
         end
 
@@ -358,8 +370,10 @@ do
         Hooveredx, Hooveredy = 0, 0
 
         Tiles={
-            {i = 1, name="Sparse grass", file = gfx.newImage("graphics/sparse_grass.png")}, 
-            {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")}
+            {i = 1, name="Sparse grass", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
+            {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false},
+            {i = 3, name="Wooden wall'", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
+            {i = 4, name="Wooden floor'", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false}
         }
     end
 
