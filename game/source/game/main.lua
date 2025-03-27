@@ -308,7 +308,7 @@ do
                         if direction == 1 then
                             direction = 1
                         else
-                            direction = 1
+                            direction = -1
                         end
                     else
                         local xmax = riverpositionx+RIVERWIDTH
@@ -321,7 +321,22 @@ do
                     end
                 elseif direction == 1 then
                     for x = riverpositionx, MAP_W do
-                        for y=math.max(j-RIVERWIDTH,1), j do
+                        for y=math.max(j-RIVERWIDTH,1)-2, j-2 do
+                            map[riverpositionx][y] = 5
+                            if Tiles[map[riverpositionx][y]].obstacle == true then
+                                if olddirection == false then
+                                    direction = 3
+                                    olddirection = true
+                                    foundobstacle = true
+                                    break
+                                end
+                            end
+                        end
+                        riverpositionx = x
+                    end
+                elseif direction == -1 then
+                    for x = riverpositionx, 1, -1 do
+                        for y=math.max(j-RIVERWIDTH,1)-2, j-2 do
                             map[riverpositionx][y] = 5
                             if Tiles[map[riverpositionx][y]].obstacle == true then
                                 if olddirection == false then
