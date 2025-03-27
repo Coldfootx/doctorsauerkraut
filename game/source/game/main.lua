@@ -294,13 +294,12 @@ do
             local riverpositiony = 1
             local direction = 0
             local olddirection = false
+            local foundobstacle = false
             for j=1, MAP_H do
                 if direction == 0 then
-                    local foundobstacle = false
                     for x=riverpositionx,math.min(MAP_W,riverpositionx+RIVERWIDTH) do
                         if Tiles[map[x][j]].obstacle == true then
                             foundobstacle = true
-                            riverpositionx = x
                             break
                         end
                     end
@@ -309,7 +308,7 @@ do
                         if direction == 1 then
                             direction = 1
                         else
-                            direction = -1
+                            direction = 1
                         end
                     else
                         local xmax = riverpositionx+RIVERWIDTH
@@ -320,41 +319,20 @@ do
                             map[x][j] = 5
                         end
                     end
-                elseif direction == 2 then
-                    local foundobstacle = false
-                    local starty = j-RIVERWIDTH
-                    if starty > MAP_H then
-                        starty = MAP_H
-                    end
-                    for y=starty-RIVERWIDTH,starty do
-                        if Tiles[map[riverpositionx+1][y]].obstacle == true then
-                            if olddirection == false then
-                                direction = -1
-                                olddirection = true
-                                foundobstacle = true
-                                break
-                            else
-                                map[riverpositionx+1][y] = 5
+                elseif direction == 1 then
+                    for x = riverpositionx, MAP_W do
+                        for y=math.max(j-RIVERWIDTH,1), j do
+                            map[riverpositionx][y] = 5
+                            if Tiles[map[riverpositionx][y]].obstacle == true then
+                                if olddirection == false then
+                                    direction = 3
+                                    olddirection = true
+                                    foundobstacle = true
+                                    break
+                                end
                             end
                         end
-                    end
-                elseif direction == 2 then
-                    local foundobstacle = false
-                    local starty = j-RIVERWIDTH
-                    if starty > MAP_H then
-                        starty = MAP_H
-                    end
-                    for y=starty-RIVERWIDTH,starty do
-                        if Tiles[map[math.min(riverpositionx-1,1)][math.min(1,y)]].obstacle == true then
-                            if olddirection == false then
-                                direction = -1
-                                olddirection = true
-                                foundobstacle = true
-                                break
-                            else
-                                map[riverpositionx-1][y] = 5
-                            end
-                        end
+                        riverpositionx = x
                     end
                 end
             end
