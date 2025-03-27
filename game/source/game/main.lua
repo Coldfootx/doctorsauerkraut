@@ -7,6 +7,7 @@ SCROLLLINES = 9
 MAP_W = 512
 MAP_H = 512
 HOUSEAMOUNT = math.floor(MAP_W*0.5859375) --- 512 is 300
+RIVERAMOUNT = math.floor(MAP_W*0.015)
 SQUARESIZE = 20
 RIVERWIDTH = 5
 SCROLLLINESMAP = 2
@@ -288,11 +289,75 @@ do
             end
         end
 
-        local riverpositionx = math.random(MAP_W-RIVERWIDTH)
-        local riverpositiony = 1
-        for i=1, MAP_H do
-            local width = riverpositionx+RIVERWIDTH
-            for x=riverpositionx,riverpositionx+RIVERWIDTH
+        for i=1,RIVERAMOUNT do
+            local riverpositionx = math.random(1,MAP_W-RIVERWIDTH)
+            local riverpositiony = 1
+            local direction = 0
+            local olddirection = false
+            for j=1, MAP_H do
+                if direction == 0 then
+                    local foundobstacle = false
+                    for x=riverpositionx,math.min(MAP_W,riverpositionx+RIVERWIDTH) do
+                        if Tiles[map[x][j]].obstacle == true then
+                            foundobstacle = true
+                            riverpositionx = x
+                            break
+                        end
+                    end
+                    if foundobstacle == true then
+                        direction = math.random(2)
+                        if direction == 1 then
+                            direction = 1
+                        else
+                            direction = -1
+                        end
+                    else
+                        local xmax = riverpositionx+RIVERWIDTH
+                        if xmax > MAP_W then
+                            xmax = MAP_W
+                        end
+                        for x=riverpositionx,xmax do
+                            map[x][j] = 5
+                        end
+                    end
+                elseif direction == 2 then
+                    local foundobstacle = false
+                    local starty = j-RIVERWIDTH
+                    if starty > MAP_H then
+                        starty = MAP_H
+                    end
+                    for y=starty-RIVERWIDTH,starty do
+                        if Tiles[map[riverpositionx+1][y]].obstacle == true then
+                            if olddirection == false then
+                                direction = -1
+                                olddirection = true
+                                foundobstacle = true
+                                break
+                            else
+                                map[riverpositionx+1][y] = 5
+                            end
+                        end
+                    end
+                elseif direction == 2 then
+                    local foundobstacle = false
+                    local starty = j-RIVERWIDTH
+                    if starty > MAP_H then
+                        starty = MAP_H
+                    end
+                    for y=starty-RIVERWIDTH,starty do
+                        if Tiles[map[math.min(riverpositionx-1,1)][math.min(1,y)]].obstacle == true then
+                            if olddirection == false then
+                                direction = -1
+                                olddirection = true
+                                foundobstacle = true
+                                break
+                            else
+                                map[riverpositionx-1][y] = 5
+                            end
+                        end
+                    end
+                end
+            end
         end
 
         Save.map = map
@@ -355,7 +420,6 @@ do
         Save = {map=map, positionx=0, positiony=0}
 
         --generate all data
-        MapTotal = generate_map()
 
         local fontsize, y = translatexy(SMALLFONT,SMALLFONT)
         SmallFont = gfx.newFont(fontsize)
@@ -398,8 +462,11 @@ do
             {i = 1, name="Sparse grass", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
             {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false},
             {i = 3, name="Wooden wall", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
-            {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false}
+            {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
+            {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false}
         }
+
+        MapTotal = generate_map()
     end
 
     function love.mousereleased(x, y, button, istouch, presses)
