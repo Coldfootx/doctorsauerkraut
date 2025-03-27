@@ -302,6 +302,8 @@ do
                         if Tiles[map[x][j]].obstacle == true then
                             foundobstacle = true
                             break
+                        else
+                            map[x][j] = 5
                         end
                     end
                     if foundobstacle == true then
@@ -316,26 +318,16 @@ do
                             direction = -1
                         end
                         foundobstacle = false
-                    else
-                        local xmax = riverpositionx+RIVERWIDTH
-                        if xmax > MAP_W then
-                            xmax = MAP_W
-                        end
-                        for x=riverpositionx,xmax do
-                            map[x][j] = 5
-                        end
                     end
                 elseif direction == 1 then
                     for x = riverpositionx, MAP_W do
-                        for y=math.max(j-RIVERWIDTH,1)-2, j-2 do
+                        for y=math.max(j-RIVERWIDTH,1), j do
                             map[riverpositionx][y] = 5
                             if Tiles[map[riverpositionx][y]].obstacle == true then
-                                if olddirection == false then
-                                    direction = 0
-                                    olddirection = true
-                                    foundobstacle = true
-                                    break
-                                end
+                                direction = 0
+                                olddirection = true
+                                foundobstacle = false
+                                break
                             end
                         end
                         riverpositionx = x
@@ -345,12 +337,10 @@ do
                         for y=math.max(j-RIVERWIDTH,1)-2, j-2 do
                             map[riverpositionx][y] = 5
                             if Tiles[map[riverpositionx][y]].obstacle == true then
-                                if olddirection == false then
-                                    direction = 3
-                                    olddirection = true
-                                    foundobstacle = true
-                                    break
-                                end
+                                direction = 0
+                                olddirection = true
+                                foundobstacle = false
+                                break
                             end
                         end
                         riverpositionx = x
