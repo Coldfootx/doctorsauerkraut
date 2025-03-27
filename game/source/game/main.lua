@@ -4,10 +4,13 @@ SMALLFONTDRAWS = 3
 BIGFONT = 0.02
 SCROLLLINES = 9
 
-MAP_W = 100
-MAP_H = 100
+MAP_W = 512
+MAP_H = 512
 SQUARESIZE = 20
-SCROLLLINESMAP = 1
+SCROLLLINESMAP = 2
+HOUSEPERCENTAGE = 20
+HOUSESIZE = 10
+HOUSESIZEVARY = 5
 
 FPS = 75
 
@@ -238,6 +241,20 @@ do
             for j=1,MAP_H do
                 map[i][j] = randomgen:random(2)
                 maptotal = maptotal + map[i][j]
+            end
+        end
+
+        for i=1, math.floor(MAP_W*MAP_H*HOUSEPERCENTAGE) do
+            local housex, housey = randomgen:random(MAP_W), randomgen:random(MAP_H)
+            local housew, househ = randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY), randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY)
+            if housex-housew > MAP_W
+            for i=housex, housex+housew do
+                map[i][housey] = 3
+                map[i][housey+househ] = 3
+            end
+            for j=housey, housey+househ do
+                map[housex][j] = 3
+                map[housex+housew][j] = 3
             end
         end
 
