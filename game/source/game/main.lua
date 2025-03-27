@@ -295,6 +295,7 @@ do
             local direction = 0
             local olddirection = false
             local foundobstacle = false
+            local iterations = 30
             for j=1, MAP_H do
                 if direction == 0 then
                     for x=riverpositionx,math.min(MAP_W,riverpositionx+RIVERWIDTH) do
@@ -304,12 +305,17 @@ do
                         end
                     end
                     if foundobstacle == true then
+                        iterations = iterations - 1
+                        if iterations < 0 then
+                            break
+                        end
                         direction = math.random(2)
                         if direction == 1 then
                             direction = 1
                         else
                             direction = -1
                         end
+                        foundobstacle = false
                     else
                         local xmax = riverpositionx+RIVERWIDTH
                         if xmax > MAP_W then
@@ -325,7 +331,7 @@ do
                             map[riverpositionx][y] = 5
                             if Tiles[map[riverpositionx][y]].obstacle == true then
                                 if olddirection == false then
-                                    direction = 3
+                                    direction = 0
                                     olddirection = true
                                     foundobstacle = true
                                     break
