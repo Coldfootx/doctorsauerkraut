@@ -268,6 +268,22 @@ do
                 map[housex][j] = 3
                 map[endpointx][j] = 3
             end
+            local whichwall = math.random(4)
+            if whichwall == 1 then
+                local along = math.random(housey+1, endpointy-1)
+                map[housex][along] = 4
+            elseif whichwall == 2 then
+                local along = math.random(housey+1, endpointy-1)
+                local position = math.min(housex+housew, endpointx)
+                map[position][along] = 4
+            elseif whichwall == 3 then
+                local along = math.random(housex+1, endpointx-1)
+                map[along][housey] = 4
+            elseif whichwall == 4 then
+                local along = math.random(housex+1, endpointx-1)
+                local position = math.min(housey+househ, endpointy)
+                map[along][housey] = 4
+            end
         end
 
         Save.map = map
@@ -373,7 +389,7 @@ do
             {i = 1, name="Sparse grass", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
             {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false},
             {i = 3, name="Wooden wall'", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
-            {i = 4, name="Wooden floor'", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false}
+            {i = 4, name="Wooden floor'", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false}
         }
     end
 
