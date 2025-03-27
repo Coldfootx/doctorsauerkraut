@@ -388,8 +388,8 @@ do
         Tiles={
             {i = 1, name="Sparse grass", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
             {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false},
-            {i = 3, name="Wooden wall'", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
-            {i = 4, name="Wooden floor'", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false}
+            {i = 3, name="Wooden wall", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
+            {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false}
         }
     end
 
