@@ -16,6 +16,7 @@ HOUSESIZEVARY = 5
 LAKESIZE = 30
 LAKESIZEVARY = 10
 LAKEAMOUNT = math.floor(MAP_W*0.02)
+FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
 
 FPS = 75
 
@@ -222,10 +223,10 @@ do
 
         for n = 1, LAKEAMOUNT do
             -- This code is contributed by chandan_jnu
-            local rx = math.random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
-            local ry = math.random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
-            local xc = math.random(1,MAP_W)
-            local yc = math.random(1,MAP_H)
+            local rx = randomgen:random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
+            local ry = randomgen:random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
+            local xc = randomgen:random(1,MAP_W)
+            local yc = randomgen:random(1,MAP_H)
 
             local x = 0;
             local y = ry
@@ -314,19 +315,19 @@ do
                     map[housex][j] = 3
                     map[endpointx][j] = 3
                 end
-                local whichwall = math.random(4)
+                local whichwall = randomgen:random(4)
                 if whichwall == 1 then
-                    local along = math.random(housey+1, endpointy-1)
+                    local along = randomgen:random(housey+1, endpointy-1)
                     map[housex][along] = 4
                 elseif whichwall == 2 then
-                    local along = math.random(housey+1, endpointy-1)
+                    local along = randomgen:random(housey+1, endpointy-1)
                     local position = math.min(housex+housew, endpointx)
                     map[position][along] = 4
                 elseif whichwall == 3 then
-                    local along = math.random(housex+1, endpointx-1)
+                    local along = randomgen:random(housex+1, endpointx-1)
                     map[along][housey] = 4
                 elseif whichwall == 4 then
-                    local along = math.random(housex+1, endpointx-1)
+                    local along = randomgen:random(housex+1, endpointx-1)
                     local position = math.min(housey+househ, endpointy)
                     map[along][housey] = 4
                 end
@@ -334,7 +335,7 @@ do
         end
 
         for n=1,RIVERAMOUNT do
-            local xposition = math.random(1,MAP_W)
+            local xposition = randomgen:random(1,MAP_W)
             local yposition = 1
             for j = yposition, MAP_H do
                 local amountfree = 0
@@ -360,6 +361,14 @@ do
                         amountfree = 0
                     end
                 end
+            end
+        end
+
+        for n=1, FLOWERAMOUNT do
+            local fx = randomgen:random(1,MAP_W)
+            local fy = randomgen:random(1,MAP_H)
+            if Tiles[map[fx][fy]].obstacle == false and map[fx][fy] ~= 4 then
+                map[fx][fy] = 6+randomgen:random(2)
             end
         end
 
