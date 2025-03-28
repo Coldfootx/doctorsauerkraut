@@ -272,6 +272,8 @@ do
             local housew, househ = randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY), randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY)
             local endpointx = housex+housew
             local endpointy = housey+househ
+
+            local obstacle = false
             if endpointx > MAP_W then
                 endpointx = MAP_W
             end
@@ -279,33 +281,55 @@ do
                 endpointy = MAP_H
             end
             for i=housex, endpointx do
-                map[i][housey] = 3
-                map[i][endpointy] = 3
+                if map[i][housey] ==6 or map[i][endpointy] == 6 then
+                    obstacle = true
+                end
                 for y = housey+1, endpointy-1 do
                     for x = i+1, i+endpointx-1 do
-                        map[i][y] = 4
+                        if map[i][y] == 6 then
+                            obstacle = true
+                        end
                     end
                 end
             end
-            for j=housey, endpointy do
-                map[housex][j] = 3
-                map[endpointx][j] = 3
-            end
-            local whichwall = math.random(4)
-            if whichwall == 1 then
-                local along = math.random(housey+1, endpointy-1)
-                map[housex][along] = 4
-            elseif whichwall == 2 then
-                local along = math.random(housey+1, endpointy-1)
-                local position = math.min(housex+housew, endpointx)
-                map[position][along] = 4
-            elseif whichwall == 3 then
-                local along = math.random(housex+1, endpointx-1)
-                map[along][housey] = 4
-            elseif whichwall == 4 then
-                local along = math.random(housex+1, endpointx-1)
-                local position = math.min(housey+househ, endpointy)
-                map[along][housey] = 4
+
+            if obstacle == false then
+
+                if endpointx > MAP_W then
+                    endpointx = MAP_W
+                end
+                if endpointy > MAP_H then
+                    endpointy = MAP_H
+                end
+                for i=housex, endpointx do
+                    map[i][housey] = 3
+                    map[i][endpointy] = 3
+                    for y = housey+1, endpointy-1 do
+                        for x = i+1, i+endpointx-1 do
+                            map[i][y] = 4
+                        end
+                    end
+                end
+                for j=housey, endpointy do
+                    map[housex][j] = 3
+                    map[endpointx][j] = 3
+                end
+                local whichwall = math.random(4)
+                if whichwall == 1 then
+                    local along = math.random(housey+1, endpointy-1)
+                    map[housex][along] = 4
+                elseif whichwall == 2 then
+                    local along = math.random(housey+1, endpointy-1)
+                    local position = math.min(housex+housew, endpointx)
+                    map[position][along] = 4
+                elseif whichwall == 3 then
+                    local along = math.random(housex+1, endpointx-1)
+                    map[along][housey] = 4
+                elseif whichwall == 4 then
+                    local along = math.random(housex+1, endpointx-1)
+                    local position = math.min(housey+househ, endpointy)
+                    map[along][housey] = 4
+                end
             end
         end
 
