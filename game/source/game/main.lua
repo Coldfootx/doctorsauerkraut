@@ -7,7 +7,7 @@ SCROLLLINES = 9
 MAP_W = 512
 MAP_H = 512
 HOUSEAMOUNT = math.floor(MAP_W*0.5859375) --- 512 is 300
-RIVERAMOUNT = math.floor(MAP_W*0.015)
+RIVERAMOUNT = math.floor(MAP_W*0.015) --512 is 7
 SQUARESIZE = 20
 RIVERWIDTH = 5
 SCROLLLINESMAP = 2
@@ -289,61 +289,24 @@ do
             end
         end
 
-        for i=1,RIVERAMOUNT do
-            local riverpositionx = math.random(1,MAP_W-RIVERWIDTH)
-            local riverpositiony = 1
-            local direction = 0
-            local olddirection = false
-            local foundobstacle = false
-            local iterations = 30
-            for j=1, MAP_H do
-                if direction == 0 then
-                    for x=riverpositionx,math.min(MAP_W,riverpositionx+RIVERWIDTH) do
-                        if Tiles[map[x][j]].obstacle == true then
-                            foundobstacle = true
-                            break
-                        else
-                            map[x][j] = 5
-                        end
-                    end
-                    if foundobstacle == true then
-                        iterations = iterations - 1
-                        if iterations < 0 then
+        for n=1,RIVERAMOUNT do
+            local xposition = math.random(1,MAP_W)
+            local yposition = 1
+            for j = yposition, MAP_H do
+                local amountfree = 0
+                for i = xposition, MAP_W do
+                    if Tiles[map[i][j]].obstacle == false then
+                        amountfree = amountfree + 1
+                        if amountfree == RIVERWIDTH then
+                            local xstart = math.max(i - RIVERWIDTH, 1)
+                            for ii = xstart, i do
+                                map[math.min(ii+1,MAP_W)][j] = 5
+                            end
+                            xposition = xstart + 1
                             break
                         end
-                        direction = math.random(2)
-                        if direction == 1 then
-                            direction = 1
-                        else
-                            direction = -1
-                        end
-                        foundobstacle = false
-                    end
-                elseif direction == 1 then
-                    for x = riverpositionx, MAP_W do
-                        for y=math.max(j-RIVERWIDTH,1), j do
-                            map[riverpositionx][y] = 5
-                            if Tiles[map[riverpositionx][y]].obstacle == true then
-                                direction = 0
-                                olddirection = true
-                                foundobstacle = false
-                                break
-                            end
-                        end
-                        riverpositionx = x
-                    end
-                elseif direction == -1 then
-                    for x = riverpositionx, 1, -1 do
-                        for y=math.max(j-RIVERWIDTH,1)-2, j-2 do
-                            map[riverpositionx][y] = 5
-                            if Tiles[map[riverpositionx][y]].obstacle == true then
-                                direction = 0
-                                olddirection = true
-                                foundobstacle = false
-                                break
-                            end
-                        end
-                        riverpositionx = x
+                    else
+                        amountfree = 0
                     end
                 end
             end
