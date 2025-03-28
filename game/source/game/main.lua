@@ -13,6 +13,9 @@ RIVERWIDTH = 5
 SCROLLLINESMAP = 2
 HOUSESIZE = 10
 HOUSESIZEVARY = 5
+LAKESIZE = 30
+LAKESIZEVARY = 10
+LAKEAMOUNT = math.floor(MAP_W*0.02)
 
 FPS = 75
 
@@ -217,6 +220,53 @@ do
             end
         end
 
+        for n = 1, LAKEAMOUNT do
+            -- This code is contributed by chandan_jnu
+            local rx = math.random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
+            local ry = math.random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
+            local xc = math.random(1,MAP_W)
+            local yc = math.random(1,MAP_H)
+
+            local x = 0;
+            local y = ry
+
+            -- Initial decision parameter of region 1 
+            local d1 = ((ry * ry) - (rx * rx * ry) + (0.25 * rx * rx)); 
+            local dx = 2 * ry * ry * x
+            local dy = 2 * rx * rx * y
+
+            while dx < dy do
+                --Print points based on 4-way symmetry 
+                --print("(", x + xc, ",", y + yc, ")")
+                --print("(",-x + xc,",", y + yc, ")")
+                --print("(",x + xc,",", -y + yc ,")")
+                --print("(",-x + xc, ",", -y + yc, ")")
+                map[math.min(x+xc, MAP_W)][math.min(y+yc, MAP_H)] = 6
+                map[math.max(-x+xc,1)][math.min(y+yc, MAP_H)] = 6
+                map[math.min(x+xc, MAP_W)][math.max(-y+yc,1)] = 6
+                map[math.max(-x+xc,1)][math.max(-y+yc,1)] = 6
+
+                for ix = math.max(-x+xc,1), math.min(x+xc, MAP_W) do
+                    for iy = math.max(-y+yc,1), math.min(y+yc, MAP_H) do
+                        map[ix][iy] = 6
+                    end
+                end
+
+                -- Checking and updating value of decision parameter based on algorithm 
+                if (d1 < 0) then
+                    x = x + 1
+                    dx = dx + (2 * ry * ry)
+                    d1 = d1 + dx + (ry * ry)
+                else
+                    x = x + 1; 
+                    y = y - 1; 
+                    dx = dx + (2 * ry * ry)
+                    dy = dy - (2 * rx * rx)
+                    d1 = d1 + dx - dy + (ry * ry)
+                end
+            end
+        end
+
         for times=1, math.floor(HOUSEAMOUNT) do
             local housex, housey = randomgen:random(MAP_W), randomgen:random(MAP_H)
             local housew, househ = randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY), randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY)
@@ -382,7 +432,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charrigth = gfx.newImage("graphics/charright.png")}
         -- leaf 1 = main menu, 2 = new game,
 
         Hooveredx, Hooveredy = 0, 0
@@ -392,7 +442,8 @@ do
             {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false},
             {i = 3, name="Wooden wall", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
             {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
-            {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false}
+            {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false},
+            {i = 6, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = false}
         }
         --for i=0, 999 do
             MapTotal = generate_map()
