@@ -376,6 +376,9 @@ do
 
         return maptotal
     end
+    
+    local function generate_npc()
+    end
 
     local function mousepressed(x, y, mouse_button)
         Buttons[State.leaf][State.hoover].call()
@@ -449,8 +452,8 @@ do
         local paddingx, paddingy = translatexy(0.01,0.01)
         local startpaddingx, startpaddingy = translatexy(0.1,0.1)
         Buttons[2] = {
-            {text="Generate Houses", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
-            {text="Generate River", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
+            {text="Generate Ground", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
+            {text="Generate NPCS", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_npc},
             {text="Exit to Main", x = 0, y = 2*newbuttonheight+2*paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = backtomain},
         }
 
@@ -528,37 +531,39 @@ do
             end
         end
         if State.hoover ~= -2 then
-            if love.keyboard.isDown('w') then
-                if State.leaf == 2 then
-                    State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
-                    if State.yprefix < 0 then
-                        State.yprefix = 0
+            if State.leaf == 2 then
+                if love.keyboard.isDown('w') then
+                    if State.leaf == 2 then
+                        State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
+                        if State.yprefix < 0 then
+                            State.yprefix = 0
+                        end
                     end
                 end
-            end
-            if love.keyboard.isDown('s') then
-                if State.leaf == 2 then
-                    State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
-                    local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
-                    if State.yprefix > check then
-                        State.yprefix = check
+                if love.keyboard.isDown('s') then
+                    if State.leaf == 2 then
+                        State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
+                        local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
+                        if State.yprefix > check then
+                            State.yprefix = check
+                        end
                     end
                 end
-            end
-            if love.keyboard.isDown('a') then
-                if State.leaf == 2 then
-                    State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
-                    if State.xprefix < 0 then
-                        State.xprefix = 0
+                if love.keyboard.isDown('a') then
+                    if State.leaf == 2 then
+                        State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
+                        if State.xprefix < 0 then
+                            State.xprefix = 0
+                        end
                     end
                 end
-            end
-            if love.keyboard.isDown('d') then
-                if State.leaf == 2 then
-                    State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
-                    local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
-                    if State.xprefix > check then
-                        State.xprefix = check
+                if love.keyboard.isDown('d') then
+                    if State.leaf == 2 then
+                        State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
+                        local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
+                        if State.xprefix > check then
+                            State.xprefix = check
+                        end
                     end
                 end
             end
