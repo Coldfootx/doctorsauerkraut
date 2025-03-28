@@ -432,7 +432,8 @@ do
                 map[i][j] = 0
             end
         end
-        Save = {map=map, positionx=0, positiony=0}
+        Save = {map=map, npcs={}, positionx=0, positiony=0}
+        --tile = , posx, posy, favourite_thing
 
         --generate all data
 
@@ -489,7 +490,6 @@ do
             {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")},
             {i = 3, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")}
         }
-        NPCs = {} -- tile = , posx, posy, favourite_thing
         --jata magneetti
         --for i=0, 999 do
             MapTotal = generate_map()
