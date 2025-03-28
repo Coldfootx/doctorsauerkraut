@@ -306,6 +306,13 @@ do
                             break
                         end
                     else
+                        local jdlimit = math.max(j-RIVERWIDTH, 1)+1
+                        local xdlimit = math.min(i+RIVERWIDTH+1, MAP_W)
+                        for jd = jdlimit, j do
+                            for xd = i,xdlimit do
+                                map[xd][jd-1] = 5
+                            end
+                        end
                         amountfree = 0
                     end
                 end
@@ -417,8 +424,9 @@ do
             {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
             {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false}
         }
-
-        MapTotal = generate_map()
+        for i=0, 999 do
+            MapTotal = generate_map()
+        end
     end
 
     function love.mousereleased(x, y, button, istouch, presses)
