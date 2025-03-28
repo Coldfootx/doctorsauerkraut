@@ -65,12 +65,26 @@ https://en.wikipedia.org/wiki/File:DAN-13-Danzig-100_Mark_(1922).jpg
 From user https://commons.wikimedia.org/wiki/User:Godot13 - Godot13
 Attribution National Numismatic Collection, National Museum of American History
 Creative Commons Attribution-Share Alike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/deed.en
 
 
 Background love potion - graphics/potion.jpg
 https://en.w ikipedia.org/wiki/File:Filtre_d%27Amour.jpg
 From user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25
 Creative Commons Attribution-Share Alike 4.0 International
+https://creativecommons.org/licenses/by-sa/4.0/deed.en
 
 
-You must include a link to www.GodsAndIdols.com in your attribution of this asset
+Water tile - graphics/water.jpg
+https://opengameart.org/content/texture-water
+From user www.GodsAndIdols.com and https://opengameart.org/users/jattenalle
+CC-BY 3.0
+https://creativecommons.org/licenses/by/3.0/
+
+
+Flower tiles - graphics/flower1&2.png
+https://opengameart.org/content/pixel-flower-icons
+From user https://opengameart.org/users/sicklyseraph - sicklyseraph
+CC-BY 4.0
+https://creativecommons.org/licenses/by/4.0/
+

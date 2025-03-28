@@ -339,7 +339,7 @@ do
             for j = yposition, MAP_H do
                 local amountfree = 0
                 for i = xposition, MAP_W do
-                    if Tiles[map[i][j]].obstacle == false then
+                    if Tiles[map[i][j]].obstacle == false or map[i][j] == 6 then
                         amountfree = amountfree + 1
                         if amountfree == RIVERWIDTH then
                             local xstart = math.max(i - RIVERWIDTH, 1)
@@ -467,8 +467,18 @@ do
             {i = 3, name="Wooden wall", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
             {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
             {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false},
-            {i = 6, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = false}
+            {i = 6, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
+            {i = 7, name="Red flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
+            {i = 8, name="Yellow flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false}
         }
+
+        NPC_tiles ={
+            {i = 1, name="Skeleton", file = gfx.newImage("graphics/sparse_grass.png")},
+            {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")},
+            {i = 3, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")}
+        }
+        NPCs = {} -- tile = , posx, posy, favourite_thing
+        --jata magneetti
         --for i=0, 999 do
             MapTotal = generate_map()
         --end
