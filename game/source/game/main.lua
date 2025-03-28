@@ -159,36 +159,6 @@ do
         if State.hoover >= 0 then
             if key == "return" then
                 State.hoover = -2
-            elseif key == "w" then
-                if State.leaf == 2 then
-                    State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
-                    if State.yprefix < 0 then
-                        State.yprefix = 0
-                    end
-                end
-            elseif key == "s" then
-                if State.leaf == 2 then
-                    State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
-                    local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
-                    if State.yprefix > check then
-                        State.yprefix = check
-                    end
-                end
-            elseif key == "a" then
-                if State.leaf == 2 then
-                    State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
-                    if State.xprefix < 0 then
-                        State.xprefix = 0
-                    end
-                end
-            elseif key == "d" then
-                if State.leaf == 2 then
-                    State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
-                    local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
-                    if State.xprefix > check then
-                        State.xprefix = check
-                    end
-                end
             end
         elseif key == "return" and State.hoover == -2 then
             debugbox(CommandLine.text)
@@ -424,9 +394,9 @@ do
             {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
             {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false}
         }
-        for i=0, 999 do
+        --for i=0, 999 do
             MapTotal = generate_map()
-        end
+        --end
     end
 
     function love.mousereleased(x, y, button, istouch, presses)
@@ -453,10 +423,6 @@ do
     end
 
     function love.update(dt)
-        local timeout = 1.0/FPS - dt
-        if timeout < 0 then
-            timeout = 0
-        end
 
         CommandLine.focustime = CommandLine.focustime - 1/FPS
         if CommandLine.focustime < 0 then
@@ -466,6 +432,47 @@ do
             else
                 CommandLine.focusswitch = true
             end
+        end
+        if State.hoover ~= -2 then
+            if love.keyboard.isDown('w') then
+                if State.leaf == 2 then
+                    State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
+                    if State.yprefix < 0 then
+                        State.yprefix = 0
+                    end
+                end
+            end
+            if love.keyboard.isDown('s') then
+                if State.leaf == 2 then
+                    State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
+                    local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
+                    if State.yprefix > check then
+                        State.yprefix = check
+                    end
+                end
+            end
+            if love.keyboard.isDown('a') then
+                if State.leaf == 2 then
+                    State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
+                    if State.xprefix < 0 then
+                        State.xprefix = 0
+                    end
+                end
+            end
+            if love.keyboard.isDown('d') then
+                if State.leaf == 2 then
+                    State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
+                    local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
+                    if State.xprefix > check then
+                        State.xprefix = check
+                    end
+                end
+            end
+        end
+
+        local timeout = 1.0/FPS - dt
+        if timeout < 0 then
+            timeout = 0
         end
 
         love.timer.sleep(timeout)
