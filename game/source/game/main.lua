@@ -17,6 +17,7 @@ LAKESIZE = 30
 LAKESIZEVARY = 10
 LAKEAMOUNT = math.floor(MAP_W*0.02)
 FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
+SAVEFILEAMOUNT = 10
 
 FPS = 75
 
@@ -78,6 +79,10 @@ do
         return n
     end
 
+    local function debugbox(value)
+        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
+    end
+
     local function boostrandom()
     end
 
@@ -104,18 +109,30 @@ do
         end
     end
 
-    local function savegame()
-
-    end
-
-    local function newgame()
-        State.leaf = 2
+    local function change_page(n)
+        State.leaf = n
         State.hoover = 0
         find_hoovered_button(Currentx, Currenty)
     end
 
-    local function loadgame()
+    local function save_game(i)
+        change_page(3)
+    end
 
+    local function save_file(i)
+        debugbox("save file "..i)
+    end
+
+    local function load_file(i)
+        debugbox("load file "..i)
+    end
+
+    local function newgame()
+        change_page(2)
+    end
+
+    local function loadgame()
+        change_page(4)
     end
 
     local function continuegame()
@@ -130,7 +147,6 @@ do
             end
         end
     end
-
 
     local function debugbox(value)
         love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
@@ -151,7 +167,7 @@ do
     end
 
     local function helpwindow()
-        State.leaf = 5
+        change_page(5)
         State.help_text = load_help_text(State.savedhelpprefix)
     end
 
@@ -447,29 +463,48 @@ do
         local wt, newgamebuttonpadding = translatexy(0.5, 0.02)
 
         Buttons = {{}}
-        Buttons[1] = {{text="Continue", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = continuegame}, {text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y =  newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = savegame}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+5*newgamebuttonh+5*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
+        Buttons[1] = {{text="Continue", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = continuegame}, {text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y =  newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = save_game}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+5*newgamebuttonh+5*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
 
         local newbuttonwidth, newbuttonheight = translatexy(0.2,0.05)
         local paddingx, paddingy = translatexy(0.01,0.01)
         local startpaddingx, startpaddingy = translatexy(0.1,0.1)
         Buttons[2] = {
-            {text="Generate Ground", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
-            {text="Generate NPCS", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_npc},
+            {text="Generate MAP", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
+            {text="Save Game", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = save_game},
             {text="Exit to Main", x = 0, y = 2*newbuttonheight+2*paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = backtomain},
         }
 
         Buttons[3] = {{}}
+        local buttonwidth, buttonheight = translatexy(0.2, 0.05)
+        local continuebuttonx, continuebuttony = translatexy(0.18, 0.035)
+        local buttonpadding, __ = translatexy(0.01, 0)
+        for i = 1, SAVEFILEAMOUNT do
+            Buttons[3][i] = {text="Empty MAP File "..i, x = continuebuttonx, y = continuebuttony+buttonheight*i+buttonpadding*i, width = buttonwidth, height=buttonheight, call = save_file}
+        end
+        local amount = SAVEFILEAMOUNT+1
+        Buttons[3][amount] = {text="Back to Main", x = continuebuttonx, y = continuebuttony+buttonheight*amount+buttonpadding*amount, width = buttonwidth, height=buttonheight, call = backtomain}
+
         Buttons[4] = {{}}
+        buttonwidth, buttonheight = translatexy(0.2, 0.05)
+        continuebuttonx, continuebuttony = translatexy(0.18, 0.035)
+        buttonpadding, __ = translatexy(0.01, 0)
+        for i = 1, SAVEFILEAMOUNT do
+            Buttons[4][i] = {text="Empty MAP File "..i, x = continuebuttonx, y = continuebuttony+buttonheight*i+buttonpadding*i, width = buttonwidth, height=buttonheight, call = load_file}
+        end
+        amount = SAVEFILEAMOUNT+1
+        Buttons[4][amount] = {text="Back to Main", x = continuebuttonx, y = continuebuttony+buttonheight*amount+buttonpadding*amount, width = buttonwidth, height=buttonheight, call = backtomain}
 
         local helpbuttonw, helpbuttonh = translatexy(0.3, 0.07)
         local helpbuttonstartx, helpbuttonstarty = translatexy(0, 0.1)
         local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
         Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpup}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpdown}}
 
+        Buttons[6] = {{}}
+
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charrigth = gfx.newImage("graphics/charright.png")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charrigth = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg")}
         -- leaf 1 = main menu, 2 = new game,
 
         Hooveredx, Hooveredy = 0, 0
@@ -498,7 +533,11 @@ do
 
     function love.mousereleased(x, y, button, istouch, presses)
         if button == 1 and State.hoover > 0 then
-            Buttons[State.leaf][State.hoover].call()
+            if State.leaf == 3 or State.leaf == 4 then
+                Buttons[State.leaf][State.hoover].call(State.hoover)
+            else
+                Buttons[State.leaf][State.hoover].call()
+            end
         elseif x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height then
             State.hoover = -2
         elseif x > ScreenWidth-State.banner:getHeight() and x < ScreenWidth and y > 0 and y < State.banner:getHeight() then
@@ -615,9 +654,17 @@ do
             for i=0, 2 do
                 gfx.print("Use W, S, A, D", padx, pady)
             end
-        elseif State.leaf == 5 then
-            gfx.setColor(0.1,0.7,0.1)
+        elseif State.leaf == 3 then
+            gfx.setColor(0.1,0.45,0.1)
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
+            gfx.setColor(255, 255, 255, 255)
+            gfx.push()
+            local imagefile = State.lovepotion
+            local scale = ScreenHeight/imagefile:getHeight()
+            gfx.scale(scale, scale)
+            gfx.draw(imagefile, ScreenWidth/scale-imagefile:getWidth(), 0)
+            gfx.pop()
+        elseif State.leaf == 5 then
             gfx.setColor(255, 255, 255, 255)
             gfx.push()
             local scalex = ScreenWidth/State.helpbg:getWidth()
