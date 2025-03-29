@@ -110,8 +110,10 @@ do
     end
 
     local function change_page(n)
+        State.oldleaf = State.leaf
         State.leaf = n
         State.hoover = 0
+        State.waitingforsavename = false
         find_hoovered_button(Currentx, Currenty)
     end
 
@@ -188,14 +190,11 @@ do
     end
 
     function love.keyreleased(key, scancode, isrepeat)
-        if key == "escape" and State.leaf ~= 1 then
-            State.oldleaf = State.leaf
-            State.leaf = 1
-        elseif key == "escape" then
-            if State.oldleaf == 1 then
+        if  key == "escape" then
+            if State.leaf == 1 and State.oldleaf == 1 then
                 quitmessage()
             else
-                State.leaf = State.oldleaf
+                change_page(State.oldleaf)
             end
         end
     end
@@ -413,10 +412,8 @@ do
     end
 
     local function backtomain()
+        change_page(1)
         State.oldleaf = 1
-        State.leaf = 1
-        State.hoover = 0
-        find_hoovered_button(Currentx, Currenty)
     end
 
     local function scrollhelpup()
@@ -504,7 +501,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charrigth = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charrigth = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false}
         -- leaf 1 = main menu, 2 = new game,
 
         Hooveredx, Hooveredy = 0, 0
@@ -663,6 +660,14 @@ do
             local scale = ScreenHeight/imagefile:getHeight()
             gfx.scale(scale, scale)
             gfx.draw(imagefile, ScreenWidth/scale-imagefile:getWidth(), 0)
+            gfx.pop()
+        elseif State.leaf == 4 then
+            gfx.setColor(0.7,0.1,0.1)
+            gfx.push()
+            local rotatefile = State.lovepotion
+            local rotatescale = ScreenHeight/rotatefile:getHeight()
+            gfx.scale(rotatescale, rotatescale)
+            gfx.draw(rotatefile, ScreenWidth/rotatescale-rotatefile:getWidth(), math.max(1,ScreenHeight/2-rotatefile:getHeight()/2))
             gfx.pop()
         elseif State.leaf == 5 then
             gfx.setColor(255, 255, 255, 255)
