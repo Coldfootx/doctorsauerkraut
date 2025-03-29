@@ -468,7 +468,10 @@ do
                 map[i][j] = 0
             end
         end
-        Save = {map=map, npcs={}, positionx=0, positiony=0}
+        Save = {map=map, npcs={}, positionx= 0, positiony= 0}
+
+        Save.positionx=randomgen:random(math.max(1,MAP_W-RIVERAMOUNT-1))
+        Save.positiony=randomgen:random(MAP_H)
         --tile = , posx, posy, favourite_thing
 
         local fontsize, y = translatexy(SMALLFONT,SMALLFONT)
@@ -547,8 +550,8 @@ do
             {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
             {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false},
             {i = 6, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
-            {i = 7, name="Red flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
-            {i = 8, name="Yellow flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false}
+            {i = 7, name="Purple flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
+            {i = 8, name="Light blue flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false}
         }
 
         NPC_tiles ={
