@@ -115,7 +115,7 @@ do
         find_hoovered_button(Currentx, Currenty)
     end
 
-    local function save_game(i)
+    local function save_game()
         change_page(3)
     end
 
@@ -470,7 +470,7 @@ do
         local startpaddingx, startpaddingy = translatexy(0.1,0.1)
         Buttons[2] = {
             {text="Generate MAP", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
-            {text="Save Game", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = save_game},
+            {text="Save MAP", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = save_game},
             {text="Exit to Main", x = 0, y = 2*newbuttonheight+2*paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = backtomain},
         }
 
