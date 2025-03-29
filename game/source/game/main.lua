@@ -24,6 +24,7 @@ FPS = 75
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
 RANDOMNESSFILE = "randomness"
+SAVENAMEFILE = "savenames"
 
 --STATEMENTS
 STARTING_RANDOMNESS = 300
@@ -65,7 +66,7 @@ do
         love.filesystem.write(SAVEFILE..save_number, compressed)
     end
 
-    local function loadfile(save_number)
+    local function load_file(save_number)
         local contents, size = love.filesystem.read(SAVEFILE..save_number)
 
         Save = lume.deserialize(love.data.decompress("string", COMPRESSION, contents))
@@ -122,11 +123,9 @@ do
     end
 
     local function save_file(i)
-        debugbox("save file "..i)
-    end
-
-    local function load_file(i)
-        debugbox("load file "..i)
+        debugbox("Press ENTER, Write Name, Press ENTER - Slot "..i)
+        State.waitingforsavename = true
+        State.waitingforsavename_n = i
     end
 
     local function newgame()
@@ -177,13 +176,29 @@ do
         quitmessage()
     end
 
+    local function save_n(n)
+        savefile(n)
+        Buttons[3][n].text = CommandLine.text
+        Buttons[4][n].text = CommandLine.text
+        local names = {}
+        for i = 1, SAVEFILEAMOUNT do
+            names[i] = Buttons[3][i].text
+        end
+        love.filesystem.write(SAVENAMEFILE, lume.serialize(names))
+        State.waitingforsavename = false
+        debugbox("Saved!")
+    end
+
     function love.keypressed(key, scancode, isrepeat)
         if State.hoover >= 0 then
             if key == "return" then
                 State.hoover = -2
             end
         elseif key == "return" and State.hoover == -2 then
-            debugbox(CommandLine.text)
+            --debugbox(CommandLine.text)
+            if State.waitingforsavename == true then
+                save_n(State.waitingforsavename_n)
+            end
         elseif key == "backspace"and State.hoover == -2 then
             CommandLine.text = CommandLine.text:sub(1,-2)
         end
@@ -237,7 +252,7 @@ do
         end
 
         for n = 1, LAKEAMOUNT do
-            -- This code is contributed by chandan_jnu
+            -- This code is partly contributed by chandan_jnu
             local rx = randomgen:random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
             local ry = randomgen:random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
             local xc = randomgen:random(1,MAP_W)
@@ -388,6 +403,8 @@ do
         end
 
         Save.map = map
+        Save.xposition = randomgen:random(ScreenWidth-RIVERWIDTH-1)
+        Save.yposition = randomgen:random(ScreenHeight)
 
         return maptotal
     end
@@ -448,8 +465,6 @@ do
         Save = {map=map, npcs={}, positionx=0, positiony=0}
         --tile = , posx, posy, favourite_thing
 
-        --generate all data
-
         local fontsize, y = translatexy(SMALLFONT,SMALLFONT)
         SmallFont = gfx.newFont(fontsize)
         fontsize, y = translatexy(BIGFONT, BIGFONT)
@@ -468,7 +483,7 @@ do
         Buttons[2] = {
             {text="Generate MAP", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
             {text="Save MAP", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = save_game},
-            {text="Exit to Main", x = 0, y = 2*newbuttonheight+2*paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = backtomain},
+            {text="Back to Main", x = 0, y = 2*newbuttonheight+2*paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = backtomain},
         }
 
         Buttons[3] = {{}}
@@ -498,10 +513,23 @@ do
 
         Buttons[6] = {{}}
 
+        if love.filesystem.getInfo(SAVENAMEFILE) == nil then
+            local names = {}
+            for n=1,SAVEFILEAMOUNT do
+                names[n] = "Unloaded File "..n
+            end
+            love.filesystem.write(SAVENAMEFILE, lume.serialize(names))
+        end
+        local names = lume.deserialize(love.filesystem.read(SAVENAMEFILE))
+        for n=1, SAVEFILEAMOUNT do
+            Buttons[3][n].text = names[n]
+            Buttons[4][n].text = names[n]
+        end
+
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charrigth = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charrigth = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0}
         -- leaf 1 = main menu, 2 = new game,
 
         Hooveredx, Hooveredy = 0, 0
