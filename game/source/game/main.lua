@@ -29,7 +29,7 @@ SAVENAMEFILE = "savenames"
 --STATEMENTS
 STARTING_RANDOMNESS = 300
 
-HELP_TEXT = 'Clean folder %APPDATA%/LOVE to save some space! This folder is \nfor starting directly from code.\n \nAnd clean folder %APPDATA%/gamename or simply /game. This folder is \nfor starting from the compiled executable.\n \nIf you delete the file "randomness"it is regenerated but edit its \ncontained number to avoid same map generation. Ideally it should be \naccumulating forever to avoid them.\n\nIn Linux look for these\n$XDG_DATA_HOME/love/ or ~/.local/share/love/\nlove may be replaced by game name or simply "game"\n\n\nAND NOW FOR LICENSES\n\n\nAdditional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game \nnewest GPL\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nMain Menu background money notes - graphics/100.jpg\nhttps://en.wikipedia.org/wiki/File:DAN-13-Danzig-100_Mark_(1922).jpg\nFrom user https://commons.wikimedia.org/wiki/User:Godot13 - Godot13\nAttribution National Numismatic Collection, National Museum of American History\nCreative Commons Attribution-Share Alike 4.0 International\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.w ikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International\n\n'
+HELP_TEXT = 'Clean folder %APPDATA%/LOVE to save some space! This folder is \nfor starting directly from code.\n \nAnd clean folder %APPDATA%/gamename or simply /game. This folder is \nfor starting from the compiled executable.\n \nIf you delete the file "randomness" it is regenerated but edit its \ncontained number to avoid same map generation. Ideally it should be \naccumulating forever to avoid them.\n\nIn Linux look for these\n$XDG_DATA_HOME/love/ or ~/.local/share/love/\nlove may be replaced by game name or simply "game"\n\n\nAND NOW FOR LICENSES\n\n\nAdditional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game\nby hacker Purlov\nnewest GPL\nhttps://www.gnu.org/licenses/gpl-3.0.html\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nMain Menu background money notes - graphics/100.jpg\nhttps://en.wikipedia.org/wiki/File:DAN-13-Danzig-100_Mark_(1922).jpg\nFrom user https://commons.wikimedia.org/wiki/User:Godot13 - Godot13\nAttribution National Numismatic Collection, National Museum of American History\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.w ikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nWater tile - graphics/water.jpg\nhttps://opengameart.org/content/texture-water\nFrom user www.GodsAndIdols.com and https://opengameart.org/users/jattenalle\nCC-BY 3.0\nhttps://creativecommons.org/licenses/by/3.0/\n\n\nFlower tiles - graphics/flower1&2.png\nI changed their colours somewhat\nhttps://opengameart.org/content/pixel-flower-icons\nFrom user https://opengameart.org/users/sicklyseraph - sicklyseraph\nCC-BY 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n\n'
 
 --[[
     url,website logo,game logo and game title and game banner's text. only 5 places for name
@@ -248,12 +248,10 @@ do
 
     local function generate_map()
         local map = {}
-        local maptotal = 0
         for i=1,MAP_W do
             map[i] = {}     -- create x
             for j=1,MAP_H do
                 map[i][j] = randomgen:random(2)
-                maptotal = maptotal + map[i][j]
             end
         end
 
@@ -465,7 +463,7 @@ do
         for i=1,MAP_W do
             map[i] = {}     -- create x
             for j=1,MAP_H do
-                map[i][j] = 0
+                map[i][j] = 1
             end
         end
         Save = {map=map, npcs={}, positionx= 0, positiony= 0}
@@ -561,7 +559,7 @@ do
         }
         --jata magneetti
         --for i=0, 999 do
-            MapTotal = generate_map()
+        --    MapTotal = generate_map()
         --end
     end
 
@@ -791,6 +789,6 @@ do
             end
         end
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, mapnumber="..MapTotal..", randomseed="..Randomseed..", mousehoover="..Tiles[Save.map[State.xprefix+Hooveredx+1][State.yprefix+Hooveredy+1]].name)
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", mousehoover="..Tiles[Save.map[State.xprefix+Hooveredx+1][State.yprefix+Hooveredy+1]].name)
     end
 end

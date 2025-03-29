@@ -4,7 +4,7 @@ for starting directly from code.
 And clean folder %APPDATA%/gamename or simply /game. This folder is 
 for starting from the compiled executable.
  
-If you delete the file "randomness"it is regenerated but edit its 
+If you delete the file "randomness" it is regenerated but edit its 
 contained number to avoid same map generation. Ideally it should be 
 accumulating forever to avoid them.
 
@@ -20,8 +20,10 @@ Additional licenses not mentioned in the license file in the game folder
 and folder love in the source distribution
 
 
-This game 
+This game
+by hacker Purlov
 newest GPL
+https://www.gnu.org/licenses/gpl-3.0.html
 
 
 ----Libraries----
@@ -83,6 +85,7 @@ https://creativecommons.org/licenses/by/3.0/
 
 
 Flower tiles - graphics/flower1&2.png
+I changed their colours somewhat
 https://opengameart.org/content/pixel-flower-icons
 From user https://opengameart.org/users/sicklyseraph - sicklyseraph
 CC-BY 4.0
