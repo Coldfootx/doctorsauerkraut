@@ -189,6 +189,12 @@ do
         debugbox("Saved!")
     end
 
+    local function load_n(n)
+        load_file(n)
+        debugbox("Loaded!")
+        change_page(1)
+    end
+
     function love.keypressed(key, scancode, isrepeat)
         if State.hoover >= 0 then
             if key == "return" then
@@ -501,7 +507,7 @@ do
         continuebuttonx, continuebuttony = translatexy(0.18, 0.035)
         buttonpadding, __ = translatexy(0.01, 0)
         for i = 1, SAVEFILEAMOUNT do
-            Buttons[4][i] = {text="Empty MAP File "..i, x = continuebuttonx, y = continuebuttony+buttonheight*i+buttonpadding*i, width = buttonwidth, height=buttonheight, call = load_file}
+            Buttons[4][i] = {text="Empty MAP File "..i, x = continuebuttonx, y = continuebuttony+buttonheight*i+buttonpadding*i, width = buttonwidth, height=buttonheight, call = load_n}
         end
         amount = SAVEFILEAMOUNT+1
         Buttons[4][amount] = {text="Back to Main", x = continuebuttonx, y = continuebuttony+buttonheight*amount+buttonpadding*amount, width = buttonwidth, height=buttonheight, call = backtomain}
