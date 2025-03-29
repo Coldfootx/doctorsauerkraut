@@ -33,8 +33,8 @@ HELP_TEXT = 'Clean folder %APPDATA%/LOVE to save some space! This folder is \nfo
 
 --[[
     url,website logo,game logo and game title and game banner's text. only 5 places for name
-    name about me and github
-    Mini tiles hand-drawn with A* clicks
+    name about me, github and shoutbox shouts. only 3 places
+    Mini tiles A* clicks
     -2 places
     -pystyy polttamaan
 ]] --
