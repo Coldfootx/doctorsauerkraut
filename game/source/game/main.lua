@@ -17,6 +17,8 @@ LAKESIZE = 30
 LAKESIZEVARY = 10
 LAKEAMOUNT = math.floor(MAP_W*0.02)
 FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
+ROADAMOUNT = math.floor(MAP_W*0.022)
+ROADWIDTH = 6
 SAVEFILEAMOUNT = 10
 
 FPS = 75
@@ -123,7 +125,7 @@ do
     end
 
     local function save_file(i)
-        debugbox("Press ENTER, Write Name, Press ENTER - Slot "..i)
+        debugbox("Close this dialog, Press ENTER, Write Name, Press ENTER - Slot "..i)
         State.waitingforsavename = true
         State.waitingforsavename_n = i
     end
@@ -399,18 +401,98 @@ do
         end
 
         for n=1, FLOWERAMOUNT do
-            local fx = randomgen:random(1,MAP_W)
-            local fy = randomgen:random(1,MAP_H)
+            local fx = randomgen:random(MAP_W)
+            local fy = randomgen:random(MAP_H)
             if Tiles[map[fx][fy]].obstacle == false and map[fx][fy] ~= 4 then
                 map[fx][fy] = 6+randomgen:random(2)
             end
         end
 
-        Save.map = map
-        Save.xposition = randomgen:random(ScreenWidth-RIVERWIDTH-1)
-        Save.yposition = randomgen:random(ScreenHeight)
+        for n=1, ROADAMOUNT do
+            local random = randomgen:random(4)
+            local cx
+            local cy
+            local suunta
+            if random == 1 then
+                cx = 1
+                cy = randomgen:random(MAP_H-1)
+                suunta = 1
+            elseif random == 2 then
+                cx = MAP_W-1
+                cy = randomgen:random(MAP_H-1)
+                suunta = -1
+            elseif random == 3 then
+                cx = randomgen:random(MAP_W-1)
+                cy = 1
+                suunta = 2
+            elseif random == 4 then
+                cx = randomgen:random(MAP_W-1)
+                cy = MAP_H-1
+                suunta = -2
+            end
 
-        return maptotal
+            local function randomsuunta()
+                local random = randomgen:random(4)
+                local suunta
+                if random == 1 then
+                    suunta = 1
+                elseif random == 2 then
+                    suunta = -1
+                elseif random == 3 then
+                    suunta = 2
+                elseif random == 4 then
+                    suunta = -2
+                end
+                return suunta
+            end
+
+            for n=1, 999999 do
+                if suunta == 1 then
+                    local cxtest = math.min(cx+1, MAP_W)
+                    if Tiles[map[cxtest][cy]].obstacle == false then
+                        cx = cxtest
+                        map[cx][cy] = 9
+                    else
+                        suunta = randomsuunta()
+                    end
+                elseif suunta == -1 then
+                    local cxtest = math.max(cx-1, 1)
+                    if Tiles[map[cxtest][cy]].obstacle == false then
+                        cx = cxtest
+                        map[cx][cy] = 9
+                    else
+                        suunta = randomsuunta()
+                    end
+                elseif suunta == 2 then
+                    local cytest = math.min(cy+1, MAP_H)
+                    if Tiles[map[cx][cytest]].obstacle == false then
+                        cy = cytest
+                        map[cx][cy] = 9
+                    else
+                        suunta = randomsuunta()
+                    end
+                elseif suunta == -2 then
+                    local cytest = math.max(cy-1, 1)
+                    if Tiles[map[cx][cytest]].obstacle == false then
+                        cy = cytest
+                        map[cx][cy] = 9
+                    else
+                        suunta = randomsuunta()
+                    end
+                end
+            end
+        end
+
+        local px = randomgen:random(math.max(MAP_W-RIVERWIDTH-1,1))
+        local py =  randomgen:random(MAP_H)
+        while Tiles[map[px][py]].obstacle == true do
+            px = randomgen:random(math.max(MAP_W-RIVERWIDTH-1,1))
+            py =  randomgen:random(MAP_H)
+        end
+        Save.positionx = px
+        Save.positiony = py
+
+        Save.map = map
     end
     
     local function generate_npc()
@@ -549,7 +631,8 @@ do
             {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false},
             {i = 6, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
             {i = 7, name="Purple flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
-            {i = 8, name="Light blue flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false}
+            {i = 8, name="Light blue flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
+            {i = 9, name="Sand road", file = gfx.newImage("graphics/road.png"), obstacle = false}
         }
 
         NPC_tiles ={
