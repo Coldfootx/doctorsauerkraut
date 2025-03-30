@@ -18,7 +18,6 @@ LAKESIZEVARY = 10
 LAKEAMOUNT = math.floor(MAP_W*0.02)
 FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
 ROADAMOUNT = math.floor(MAP_W*0.022)
-ROADWIDTH = 6
 SAVEFILEAMOUNT = 10
 
 FPS = 75
@@ -241,22 +240,22 @@ do
         end
     end
 
-    local function transfer_prefix_to_pos()
-        Save.positionx= State.xprefix+ScreenWidth/SQUARESIZE/2
-        Save.positiony = State.yprefix+ScreenHeight/SQUARESIZE/2
-    end
-
     local function randomlocation()
-        local px = randomgen:random(math.max(MAP_W-RIVERWIDTH-1,1))
-        local py =  randomgen:random(MAP_H)
-        while Tiles[Save.map[px][py]].obstacle == true do
-            px = randomgen:random(math.max(MAP_W-RIVERWIDTH-1,1))
+        local px, py
+        repeat
+            px = randomgen:random(MAP_W-RIVERWIDTH-1)
             py = randomgen:random(MAP_H)
-        end
+        until Tiles[Save.map[px][py]].obstacle == false
+        --debugbox(Tiles[Save.map[px][py]].name)
         Save.positionx = px
         Save.positiony = py
-        State.xprefix = math.max(px-MAP_W/2,1)
-        State.yprefix = math.max(py-MAP_H/2,1)
+        State.xprefix = math.max(px-math.floor(ScreenWidth/SQUARESIZE/2),1)
+        State.yprefix = math.max(py-math.floor(ScreenHeight/SQUARESIZE/2),1)
+
+        --debugbox(Save.positionx..", "..Save.positiony)
+
+        --local xamount = math.floor(ScreenWidth/SQUARESIZE/2)
+        --local yamount = math.floor(ScreenHeight/SQUARESIZE/2)
     end
 
     local function generate_map()
@@ -605,9 +604,10 @@ do
         Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpup}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpdown}}
 
         local gamebuttonw, gamebuttonh = translatexy(0.3, 0.07)
+        local wpadding, hpadding = translatexy(0,0.15)
         --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
         --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
-        Buttons[6] = {{text="Random location", x = 0, y = 0*gamebuttonh, width = gamebuttonw, height=gamebuttonh, call = randomlocation}, {text="Back to Main", x = 0, y = 1*gamebuttonh, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
+        Buttons[6] = {{text="Random location", x = 0, y = 0*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = randomlocation}, {text="Back to Main", x = 0, y = 1*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
 
         if love.filesystem.getInfo(SAVENAMEFILE) == nil then
             local names = {}
@@ -648,7 +648,7 @@ do
             {i = 3, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")}
         }
 
-        transfer_prefix_to_pos()
+        randomlocation()
         --jata magneetti
         --for i=0, 999 do
         --    MapTotal = generate_map()
@@ -703,7 +703,6 @@ do
                             State.yprefix = 0
                         end
                     end
-                    transfer_prefix_to_pos()
                 end
                 if love.keyboard.isDown('s') then
                     if State.leaf == 2 then
@@ -713,7 +712,6 @@ do
                             State.yprefix = check
                         end
                     end
-                    transfer_prefix_to_pos()
                 end
                 if love.keyboard.isDown('a') then
                     if State.leaf == 2 then
@@ -722,7 +720,6 @@ do
                             State.xprefix = 0
                         end
                     end
-                    transfer_prefix_to_pos()
                 end
                 if love.keyboard.isDown('d') then
                     if State.leaf == 2 then
@@ -732,7 +729,6 @@ do
                             State.xprefix = check
                         end
                     end
-                    transfer_prefix_to_pos()
                 end
             end
         end
@@ -770,7 +766,7 @@ do
                 for j=1, yamount do
                     gfx.setColor(255, 255, 255, 255)
                     gfx.push()
-                    local imagefile = Tiles[Save.map[i+State.xprefix][j+State.yprefix]].file
+                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-2),MAP_W)][math.min(math.max(1,j+State.yprefix-2),MAP_H)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
                     gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
@@ -822,17 +818,19 @@ do
                 for j=1, yamount do
                     gfx.setColor(255, 255, 255, 255)
                     gfx.push()
-                    local imagefile = Tiles[Save.map[i+State.xprefix][j+State.yprefix]].file
+                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-2),MAP_W)][math.min(math.max(1,j+State.yprefix-2),MAP_H)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
                     gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
                     gfx.pop()
-                    gfx.setColor(255, 255, 255, 255)
                     gfx.push()
-                    local scalechar = ScreenWidth/xamount/imagefile:getWidth()*1.2
-                    gfx.scale(scalechar, scalechar)
-                    gfx.draw(State.charright, (Save.positionx-State.xprefix)*SQUARESIZE/scalechar, (Save.positiony-State.yprefix)*SQUARESIZE/scalechar)
+                    imagefile = State.charright
+                    local scalec = ScreenWidth/xamount/imagefile:getWidth()
+                    gfx.scale(scalec, scalec)
+                    gfx.draw(State.charright, math.floor(Save.positionx-State.xprefix+1)*SQUARESIZE/scalec, math.floor(Save.positiony-State.yprefix+1)*SQUARESIZE/scalec)
                     gfx.pop()
+                    --State.xprefix = math.max(px-MAP_W/2,1)
+                    --State.yprefix = math.max(py-MAP_H/2,1)
                 end
             end
         end
@@ -906,6 +904,6 @@ do
             end
         end
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", mousehoover="..Tiles[Save.map[State.xprefix+Hooveredx+1][State.yprefix+Hooveredy+1]].name)
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", xpos="..Save.positionx.."|"..math.min(State.xprefix+Hooveredx-1,MAP_W)..", ypos="..Save.positiony.."|"..math.min(State.yprefix+Hooveredy-1,MAP_H)..", mousehoover="..Tiles[Save.map[math.min(State.xprefix+Hooveredx-1,MAP_W)][math.min(State.yprefix+Hooveredy-1,MAP_H)]].name)
     end
 end
