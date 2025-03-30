@@ -131,6 +131,7 @@ do
     end
 
     local function continuegame()
+        change_page(6)
     end
 
     local function explode(inputstr, sep)
@@ -238,6 +239,24 @@ do
             gfx.print(text, width-1, height-1)]]--
             gfx.print(text, width, height)
         end
+    end
+
+    local function transfer_prefix_to_pos()
+        Save.positionx= State.xprefix+ScreenWidth/SQUARESIZE/2
+        Save.positiony = State.yprefix+ScreenHeight/SQUARESIZE/2
+    end
+
+    local function randomlocation()
+        local px = randomgen:random(math.max(MAP_W-RIVERWIDTH-1,1))
+        local py =  randomgen:random(MAP_H)
+        while Tiles[Save.map[px][py]].obstacle == true do
+            px = randomgen:random(math.max(MAP_W-RIVERWIDTH-1,1))
+            py = randomgen:random(MAP_H)
+        end
+        Save.positionx = px
+        Save.positiony = py
+        State.xprefix = math.max(px-MAP_W/2,1)
+        State.yprefix = math.max(py-MAP_H/2,1)
     end
 
     local function generate_map()
@@ -475,14 +494,7 @@ do
             end
         end
 
-        local px = randomgen:random(math.max(MAP_W-RIVERWIDTH-1,1))
-        local py =  randomgen:random(MAP_H)
-        while Tiles[map[px][py]].obstacle == true do
-            px = randomgen:random(math.max(MAP_W-RIVERWIDTH-1,1))
-            py =  randomgen:random(MAP_H)
-        end
-        Save.positionx = px
-        Save.positiony = py
+        randomlocation()
 
         Save.map = map
     end
@@ -592,7 +604,10 @@ do
         local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
         Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpup}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpdown}}
 
-        Buttons[6] = {{}}
+        local gamebuttonw, gamebuttonh = translatexy(0.3, 0.07)
+        --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
+        --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
+        Buttons[6] = {{text="Random location", x = 0, y = 0*gamebuttonh, width = gamebuttonw, height=gamebuttonh, call = randomlocation}, {text="Back to Main", x = 0, y = 1*gamebuttonh, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
 
         if love.filesystem.getInfo(SAVENAMEFILE) == nil then
             local names = {}
@@ -610,7 +625,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charrigth = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0}
         -- leaf 1 = main menu, 2 = new game,
 
         Hooveredx, Hooveredy = 0, 0
@@ -632,6 +647,8 @@ do
             {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")},
             {i = 3, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")}
         }
+
+        transfer_prefix_to_pos()
         --jata magneetti
         --for i=0, 999 do
         --    MapTotal = generate_map()
@@ -676,6 +693,7 @@ do
                 CommandLine.focusswitch = true
             end
         end
+
         if State.hoover ~= -2 then
             if State.leaf == 2 then
                 if love.keyboard.isDown('w') then
@@ -685,6 +703,7 @@ do
                             State.yprefix = 0
                         end
                     end
+                    transfer_prefix_to_pos()
                 end
                 if love.keyboard.isDown('s') then
                     if State.leaf == 2 then
@@ -694,6 +713,7 @@ do
                             State.yprefix = check
                         end
                     end
+                    transfer_prefix_to_pos()
                 end
                 if love.keyboard.isDown('a') then
                     if State.leaf == 2 then
@@ -702,6 +722,7 @@ do
                             State.xprefix = 0
                         end
                     end
+                    transfer_prefix_to_pos()
                 end
                 if love.keyboard.isDown('d') then
                     if State.leaf == 2 then
@@ -711,6 +732,7 @@ do
                             State.xprefix = check
                         end
                     end
+                    transfer_prefix_to_pos()
                 end
             end
         end
@@ -793,6 +815,26 @@ do
             gfx.setColor(1,1,1)
             gfx.rectangle("line", Buttons[State.leaf][2].x-beyondbuttonw, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height, Buttons[State.leaf][2].width+ 2*beyondbuttonw, Buttons[State.leaf][3].y-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height))
             gfx.print(State.help_text, Buttons[State.leaf][2].x-beyondbuttonw+State.helppadding, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height+State.helppadding)
+        elseif State.leaf == 6 then
+            local xamount = math.floor(ScreenWidth/SQUARESIZE)
+            local yamount = math.floor(ScreenHeight/SQUARESIZE)
+            for i=1, xamount do
+                for j=1, yamount do
+                    gfx.setColor(255, 255, 255, 255)
+                    gfx.push()
+                    local imagefile = Tiles[Save.map[i+State.xprefix][j+State.yprefix]].file
+                    local scale = ScreenWidth/xamount/imagefile:getWidth()
+                    gfx.scale(scale, scale)
+                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
+                    gfx.pop()
+                    gfx.setColor(255, 255, 255, 255)
+                    gfx.push()
+                    local scalechar = ScreenWidth/xamount/imagefile:getWidth()*1.2
+                    gfx.scale(scalechar, scalechar)
+                    gfx.draw(State.charright, (Save.positionx-State.xprefix)*SQUARESIZE/scalechar, (Save.positiony-State.yprefix)*SQUARESIZE/scalechar)
+                    gfx.pop()
+                end
+            end
         end
 
         gfx.setFont(BigFont)
