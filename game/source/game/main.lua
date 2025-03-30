@@ -904,6 +904,9 @@ do
             end
         end
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", xpos="..Save.positionx.."|"..math.min(State.xprefix+Hooveredx-1,MAP_W)..", ypos="..Save.positiony.."|"..math.min(State.yprefix+Hooveredy-1,MAP_H)..", mousehoover="..Tiles[Save.map[math.min(State.xprefix+Hooveredx-1,MAP_W)][math.min(State.yprefix+Hooveredy-1,MAP_H)]].name)
+        local posx = math.min(math.max(State.xprefix+Hooveredx-1,1), MAP_W)
+        local posy = math.min(math.max(State.yprefix+Hooveredy-1,1), MAP_H)
+
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", xpos="..Save.positionx.."|"..posx..", ypos="..Save.positiony.."|"..posy..", mousehoover="..Tiles[Save.map[posx][posy]].name)
     end
 end
