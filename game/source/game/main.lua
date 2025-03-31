@@ -139,7 +139,7 @@ do
         calculate_prefix(px,py)
     end
 
-    local function generate_map()
+    local function format_map()
         local map = {}
         for i=1,MAP_W do
             map[i] = {}     -- create x
@@ -147,6 +147,11 @@ do
                 map[i][j] = randomgen:random(2)
             end
         end
+        return map
+    end
+
+    local function generate_map()
+        local map = format_map()
 
         for n = 1, LAKEAMOUNT do
             -- This code is partly contributed by chandan_jnu
@@ -380,7 +385,12 @@ do
     end
 
     local function newgame()
-        change_page(2)
+        local pressedbutton = love.window.showMessageBox("Remember to save map first", "Entering new game formats the current map in memory. Want to continue?", {"OK", "No!", enterbutton = 2}, "warning", true)
+        if pressedbutton == 1 then
+            Save.map = format_map()
+            change_page(2)
+        end
+        
     end
 
     local function loadgame()
@@ -776,7 +786,7 @@ do
             gfx.setColor(1,1,1)
             local padx, pady = translatexy(0.02, 0.05)
             for i=0, 2 do
-                gfx.print("Use W, S, A, D", padx, pady)
+                gfx.print("Use W, S, A, D - Don't start on a lake", padx, pady)
             end
         elseif State.leaf == 3 then
             gfx.setColor(0.1,0.45,0.1)
