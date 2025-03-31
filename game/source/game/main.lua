@@ -55,8 +55,8 @@ do
     Randomseed = choice
 
     local function savefile(save_number)
-        Save.positionx = State.xprefix + SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)
-        Save.positiony = State.yprefix + SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)
+        Save.positionx = State.xprefix + math.floor(ScreenWidth/SQUARESIZE/2)
+        Save.positiony = State.yprefix + math.floor(ScreenHeight/SQUARESIZE/2)
 
         local compressed = love.data.compress("string", COMPRESSION, lume.serialize(Save), 9)
 
@@ -374,13 +374,12 @@ do
             end
         end
 
-        randomlocation()
-
         Save.map = map
+
+        randomlocation()
     end
 
     local function newgame()
-        generate_map()
         change_page(2)
     end
 
@@ -766,7 +765,7 @@ do
                 for j=1, yamount do
                     gfx.setColor(255, 255, 255, 255)
                     gfx.push()
-                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-2),MAP_W)][math.min(math.max(1,j+State.yprefix-2),MAP_H)]].file
+                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_W)][math.min(math.max(1,j+State.yprefix-1),MAP_H)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
                     gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
@@ -818,7 +817,7 @@ do
                 for j=1, yamount do
                     gfx.setColor(255, 255, 255, 255)
                     gfx.push()
-                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-2),MAP_W)][math.min(math.max(1,j+State.yprefix-2),MAP_H)]].file
+                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_W)][math.min(math.max(1,j+State.yprefix-1),MAP_H)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
                     gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
