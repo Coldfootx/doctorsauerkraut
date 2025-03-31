@@ -35,6 +35,7 @@ HELP_TEXT = 'Look at folder %APPDATA%/LOVE to save some space! This folder is \n
 do
     local love = require("love")
     local lume = require("lib.lume")
+    local utf8 = require("utf8")
 
     local gfx = love.graphics
 
@@ -206,7 +207,10 @@ do
                 save_n(State.waitingforsavename_n)
             end
         elseif key == "backspace"and State.hoover == -2 then
-            CommandLine.text = CommandLine.text:sub(1,-2)
+            if string.len(CommandLine.text) > 0 then
+                CommandLine.text = CommandLine.text:sub(1,utf8.offset(CommandLine.text, -1)-1)
+            end
+           -- CommandLine.text = string.gsub(CommandLine.text,"%W",function(d)return tonumber(d) and d or "" end) 
         end
     end
 
@@ -539,6 +543,12 @@ do
     local function scrollhelpdown()
         State.savedhelpprefix = State.savedhelpprefix + SCROLLLINES
         State.help_text = load_help_text(State.savedhelpprefix)
+    end
+
+    local function getposfromhoover()
+        local posx = math.min(math.max(State.xprefix+Hooveredx-1,1), MAP_W)
+        local posy = math.min(math.max(State.yprefix+Hooveredy-1,1), MAP_H)
+        return posx, posy
     end
 
     function love.load()
@@ -910,8 +920,7 @@ do
             end
         end
 
-        local posx = math.min(math.max(State.xprefix+Hooveredx-1,1), MAP_W)
-        local posy = math.min(math.max(State.yprefix+Hooveredy-1,1), MAP_H)
+        local posx, posy = getposfromhoover()
 
         print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", xpos="..Save.positionx.."|"..posx..", ypos="..Save.positiony.."|"..posy..", mousehoover="..Tiles[Save.map[posx][posy]].name)
     end
