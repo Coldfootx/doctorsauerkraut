@@ -170,6 +170,11 @@ do
         quitmessage()
     end
 
+    local function calculate_prefix(px, py)
+        State.xprefix = math.max(px-math.floor(ScreenWidth/SQUARESIZE/2),1)
+        State.yprefix = math.max(py-math.floor(ScreenHeight/SQUARESIZE/2),1)
+    end
+
     local function save_n(n)
         savefile(n)
         Buttons[3][n].text = CommandLine.text
@@ -185,6 +190,7 @@ do
 
     local function load_n(n)
         load_file(n)
+        calculate_prefix(Save.positionx, Save.positiony)
         debugbox("Loaded!")
         change_page(1)
     end
@@ -249,8 +255,8 @@ do
         --debugbox(Tiles[Save.map[px][py]].name)
         Save.positionx = px
         Save.positiony = py
-        State.xprefix = math.max(px-math.floor(ScreenWidth/SQUARESIZE/2),1)
-        State.yprefix = math.max(py-math.floor(ScreenHeight/SQUARESIZE/2),1)
+        calculate_prefix(px,py)
+        
 
         --debugbox(Save.positionx..", "..Save.positiony)
 
