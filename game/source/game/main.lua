@@ -55,9 +55,9 @@ do
     Randomseed = choice
 
     local function savefile(save_number)
-        Save.positionx =SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)
-        Save.positiony= SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)
-        
+        Save.positionx = State.xprefix + SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)
+        Save.positiony = State.yprefix + SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)
+
         local compressed = love.data.compress("string", COMPRESSION, lume.serialize(Save), 9)
 
         love.filesystem.write(SAVEFILE..save_number, compressed)
