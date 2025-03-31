@@ -55,6 +55,9 @@ do
     Randomseed = choice
 
     local function savefile(save_number)
+        Save.positionx =SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)
+        Save.positiony= SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)
+        
         local compressed = love.data.compress("string", COMPRESSION, lume.serialize(Save), 9)
 
         love.filesystem.write(SAVEFILE..save_number, compressed)
@@ -122,132 +125,9 @@ do
         State.waitingforsavename_n = i
     end
 
-    local function newgame()
-        change_page(2)
-    end
-
-    local function loadgame()
-        change_page(4)
-    end
-
-    local function continuegame()
-        change_page(6)
-    end
-
-    local function explode(inputstr, sep)
-        sep=sep or '%s'
-        local t={}
-        for field,s in string.gmatch(inputstr, "([^"..sep.."]*)("..sep.."?)") do
-            table.insert(t,field)  
-            if s=="" then return t
-            end
-        end
-    end
-
-    local function debugbox(value)
-        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
-    end
-
-    local function load_help_text(prefix)
-        local lines = explode(HELP_TEXT, "\n")
-        local fits = (Buttons[State.leaf][3].y-State.helppadding-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height+State.helppadding))/SmallFont:getHeight()
-        local sliced = {}
-        for i=0, fits do
-            sliced[i] = lines[prefix+i]
-        end
-        --debugbox(sliced[2])
-        local nstring = table.concat(sliced, "\n")
-        State.savedhelpprefix = prefix
-        --debugbox(nstring)
-        return nstring
-    end
-
-    local function helpwindow()
-        change_page(5)
-        State.help_text = load_help_text(State.savedhelpprefix)
-    end
-
-    local function quitgame()
-        quitmessage()
-    end
-
     local function calculate_prefix(px, py)
         State.xprefix = math.max(px-math.floor(ScreenWidth/SQUARESIZE/2),1)
         State.yprefix = math.max(py-math.floor(ScreenHeight/SQUARESIZE/2),1)
-    end
-
-    local function save_n(n)
-        savefile(n)
-        Buttons[3][n].text = CommandLine.text
-        Buttons[4][n].text = CommandLine.text
-        local names = {}
-        for i = 1, SAVEFILEAMOUNT do
-            names[i] = Buttons[3][i].text
-        end
-        love.filesystem.write(SAVENAMEFILE, lume.serialize(names))
-        State.waitingforsavename = false
-        debugbox("Saved!")
-    end
-
-    local function load_n(n)
-        load_file(n)
-        calculate_prefix(Save.positionx, Save.positiony)
-        debugbox("Loaded!")
-        change_page(1)
-    end
-
-    function love.keypressed(key, scancode, isrepeat)
-        if State.hoover >= 0 then
-            if key == "return" then
-                State.hoover = -2
-            end
-        elseif key == "return" and State.hoover == -2 then
-            --debugbox(CommandLine.text)
-            if State.waitingforsavename == true then
-                save_n(State.waitingforsavename_n)
-            end
-        elseif key == "backspace"and State.hoover == -2 then
-            if string.len(CommandLine.text) > 0 then
-                CommandLine.text = CommandLine.text:sub(1,utf8.offset(CommandLine.text, -1)-1)
-            end
-           -- CommandLine.text = string.gsub(CommandLine.text,"%W",function(d)return tonumber(d) and d or "" end) 
-        end
-    end
-
-    function love.keyreleased(key, scancode, isrepeat)
-        if  key == "escape" then
-            if State.leaf == 1 and State.oldleaf == 1 then
-                quitmessage()
-            else
-                change_page(State.oldleaf)
-            end
-        end
-    end
-
-    local function translatexy(x1, y1)
-        x1 = x1*ScreenWidth
-        y1 = y1*ScreenHeight
-        return x1, y1
-    end
-
-    local function print_to_debug(text)
-        local width, height = translatexy(0.01, 0.97)
-        gfx.setColor(1,1,1)
-        gfx.rectangle("fill",width,height,SmallFont:getWidth(text),SmallFont:getHeight(text))
-        gfx.setFont(SmallFont)
-        gfx.setColor(1,0,0)
-        for i=1, SMALLFONTDRAWS do
-            --[[gfx.setColor(0,0,0)
-            gfx.print(text, width-1, height)
-            gfx.print(text, width+1, height)
-            gfx.print(text, width, height-1)
-            gfx.print(text, width, height+1)
-            gfx.print(text, width-1, height+1)
-            gfx.print(text, width+1, height-1)
-            gfx.print(text, width+1, height+1)
-            gfx.print(text, width-1, height-1)]]--
-            gfx.print(text, width, height)
-        end
     end
 
     local function randomlocation()
@@ -256,16 +136,7 @@ do
             px = randomgen:random(MAP_W-RIVERWIDTH-1)
             py = randomgen:random(MAP_H)
         until Tiles[Save.map[px][py]].obstacle == false
-        --debugbox(Tiles[Save.map[px][py]].name)
-        Save.positionx = px
-        Save.positiony = py
         calculate_prefix(px,py)
-        
-
-        --debugbox(Save.positionx..", "..Save.positiony)
-
-        --local xamount = math.floor(ScreenWidth/SQUARESIZE/2)
-        --local yamount = math.floor(ScreenHeight/SQUARESIZE/2)
     end
 
     local function generate_map()
@@ -507,7 +378,122 @@ do
 
         Save.map = map
     end
-    
+
+    local function newgame()
+        generate_map()
+        change_page(2)
+    end
+
+    local function loadgame()
+        change_page(4)
+    end
+
+    local function continuegame()
+        change_page(6)
+    end
+
+    local function explode(inputstr, sep)
+        sep=sep or '%s'
+        local t={}
+        for field,s in string.gmatch(inputstr, "([^"..sep.."]*)("..sep.."?)") do
+            table.insert(t,field)  
+            if s=="" then return t
+            end
+        end
+    end
+
+    local function debugbox(value)
+        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
+    end
+
+    local function load_help_text(prefix)
+        local lines = explode(HELP_TEXT, "\n")
+        local fits = (Buttons[State.leaf][3].y-State.helppadding-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height+State.helppadding))/SmallFont:getHeight()
+        local sliced = {}
+        for i=0, fits do
+            sliced[i] = lines[prefix+i]
+        end
+        --debugbox(sliced[2])
+        local nstring = table.concat(sliced, "\n")
+        State.savedhelpprefix = prefix
+        --debugbox(nstring)
+        return nstring
+    end
+
+    local function helpwindow()
+        change_page(5)
+        State.help_text = load_help_text(State.savedhelpprefix)
+    end
+
+    local function quitgame()
+        quitmessage()
+    end
+
+    local function save_n(n)
+        savefile(n)
+        Buttons[3][n].text = CommandLine.text
+        Buttons[4][n].text = CommandLine.text
+        local names = {}
+        for i = 1, SAVEFILEAMOUNT do
+            names[i] = Buttons[3][i].text
+        end
+        love.filesystem.write(SAVENAMEFILE, lume.serialize(names))
+        State.waitingforsavename = false
+        debugbox("Saved!")
+    end
+
+    local function load_n(n)
+        load_file(n)
+        calculate_prefix(Save.positionx, Save.positiony)
+        debugbox("Loaded!")
+        change_page(1)
+    end
+
+    function love.keypressed(key, scancode, isrepeat)
+        if State.hoover >= 0 then
+            if key == "return" then
+                State.hoover = -2
+            end
+        elseif key == "return" and State.hoover == -2 then
+            --debugbox(CommandLine.text)
+            if State.waitingforsavename == true then
+                save_n(State.waitingforsavename_n)
+            end
+        elseif key == "backspace"and State.hoover == -2 then
+            if string.len(CommandLine.text) > 0 then
+                CommandLine.text = CommandLine.text:sub(1,utf8.offset(CommandLine.text, -1)-1)
+            end
+           -- CommandLine.text = string.gsub(CommandLine.text,"%W",function(d)return tonumber(d) and d or "" end) 
+        end
+    end
+
+    function love.keyreleased(key, scancode, isrepeat)
+        if  key == "escape" then
+            if State.leaf == 1 and State.oldleaf == 1 then
+                quitmessage()
+            else
+                change_page(State.oldleaf)
+            end
+        end
+    end
+
+    local function translatexy(x1, y1)
+        x1 = x1*ScreenWidth
+        y1 = y1*ScreenHeight
+        return x1, y1
+    end
+
+    local function print_to_debug(text)
+        local width, height = translatexy(0.01, 0.97)
+        gfx.setColor(1,1,1)
+        gfx.rectangle("fill",width,height,SmallFont:getWidth(text),SmallFont:getHeight(text))
+        gfx.setFont(SmallFont)
+        gfx.setColor(1,0,0)
+        for i=1, SMALLFONTDRAWS do
+            gfx.print(text, width, height)
+        end
+    end
+
     local function generate_npc()
     end
 
@@ -546,8 +532,8 @@ do
     end
 
     local function getposfromhoover()
-        local posx = math.min(math.max(State.xprefix+Hooveredx-1,1), MAP_W)
-        local posy = math.min(math.max(State.yprefix+Hooveredy-1,1), MAP_H)
+        local posx = math.min(math.max(State.xprefix+Hooveredx,1), MAP_W)
+        local posy = math.min(math.max(State.yprefix+Hooveredy,1), MAP_H)
         return posx, posy
     end
 
@@ -567,10 +553,8 @@ do
                 map[i][j] = 1
             end
         end
-        Save = {map=map, npcs={}, positionx= 0, positiony= 0}
-
-        Save.positionx=randomgen:random(math.max(1,MAP_W-RIVERAMOUNT-1))
-        Save.positiony=randomgen:random(MAP_H)
+        Save = {map=map, npcs={}, positionx=  1, positiony= 1}
+        
         --tile = , posx, posy, favourite_thing
 
         local fontsize, y = translatexy(SMALLFONT,SMALLFONT)
@@ -843,7 +827,7 @@ do
                     imagefile = State.charright
                     local scalec = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scalec, scalec)
-                    gfx.draw(State.charright, math.floor(Save.positionx-State.xprefix+1)*SQUARESIZE/scalec, math.floor(Save.positiony-State.yprefix+1)*SQUARESIZE/scalec)
+                    gfx.draw(State.charright, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec)
                     gfx.pop()
                     --State.xprefix = math.max(px-MAP_W/2,1)
                     --State.yprefix = math.max(py-MAP_H/2,1)
