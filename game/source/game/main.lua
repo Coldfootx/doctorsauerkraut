@@ -63,6 +63,10 @@ do
         love.filesystem.write(SAVEFILE..save_number, compressed)
     end
 
+    local function debugbox(value)
+        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
+    end
+
     local function load_file(save_number)
         local contents, size = love.filesystem.read(SAVEFILE..save_number)
 
@@ -75,10 +79,6 @@ do
             n = n + 1
         end
         return n
-    end
-
-    local function debugbox(value)
-        love.window.showMessageBox("Debug Info", value, {"OK"}, "info", true)
     end
 
     local function boostrandom()
@@ -452,10 +452,14 @@ do
     end
 
     local function load_n(n)
-        load_file(n)
-        calculate_prefix(Save.positionx, Save.positiony)
-        debugbox("Loaded!")
-        change_page(1)
+        if love.filesystem.getInfo(SAVEFILE..n) == nil then
+            debugbox("Unloaded Save File")
+        else
+            load_file(n)
+            calculate_prefix(Save.positionx, Save.positiony)
+            debugbox("Loaded!")
+            change_page(1)
+        end
     end
 
     function love.keypressed(key, scancode, isrepeat)
