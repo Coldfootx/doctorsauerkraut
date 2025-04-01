@@ -384,6 +384,82 @@ do
             end
         end
 
+        --second road
+        for amount=1, ROADAMOUNT do
+            local random = randomgen:random(4)
+            local cx
+            local cy
+            local suunta
+            if random == 1 then
+                cx = 1
+                cy = randomgen:random(MAP_H-1)
+                suunta = 1
+            elseif random == 2 then
+                cx = MAP_W-1
+                cy = randomgen:random(MAP_H-1)
+                suunta = -1
+            elseif random == 3 then
+                cx = randomgen:random(MAP_W-1)
+                cy = 1
+                suunta = 2
+            elseif random == 4 then
+                cx = randomgen:random(MAP_W-1)
+                cy = MAP_H-1
+                suunta = -2
+            end
+
+            local function randomsuunta()
+                local random = randomgen:random(4)
+                local suunta
+                if random == 1 then
+                    suunta = 1
+                elseif random == 2 then
+                    suunta = -1
+                elseif random == 3 then
+                    suunta = 2
+                elseif random == 4 then
+                    suunta = -2
+                end
+                return suunta
+            end
+
+            for n=1, 999999 do
+                if suunta == 1 then
+                    local cxtest = math.min(cx+1, MAP_W)
+                    if Tiles[map[cxtest][cy]].obstacle == false then
+                        cx = cxtest
+                        map[cx][cy] = 10
+                    else
+                        suunta = randomsuunta()
+                    end
+                elseif suunta == -1 then
+                    local cxtest = math.max(cx-1, 1)
+                    if Tiles[map[cxtest][cy]].obstacle == false then
+                        cx = cxtest
+                        map[cx][cy] = 10
+                    else
+                        suunta = randomsuunta()
+                    end
+                elseif suunta == 2 then
+                    local cytest = math.min(cy+1, MAP_H)
+                    if Tiles[map[cx][cytest]].obstacle == false then
+                        cy = cytest
+                        map[cx][cy] = 10
+                    else
+                        suunta = randomsuunta()
+                    end
+                elseif suunta == -2 then
+                    local cytest = math.max(cy-1, 1)
+                    if Tiles[map[cx][cytest]].obstacle == false then
+                        cy = cytest
+                        map[cx][cy] = 10
+                    else
+                        suunta = randomsuunta()
+                    end
+                end
+            end
+        end
+
         Save.map = map
 
         randomlocation()
@@ -657,7 +733,8 @@ do
             {i = 6, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
             {i = 7, name="Purple flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
             {i = 8, name="Light blue flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
-            {i = 9, name="Sand road", file = gfx.newImage("graphics/road.png"), obstacle = false}
+            {i = 9, name="Sand road", file = gfx.newImage("graphics/road.png"), obstacle = false},
+            {i = 10, name="Dark sand road", file = gfx.newImage("graphics/road2.png"), obstacle = false}
         }
 
         NPC_tiles ={
