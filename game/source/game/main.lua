@@ -643,8 +643,8 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0}
-        -- leaf 1 = main menu, 2 = new game,
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = nil, lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0}
+        State.charchosen = State.charright
 
         Hooveredx, Hooveredy = 0, 0
 
@@ -759,11 +759,13 @@ do
                     if love.keyboard.isDown('a') then
                         if Tiles[Save.map[State.xprefix+centerdistancew-1][State.yprefix+centerdistanceh]].obstacle == false then
                             State.xprefix = State.xprefix - 1
+                            State.charchosen = State.charleft
                         end
                     end
                     if love.keyboard.isDown('d') then
                         if Tiles[Save.map[State.xprefix+centerdistancew+1][State.yprefix+centerdistanceh]].obstacle == false then
                             State.xprefix = State.xprefix + 1
+                            State.charchosen = State.charright
                         end
                     end
                 end
@@ -861,10 +863,10 @@ do
                     gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
                     gfx.pop()
                     gfx.push()
-                    imagefile = State.charright
+                    imagefile = State.charchosen
                     local scalec = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scalec, scalec)
-                    gfx.draw(State.charright, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec)
+                    gfx.draw(State.charchosen, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec)
                     gfx.pop()
                     --State.xprefix = math.max(px-MAP_W/2,1)
                     --State.yprefix = math.max(py-MAP_H/2,1)
