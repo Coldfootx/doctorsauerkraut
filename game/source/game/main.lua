@@ -126,8 +126,8 @@ do
     end
 
     local function calculate_prefix(px, py)
-        State.xprefix = math.max(px-math.floor(ScreenWidth/SQUARESIZE/2),1)
-        State.yprefix = math.max(py-math.floor(ScreenHeight/SQUARESIZE/2),1)
+        State.xprefix = px-math.floor(ScreenWidth/SQUARESIZE/2)
+        State.yprefix = py-math.floor(ScreenHeight/SQUARESIZE/2)
     end
 
     local function randomlocation()
