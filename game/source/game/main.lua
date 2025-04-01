@@ -21,6 +21,7 @@ ROADAMOUNT = math.floor(MAP_W*0.022)
 SAVEFILEAMOUNT = 10
 
 FPS = 75
+WALKSPEED = 1/FPS*10
 
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
@@ -137,6 +138,10 @@ do
             py = randomgen:random(MAP_H)
         until Tiles[Save.map[px][py]].obstacle == false
         calculate_prefix(px,py)
+    end
+
+    local function moveoffset(x,y)
+
     end
 
     local function format_map()
@@ -458,7 +463,7 @@ do
             load_file(n)
             calculate_prefix(Save.positionx, Save.positiony)
             debugbox("Loaded!")
-            change_page(1)
+            change_page(6)
         end
     end
 
@@ -620,7 +625,7 @@ do
         local wpadding, hpadding = translatexy(0,0.15)
         --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
         --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
-        Buttons[6] = {{text="Random location", x = 0, y = 0*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = randomlocation}, {text="Back to Main", x = 0, y = 1*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
+        Buttons[6] = {{text="Collect flower", x = 0, y = 0*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = randomlocation}, {text="Back to Main", x = 0, y = 1*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
 
         if love.filesystem.getInfo(SAVENAMEFILE) == nil then
             local names = {}
@@ -638,7 +643,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0}
         -- leaf 1 = main menu, 2 = new game,
 
         Hooveredx, Hooveredy = 0, 0
@@ -710,36 +715,55 @@ do
         if State.hoover ~= -2 then
             if State.leaf == 2 then
                 if love.keyboard.isDown('w') then
-                    if State.leaf == 2 then
-                        State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
-                        if State.yprefix < 0 then
-                            State.yprefix = 0
-                        end
+                    State.yprefix = math.floor(State.yprefix - SCROLLLINESMAP)
+                    if State.yprefix < 0 then
+                        State.yprefix = 0
                     end
                 end
                 if love.keyboard.isDown('s') then
-                    if State.leaf == 2 then
-                        State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
-                        local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
-                        if State.yprefix > check then
-                            State.yprefix = check
-                        end
+                    State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
+                    local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
+                    if State.yprefix > check then
+                        State.yprefix = check
                     end
                 end
                 if love.keyboard.isDown('a') then
-                    if State.leaf == 2 then
-                        State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
-                        if State.xprefix < 0 then
-                            State.xprefix = 0
-                        end
+                    State.xprefix = math.floor(State.xprefix - SCROLLLINESMAP)
+                    if State.xprefix < 0 then
+                        State.xprefix = 0
                     end
                 end
                 if love.keyboard.isDown('d') then
-                    if State.leaf == 2 then
-                        State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
-                        local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
-                        if State.xprefix > check then
-                            State.xprefix = check
+                    State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
+                    local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
+                    if State.xprefix > check then
+                        State.xprefix = check
+                    end
+                end
+            elseif State.leaf == 6 then
+                State.walkingwait = State.walkingwait - dt
+                if State.walkingwait < 0 then
+                    State.walkingwait = WALKSPEED
+                    local centerdistancew = math.floor(ScreenWidth/SQUARESIZE/2)
+                    local centerdistanceh = math.floor(ScreenHeight/SQUARESIZE/2)
+                    if love.keyboard.isDown('w') then
+                        if Tiles[Save.map[State.xprefix+centerdistancew][State.yprefix+centerdistanceh-1]].obstacle == false then
+                            State.yprefix = State.yprefix - 1
+                        end
+                    end
+                    if love.keyboard.isDown('s') then
+                        if Tiles[Save.map[State.xprefix+centerdistancew][State.yprefix+centerdistanceh+1]].obstacle == false then
+                            State.yprefix = State.yprefix + 1
+                        end
+                    end
+                    if love.keyboard.isDown('a') then
+                        if Tiles[Save.map[State.xprefix+centerdistancew-1][State.yprefix+centerdistanceh]].obstacle == false then
+                            State.xprefix = State.xprefix - 1
+                        end
+                    end
+                    if love.keyboard.isDown('d') then
+                        if Tiles[Save.map[State.xprefix+centerdistancew+1][State.yprefix+centerdistanceh]].obstacle == false then
+                            State.xprefix = State.xprefix + 1
                         end
                     end
                 end
