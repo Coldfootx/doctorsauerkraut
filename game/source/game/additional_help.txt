@@ -102,8 +102,9 @@ https://creativecommons.org/licenses/by-sa/3.0/
 
 Red outfit for main character - graphics/charright & left.png
 https://opengameart.org/content/occupational-icons
+From user https://opengameart.org/users/technopeasant - technopeasant
 Tiles have been drawn by David E. Gervais, and are published under the Creative 
-Commons licence. You are free to to copy, distribute and transmit those tiles 
+Commons license. You are free to copy, distribute and transmit those tiles 
 as long as you credit David Gervais as their creator.
 CC-BY 3.0
 http://creativecommons.org/licenses/by/3.0/
@@ -111,6 +112,6 @@ http://creativecommons.org/licenses/by/3.0/
 
 A sand road - graphics/road2.png
 https://opengameart.org/content/pixel-art-top-down-tileset
-https://opengameart.org/users/dustdfg - Yevhen Babiichuk (DustDFG)
+From user https://opengameart.org/users/dustdfg - Yevhen Babiichuk (DustDFG)
 CC-BY-SA 4.0
 https://creativecommons.org/licenses/by-sa/4.0/

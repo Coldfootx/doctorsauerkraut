@@ -17,7 +17,7 @@ LAKESIZE = 30
 LAKESIZEVARY = 10
 LAKEAMOUNT = math.floor(MAP_W*0.02)
 FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
-ROADAMOUNT = math.floor(MAP_W*0.022)
+ROADAMOUNT = math.floor(MAP_W*0.022) -- both roads use this so its times two basically
 SAVEFILEAMOUNT = 10
 
 FPS = 75
