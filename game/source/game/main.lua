@@ -744,27 +744,27 @@ do
                 State.walkingwait = State.walkingwait - dt
                 if State.walkingwait < 0 then
                     State.walkingwait = WALKSPEED
-                    local centerdistancew = math.floor(ScreenWidth/SQUARESIZE/2)
-                    local centerdistanceh = math.floor(ScreenHeight/SQUARESIZE/2)
+                    local centerw = math.floor(ScreenWidth/SQUARESIZE/2)
+                    local centerh = math.floor(ScreenHeight/SQUARESIZE/2)
                     if love.keyboard.isDown('w') then
-                        if Tiles[Save.map[State.xprefix+centerdistancew][State.yprefix+centerdistanceh-1]].obstacle == false then
-                            State.yprefix = State.yprefix - 1
+                        if Tiles[Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh-1, 1)]].obstacle == false then
+                            State.yprefix = math.max(State.yprefix - 1,-centerh+1)
                         end
                     end
                     if love.keyboard.isDown('s') then
-                        if Tiles[Save.map[State.xprefix+centerdistancew][State.yprefix+centerdistanceh+1]].obstacle == false then
-                            State.yprefix = State.yprefix + 1
+                        if Tiles[Save.map[State.xprefix+centerw][math.min(State.yprefix+centerh+1,MAP_H)]].obstacle == false then
+                            State.yprefix = math.min(State.yprefix + 1, MAP_H-centerh-1)
                         end
                     end
                     if love.keyboard.isDown('a') then
-                        if Tiles[Save.map[State.xprefix+centerdistancew-1][State.yprefix+centerdistanceh]].obstacle == false then
-                            State.xprefix = State.xprefix - 1
+                        if Tiles[Save.map[math.max(State.xprefix+centerw-1, 1)][State.yprefix+centerh]].obstacle == false then
+                            State.xprefix = math.max(State.xprefix - 1,-centerw+1)
                             State.charchosen = State.charleft
                         end
                     end
                     if love.keyboard.isDown('d') then
-                        if Tiles[Save.map[State.xprefix+centerdistancew+1][State.yprefix+centerdistanceh]].obstacle == false then
-                            State.xprefix = State.xprefix + 1
+                        if Tiles[Save.map[math.min(State.xprefix+centerw+1, MAP_W)][State.yprefix+centerh]].obstacle == false then
+                            State.xprefix = math.min(State.xprefix + 1,MAP_W-centerw-1)
                             State.charchosen = State.charright
                         end
                     end
@@ -863,10 +863,10 @@ do
                     gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
                     gfx.pop()
                     gfx.push()
-                    imagefile = State.charchosen
+                    local imagefile = State.charchosen
                     local scalec = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scalec, scalec)
-                    gfx.draw(State.charchosen, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec)
+                    gfx.draw(imagefile, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec)
                     gfx.pop()
                     --State.xprefix = math.max(px-MAP_W/2,1)
                     --State.yprefix = math.max(py-MAP_H/2,1)
