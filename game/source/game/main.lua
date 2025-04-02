@@ -654,11 +654,11 @@ do
 
     local function startalchcombine()
         State.waitingforalchcombine=true
-        debugbox("Close this dialog. Hit enter. Write alchitem+alchitem into the command line (no spaces). Hit enter.")
+        debugbox("Close this dialog. Hit enter. Type number+number. Hit enter.")
     end
 
     local function startalchremove()
-        debugbox("Close this dialog. Hit enter. Write alchitem into the command line (no spaces). Hit enter.")
+        debugbox("Close this dialog. Hit enter. Type the number to delete. Hit enter.")
     end
 
     local function refreshalchinventory()
@@ -668,7 +668,7 @@ do
             State.printingalchinventorytext = ""
             for i=1, #Save.alchinventory do
                 if Save.alchinventory[i] ~= 0 then
-                    State.printingalchinventorytext = State.printingalchinventorytext..AlchItems[Save.alchinventory[i]].name.."\n"
+                    State.printingalchinventorytext = State.printingalchinventorytext..i..". "..AlchItems[Save.alchinventory[i]].name.."\n"
                 end
             end
         end
