@@ -661,15 +661,15 @@ do
         local wt, newgamebuttonpadding = translatexy(0.5, 0.02)
 
         Buttons = {{}}
-        Buttons[1] = {{text="Continue", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = continuegame}, {text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y =  newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = save_game}, {text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+5*newgamebuttonh+5*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
+        Buttons[1] = {{size=1, text="Continue", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth, width = newgamebuttonw, height=newgamebuttonh, call = continuegame}, {size=1, text="New Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+newgamebuttonh+newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = newgame},{size=1, text="Save Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y =  newbuttonstarth+2*newgamebuttonh+2*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = save_game}, {size=1, text="Load Game", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+3*newgamebuttonh+3*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = loadgame}, {size=1, text="Help", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+4*newgamebuttonh+4*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = helpwindow}, {size=1, text="Quit", x = ScreenWidth/2.0-newgamebuttonw/2.0, y = newbuttonstarth+5*newgamebuttonh+5*newgamebuttonpadding, width = newgamebuttonw, height=newgamebuttonh, call = quitgame}}
 
         local newbuttonwidth, newbuttonheight = translatexy(0.2,0.05)
         local paddingx, paddingy = translatexy(0.01,0.01)
         local startpaddingx, startpaddingy = translatexy(0.1,0.1)
         Buttons[2] = {
-            {text="Generate MAP", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
-            {text="Save MAP", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = save_game},
-            {text="Back to Main", x = 0, y = 2*newbuttonheight+2*paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = backtomain},
+            {size=1, text="Generate MAP", x = 0, y = startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = generate_map},
+            {size=1, text="Save MAP", x = 0, y = newbuttonheight+paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = save_game},
+            {size=1, text="Back to Main", x = 0, y = 2*newbuttonheight+2*paddingy+startpaddingy, width = newbuttonwidth, height=newbuttonheight, call = backtomain},
         }
 
         Buttons[3] = {{}}
@@ -677,31 +677,31 @@ do
         local continuebuttonx, continuebuttony = translatexy(0.18, 0.035)
         local buttonpadding, __ = translatexy(0.01, 0)
         for i = 1, SAVEFILEAMOUNT do
-            Buttons[3][i] = {text="Empty MAP File "..i, x = continuebuttonx, y = continuebuttony+buttonheight*i+buttonpadding*i, width = buttonwidth, height=buttonheight, call = save_file}
+            Buttons[3][i] = {size=1, text="Empty MAP File "..i, x = continuebuttonx, y = continuebuttony+buttonheight*i+buttonpadding*i, width = buttonwidth, height=buttonheight, call = save_file}
         end
         local amount = SAVEFILEAMOUNT+1
-        Buttons[3][amount] = {text="Back to Main", x = continuebuttonx, y = continuebuttony+buttonheight*amount+buttonpadding*amount, width = buttonwidth, height=buttonheight, call = backtomain}
+        Buttons[3][amount] = {size=1, text="Back to Main", x = continuebuttonx, y = continuebuttony+buttonheight*amount+buttonpadding*amount, width = buttonwidth, height=buttonheight, call = backtomain}
 
         Buttons[4] = {{}}
         buttonwidth, buttonheight = translatexy(0.2, 0.05)
         continuebuttonx, continuebuttony = translatexy(0.18, 0.035)
         buttonpadding, __ = translatexy(0.01, 0)
         for i = 1, SAVEFILEAMOUNT do
-            Buttons[4][i] = {text="Empty MAP File "..i, x = continuebuttonx, y = continuebuttony+buttonheight*i+buttonpadding*i, width = buttonwidth, height=buttonheight, call = load_n}
+            Buttons[4][i] = {size=1, text="Empty MAP File "..i, x = continuebuttonx, y = continuebuttony+buttonheight*i+buttonpadding*i, width = buttonwidth, height=buttonheight, call = load_n}
         end
         amount = SAVEFILEAMOUNT+1
-        Buttons[4][amount] = {text="Back to Main", x = continuebuttonx, y = continuebuttony+buttonheight*amount+buttonpadding*amount, width = buttonwidth, height=buttonheight, call = backtomain}
+        Buttons[4][amount] = {size=1, text="Back to Main", x = continuebuttonx, y = continuebuttony+buttonheight*amount+buttonpadding*amount, width = buttonwidth, height=buttonheight, call = backtomain}
 
         local helpbuttonw, helpbuttonh = translatexy(0.3, 0.07)
         local helpbuttonstartx, helpbuttonstarty = translatexy(0, 0.1)
         local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
-        Buttons[5] = {{text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpup}, {text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpdown}}
+        Buttons[5] = {{size=1, text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {size=1, text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpup}, {size=1, text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpdown}}
 
-        local gamebuttonw, gamebuttonh = translatexy(0.3, 0.07)
+        local gamebuttonw, gamebuttonh = translatexy(0.2, 0.03)
         local wpadding, hpadding = translatexy(0,0.15)
         --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
         --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
-        Buttons[6] = {{text="Collect flower", x = 0, y = 0*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = randomlocation}, {text="Back to Main", x = 0, y = 1*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
+        Buttons[6] = {{size=2, text="Collect flower", x = 0, y = 0*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = randomlocation}, {size=2, text="Back to Main", x = 0, y = 1*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
 
         if love.filesystem.getInfo(SAVENAMEFILE) == nil then
             local names = {}
@@ -951,24 +951,31 @@ do
             end
         end
 
-        gfx.setFont(BigFont)
         local len = table_len(Buttons[State.leaf])
         for i=1,len do
             local button = Buttons[State.leaf][i]
+            local width, height
+            if button.size == 1 then
+                gfx.setFont(BigFont)
+                width = BigFont:getWidth(button.text)
+                height = BigFont:getHeight(button.text)
+            elseif button.size == 2 then
+                gfx.setFont(SmallFont)
+                width = SmallFont:getWidth(button.text)
+                height = SmallFont:getHeight(button.text)
+            end
             if State.hoover == i then
                 gfx.setColor(0,0,0)
                 gfx.rectangle("fill", button.x, button.y, button.width, button.height)
                 gfx.setColor(1,1,1)
                 gfx.rectangle("line", button.x, button.y, button.width, button.height)
-                local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
-                gfx.print(button.text, button.x+button.width/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
+                gfx.print(button.text, button.x+button.width/2.0-width/2.0, button.y+button.height/2.0-height/2.0)
             else
                 gfx.setColor(1,1,1)
                 gfx.rectangle("fill", button.x, button.y, button.width, button.height)
                 gfx.rectangle("line", button.x, button.y, button.width, button.height)
                 gfx.setColor(0,0,0)
-                local w,h = BigFont:getWidth(button.text), BigFont:getHeight(button.text)
-                gfx.print(button.text, button.x+button.width/2.0-w/2.0, button.y+button.height/2.0-h/2.0)
+                gfx.print(button.text, button.x+button.width/2.0-width/2.0, button.y+button.height/2.0-height/2.0)
             end
         end
 
