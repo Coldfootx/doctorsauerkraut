@@ -20,6 +20,8 @@ FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
 ROADAMOUNT = math.floor(MAP_W*0.022) -- both roads use this so its times two basically
 SAVEFILEAMOUNT = 10
 
+MAX_ALCH_ITEMS = 1337
+
 FPS = 75
 WALKSPEED = 1/FPS*10
 
@@ -656,7 +658,16 @@ do
     end
 
     local function refreshalchinventory()
-        State.printingalchinventorytext = "Refreshed inventory\n2*Red flowers"
+        if #Save.alchinventory == 0 then
+            State.printingalchinventorytext = "Empty Alchemy Bag"
+        else
+            State.printingalchinventorytext = ""
+            for i=1, #Save.alchinventory do
+                if Save.alchinventory[i] ~= 0 then
+                    State.printingalchinventorytext = State.printingalchinventorytext..AlchItems[Save.alchinventory[i]].name.."\n"
+                end
+            end
+        end
         State.printingalchinventory = true
     end
 
@@ -668,6 +679,7 @@ do
             if tile == TilestoAlch[n][1] then
                 table.insert(Save.alchinventory, TilestoAlch[n][2])
                 Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh)] = 1
+                refreshalchinventory()
             end
         end
     end
@@ -689,6 +701,10 @@ do
             end
         end
         Save = {map=map, npcs={}, positionx=  1, positiony= 1, alchinventory = {}}
+
+        --for i=1, MAX_ALCH_ITEMS do
+         --   Save.alchinventory[i] = 0
+        --end
         
         --tile = , posx, posy, favourite_thing
 
@@ -1033,6 +1049,10 @@ do
             gfx.scale(scale, scale)
             gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scale, collectbutton.y/scale)
             gfx.pop()
+            if State.printingalchinventory == true then
+                gfx.setColor(0.5,0,0)
+                gfx.print(State.printingalchinventorytext, collectbutton.x+collectbutton.width, collectbutton.y)
+            end
         end
 
         local len = table_len(Buttons[State.leaf])
