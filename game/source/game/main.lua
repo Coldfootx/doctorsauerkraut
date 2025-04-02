@@ -113,6 +113,8 @@ do
         State.leaf = n
         State.hoover = 0
         State.waitingforsavename = false
+        State.waitingforalchcombine = false
+        State.waitingforalchremove = false
         find_hoovered_button(Currentx, Currenty)
     end
 
@@ -495,6 +497,10 @@ do
         change_page(6)
     end
 
+    local function newalchemy()
+        change_page(7)
+    end
+
     local function explode(inputstr, sep)
         sep=sep or '%s'
         local t={}
@@ -644,6 +650,28 @@ do
         return posx, posy
     end
 
+    local function startcombine()
+        State.waitingforalchcombine=true
+        debugbox("Close this dialog. Hit enter. Write alchitem+alchitem into the command line (no spaces). Hit enter.")
+    end
+
+    local function refreshalchinventory()
+        State.printingalchinventorytext = "Refreshed inventory\n2*Red flowers"
+        State.printingalchinventory = true
+    end
+
+    local function alchcollect()
+        local centerw = math.floor(ScreenWidth/SQUARESIZE/2)
+        local centerh = math.floor(ScreenHeight/SQUARESIZE/2)
+        for n=1,#TilestoAlch do
+            local tile = Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh)]
+            if tile == TilestoAlch[n][1] then
+                table.insert(Save.alchinventory, TilestoAlch[n][2])
+                Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh)] = 1
+            end
+        end
+    end
+
     function love.load()
         love.window.setVSync(1)
         love.window.setTitle("Doctor Sauerkraut")
@@ -660,7 +688,7 @@ do
                 map[i][j] = 1
             end
         end
-        Save = {map=map, npcs={}, positionx=  1, positiony= 1}
+        Save = {map=map, npcs={}, positionx=  1, positiony= 1, alchinventory = {}}
         
         --tile = , posx, posy, favourite_thing
 
@@ -714,7 +742,16 @@ do
         local wpadding, hpadding = translatexy(0,0.15)
         --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
         --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
-        Buttons[6] = {{size=2, text="Collect flower", x = 0, y = 0*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = randomlocation}, {size=2, text="Back to Main", x = 0, y = 1*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
+        Buttons[6] = {{size=2, text="Alchemy", x = 0, y = 0*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = newalchemy}, {size=2, text="Back to Main", x = 0, y = 1*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
+
+        local alchbuttonw, alchbuttonh = translatexy(0.13, 0.03)
+        local alchwpadding, alchhpadding = translatexy(0.1,0.15)
+        --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
+        --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
+        Buttons[7] = {
+            {size=2, text="Combine", x = alchwpadding, y = 0*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startcombine},
+            {size=2, text="Collect from ground", x = alchwpadding, y = 1*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchcollect},
+            {size=2, text="Inventory", x = alchwpadding, y = 3*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = refreshalchinventory}, {size=2, text="Back to Game", x = alchwpadding, y = 4*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = continuegame}}
 
         if love.filesystem.getInfo(SAVENAMEFILE) == nil then
             local names = {}
@@ -732,8 +769,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = nil, lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0}
-        State.charchosen = State.charright
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png")}
 
         Hooveredx, Hooveredy = 0, 0
 
@@ -752,6 +788,24 @@ do
             {i = 12, name="Yellow flower", file = gfx.newImage("graphics/flower4.png"), obstacle = false},
             {i = 13, name="Pink flower", file = gfx.newImage("graphics/flower5.png"), obstacle = false},
             {i = 14, name="White flower", file = gfx.newImage("graphics/flower6.png"), obstacle = false}
+        }
+
+        TilestoAlch = {
+            {7,1},
+            {8,2},
+            {11,3},
+            {12,4},
+            {13,5},
+            {14,6}
+        }
+
+        AlchItems={
+            {i = 1, name="Purple Flower", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
+            {i = 2, name="Light blue flower", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false},
+            {i = 3, name="Red flower", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
+            {i = 4, name="Yellow flower", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
+            {i = 5, name="Pink flower", file = gfx.newImage("graphics/river.png"), obstacle = false},
+            {i = 6, name="White flower", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
         }
 
         NPC_tiles ={
@@ -966,6 +1020,19 @@ do
                     --State.yprefix = math.max(py-MAP_H/2,1)
                 end
             end
+        elseif State.leaf == 7 then
+            gfx.setColor(0.3,0.3,0.3)
+            local collectbutton = Buttons[State.leaf][1]
+            gfx.rectangle("fill",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/1.5, ScreenHeight/1.5)
+            gfx.setColor(0.5,0,0)
+            gfx.rectangle("line",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/1.5, ScreenHeight/1.5)
+            gfx.setColor(255,255,255,255)
+            gfx.push()
+            local imagefile = State.alchbottle
+            local scale = ScreenWidth/imagefile:getWidth()/20
+            gfx.scale(scale, scale)
+            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scale, collectbutton.y/scale)
+            gfx.pop()
         end
 
         local len = table_len(Buttons[State.leaf])
