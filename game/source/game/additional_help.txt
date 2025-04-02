@@ -84,7 +84,7 @@ CC-BY 3.0
 https://creativecommons.org/licenses/by/3.0/
 
 
-Flower tiles - graphics/flower1&2.png
+Flower tiles - graphics/flower%n.png
 I changed their colours somewhat
 https://opengameart.org/content/pixel-flower-icons
 From user https://opengameart.org/users/sicklyseraph - sicklyseraph

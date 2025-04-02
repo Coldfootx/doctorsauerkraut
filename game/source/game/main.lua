@@ -305,7 +305,20 @@ do
             local fx = randomgen:random(MAP_W)
             local fy = randomgen:random(MAP_H)
             if Tiles[map[fx][fy]].obstacle == false and map[fx][fy] ~= 4 then
-                map[fx][fy] = 6+randomgen:random(2)
+                local choice = randomgen:random(6)
+                if choice == 1 then
+                    map[fx][fy] = 7
+                elseif choice == 2 then
+                    map[fx][fy] = 8
+                elseif choice == 3 then
+                    map[fx][fy] = 11
+                elseif choice == 4 then
+                    map[fx][fy] = 12
+                elseif choice == 5 then
+                    map[fx][fy] = 13
+                elseif choice == 6 then
+                    map[fx][fy] = 14
+                end
             end
         end
 
@@ -697,7 +710,7 @@ do
         local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
         Buttons[5] = {{size=1, text="Back to Main", x = centeredx, y = helpbuttonstarty, width = helpbuttonw, height=helpbuttonh, call = backtomain}, {size=1, text="Scroll Up", x = centeredx, y = helpbuttonstarty+helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpup}, {size=1, text="Scroll Down", x = centeredx, y = helpbuttonstarty+10*helpbuttonh, width = helpbuttonw, height=helpbuttonh, call = scrollhelpdown}}
 
-        local gamebuttonw, gamebuttonh = translatexy(0.2, 0.03)
+        local gamebuttonw, gamebuttonh = translatexy(0.115, 0.03)
         local wpadding, hpadding = translatexy(0,0.15)
         --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
         --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
@@ -734,7 +747,11 @@ do
             {i = 7, name="Purple flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
             {i = 8, name="Light blue flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
             {i = 9, name="Sand road", file = gfx.newImage("graphics/road.png"), obstacle = false},
-            {i = 10, name="Dark sand road", file = gfx.newImage("graphics/road2.png"), obstacle = false}
+            {i = 10, name="Dark sand road", file = gfx.newImage("graphics/road2.png"), obstacle = false},
+            {i = 11, name="Red flower", file = gfx.newImage("graphics/flower3.png"), obstacle = false},
+            {i = 12, name="Yellow flower", file = gfx.newImage("graphics/flower4.png"), obstacle = false},
+            {i = 13, name="Pink flower", file = gfx.newImage("graphics/flower5.png"), obstacle = false},
+            {i = 14, name="White flower", file = gfx.newImage("graphics/flower6.png"), obstacle = false}
         }
 
         NPC_tiles ={
