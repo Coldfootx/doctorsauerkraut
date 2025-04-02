@@ -1051,7 +1051,7 @@ do
             gfx.rectangle("fill",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/1.5, ScreenHeight/1.5)
             gfx.setColor(0.5,0,0)
             gfx.rectangle("line",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/1.5, ScreenHeight/1.5)
-            gfx.setColor(255,255,255,255)
+            gfx.setColor(1,0,0)
             gfx.push()
             local imagefile = State.alchbottle
             local bottlewidth = imagefile:getWidth()
