@@ -33,7 +33,7 @@ SAVENAMEFILE = "savenames"
 --STATEMENTS
 STARTING_RANDOMNESS = 300
 
-HELP_TEXT = 'Look at folder %APPDATA%/LOVE to save some space! This folder is \nfor starting directly from code.\n \nAnd look at folder %APPDATA%/gamename or simply /game. This folder is \nfor starting from the compiled executable.\n \nIf you delete the file "randomness" it is regenerated but edit its \ncontained number to avoid same map generation. Ideally it should be \naccumulating forever to avoid them.\n\nIn Linux look for these\n$XDG_DATA_HOME/love/ or ~/.local/share/love/\nlove may be replaced by game name or simply "game"\n\n\nAND NOW FOR LICENSES\n\n\nAdditional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game\nby hacker Purlov\nnewest GPL\nhttps://www.gnu.org/licenses/gpl-3.0.html\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nMain Menu background money notes - graphics/100.jpg\nhttps://en.wikipedia.org/wiki/File:DAN-13-Danzig-100_Mark_(1922).jpg\nFrom user https://commons.wikimedia.org/wiki/User:Godot13 - Godot13\nAttribution National Numismatic Collection, National Museum of American History\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.w ikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nWater tile - graphics/water.jpg\nhttps://opengameart.org/content/texture-water\nFrom user www.GodsAndIdols.com and https://opengameart.org/users/jattenalle\nCC-BY 3.0\nhttps://creativecommons.org/licenses/by/3.0/\n\n\nFlower tiles - graphics/flower1&2.png\nI changed their colours somewhat\nhttps://opengameart.org/content/pixel-flower-icons\nFrom user https://opengameart.org/users/sicklyseraph - sicklyseraph\nCC-BY 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n\n\nRoad textures - graphics/road.png\nI am using the desert one\nhttps://opengameart.org/content/road-textures\nFrom user https://opengameart.org/users/dakal - dakal\nCC-BY-SA 3.0\nhttps://creativecommons.org/licenses/by-sa/3.0/\n\n'
+HELP_TEXT = 'Look at folder %APPDATA%/LOVE to save some space! This folder is \nfor starting directly from code.\n \nAnd look at folder %APPDATA%/gamename or simply /game. This folder is \nfor starting from the compiled executable.\n \nIf you delete the file "randomness" it is regenerated but edit its \ncontained number to avoid same map generation. Ideally it should be \naccumulating forever to avoid them.\n\nIn Linux look for these\n$XDG_DATA_HOME/love/ or ~/.local/share/love/\nlove may be replaced by game name or simply "game"\n\n\nAND NOW FOR LICENSES\n\n\nAdditional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game\nby hacker Purlov\nnewest GPL\nhttps://www.gnu.org/licenses/gpl-3.0.html\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nMain Menu background money notes - graphics/100.jpg\nhttps://en.wikipedia.org/wiki/File:DAN-13-Danzig-100_Mark_(1922).jpg\nFrom user https://commons.wikimedia.org/wiki/User:Godot13 - Godot13\nAttribution National Numismatic Collection, National Museum of American History\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.w ikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nWater tile - graphics/water.jpg\nhttps://opengameart.org/content/texture-water\nFrom user www.GodsAndIdols.com and https://opengameart.org/users/jattenalle\nCC-BY 3.0\nhttps://creativecommons.org/licenses/by/3.0/\n\n\nFlower tiles - graphics/flower%n.png\nI changed their colours somewhat\nhttps://opengameart.org/content/pixel-flower-icons\nFrom user https://opengameart.org/users/sicklyseraph - sicklyseraph\nCC-BY 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n\n\nRoad textures - graphics/road.png\nI am using the desert one\nhttps://opengameart.org/content/road-textures\nFrom user https://opengameart.org/users/dakal - dakal\nCC-BY-SA 3.0\nhttps://creativecommons.org/licenses/by-sa/3.0/\n\n\nRed outfit for main character - graphics/charright & left.png\nhttps://opengameart.org/content/occupational-icons\nFrom user https://opengameart.org/users/technopeasant - technopeasant\nTiles have been drawn by David E. Gervais, and are published under the Creative \nCommons license. You are free to copy, distribute and transmit those tiles \nas long as you credit David Gervais as their creator.\nCC-BY 3.0\nhttp://creativecommons.org/licenses/by/3.0/\n\n\nA sand road - graphics/road2.png\nhttps://opengameart.org/content/pixel-art-top-down-tileset\nFrom user https://opengameart.org/users/dustdfg - Yevhen Babiichuk (DustDFG)\nCC-BY-SA 4.0\nhttps://creativecommons.org/licenses/by-sa/4.0/'
 
 do
     local love = require("love")
@@ -652,9 +652,13 @@ do
         return posx, posy
     end
 
-    local function startcombine()
+    local function startalchcombine()
         State.waitingforalchcombine=true
         debugbox("Close this dialog. Hit enter. Write alchitem+alchitem into the command line (no spaces). Hit enter.")
+    end
+
+    local function startalchremove()
+        debugbox("Close this dialog. Hit enter. Write alchitem into the command line (no spaces). Hit enter.")
     end
 
     local function refreshalchinventory()
@@ -678,7 +682,9 @@ do
             local tile = Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh)]
             if tile == TilestoAlch[n][1] then
                 table.insert(Save.alchinventory, TilestoAlch[n][2])
-                Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh)] = 1
+                if AlchItems[TilestoAlch[n][2]].obstacle == false then
+                    Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh)] = 1
+                end
                 refreshalchinventory()
             end
         end
@@ -765,8 +771,9 @@ do
         --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
         --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
         Buttons[7] = {
-            {size=2, text="Combine", x = alchwpadding, y = 0*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startcombine},
-            {size=2, text="Collect from ground", x = alchwpadding, y = 1*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchcollect},
+            {size=2, text="Combine", x = alchwpadding, y = 0*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startalchcombine},
+            {size=2, text="Remove", x = alchwpadding, y = 1*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startalchremove},
+            {size=2, text="Collect from ground", x = alchwpadding, y = 2*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchcollect},
             {size=2, text="Inventory", x = alchwpadding, y = 3*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = refreshalchinventory}, {size=2, text="Back to Game", x = alchwpadding, y = 4*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = continuegame}}
 
         if love.filesystem.getInfo(SAVENAMEFILE) == nil then
@@ -812,16 +819,18 @@ do
             {11,3},
             {12,4},
             {13,5},
-            {14,6}
+            {14,6},
+            {5,7}
         }
 
         AlchItems={
-            {i = 1, name="Purple Flower", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
+            {i = 1, name="Purple flower", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
             {i = 2, name="Light blue flower", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false},
-            {i = 3, name="Red flower", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
+            {i = 3, name="Red flower", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = false},
             {i = 4, name="Yellow flower", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
             {i = 5, name="Pink flower", file = gfx.newImage("graphics/river.png"), obstacle = false},
-            {i = 6, name="White flower", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
+            {i = 6, name="White flower", file = gfx.newImage("graphics/water.jpg"), obstacle = false},
+            {i = 7, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = true}
         }
 
         NPC_tiles ={
@@ -1045,13 +1054,14 @@ do
             gfx.setColor(255,255,255,255)
             gfx.push()
             local imagefile = State.alchbottle
-            local scale = ScreenWidth/imagefile:getWidth()/20
+            local bottlewidth = imagefile:getWidth()
+            local scale = ScreenWidth/bottlewidth/20
             gfx.scale(scale, scale)
             gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scale, collectbutton.y/scale)
             gfx.pop()
             if State.printingalchinventory == true then
-                gfx.setColor(0.5,0,0)
-                gfx.print(State.printingalchinventorytext, collectbutton.x+collectbutton.width, collectbutton.y)
+                gfx.setColor(1,0,0)
+                gfx.print(State.printingalchinventorytext, collectbutton.x+collectbutton.width+bottlewidth*scale, collectbutton.y)
             end
         end
 
