@@ -1055,13 +1055,30 @@ do
             gfx.push()
             local imagefile = State.alchbottle
             local bottlewidth = imagefile:getWidth()
-            local scale = ScreenWidth/bottlewidth/20
-            gfx.scale(scale, scale)
-            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scale, collectbutton.y/scale)
+            local bottleheight = imagefile:getHeight()
+            local scalebottle = ScreenWidth/bottlewidth/20
+            gfx.scale(scalebottle, scalebottle)
+            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scalebottle, collectbutton.y/scalebottle)
+            gfx.pop()
+            gfx.push()
+            imagefile = State.alchdoc
+            local docwidth = imagefile:getWidth()
+            local docheight = imagefile:getHeight()
+            local scaledoc = ScreenWidth/docwidth/20
+            gfx.scale(scaledoc, scaledoc)
+            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scaledoc, (collectbutton.y+bottleheight*scalebottle)/scaledoc)
+            gfx.pop()
+            gfx.push()
+            imagefile = State.alchankh
+            local ankhwidth = imagefile:getWidth()
+            local ankhheight = imagefile:getHeight()
+            local scaleankh = ScreenWidth/ankhwidth/20
+            gfx.scale(scaleankh, scaleankh)
+            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scaleankh, (collectbutton.y+ScreenHeight/1.5)/scaleankh-ankhheight)--good stretching
             gfx.pop()
             if State.printingalchinventory == true then
                 gfx.setColor(1,0,0)
-                gfx.print(State.printingalchinventorytext, collectbutton.x+collectbutton.width+bottlewidth*scale, collectbutton.y)
+                gfx.print(State.printingalchinventorytext, collectbutton.x+collectbutton.width+bottlewidth*scalebottle, collectbutton.y)
             end
         end
 
