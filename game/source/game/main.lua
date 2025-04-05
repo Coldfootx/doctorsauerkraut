@@ -15,6 +15,7 @@ HOUSESIZE = 10
 HOUSESIZEVARY = 5
 LAKESIZE = 30
 LAKESIZEVARY = 10
+ALCHEMYWINDOWSIZE = 1/1.5 -- times ScreenWidth and ScreenHeight
 LAKEAMOUNT = math.floor(MAP_W*0.02)
 FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
 ROADAMOUNT = math.floor(MAP_W*0.022) -- both roads use this so its times two basically
@@ -549,7 +550,6 @@ do
             names[i] = Buttons[3][i].text
         end
         love.filesystem.write(SAVENAMEFILE, lume.serialize(names))
-        State.waitingforsavename = false
         debugbox("Saved!")
     end
 
@@ -557,12 +557,26 @@ do
         if love.filesystem.getInfo(SAVEFILE..n) == nil then
             debugbox("Unloaded Save File")
         else
-            load_file(n)
-            calculate_prefix(Save.positionx, Save.positiony)
-            debugbox("Loaded!")
-            change_page(6)
+            local pressedbutton = love.window.showMessageBox("Lose all data when loading", "Loading a game formats the current memory. Want to continue?", {"OK", "No!", enterbutton = 2}, "warning", true)
+            if pressedbutton == 1 then
+                load_file(n)
+                calculate_prefix(Save.positionx, Save.positiony)
+                debugbox("Loaded!")
+                change_page(6)
+            end
         end
     end
+
+    local function has_value (tab, val)
+        for index, value in ipairs(tab) do
+            if value == val then
+                return true
+            end
+        end
+    
+        return false
+    end
+    
 
     function love.keypressed(key, scancode, isrepeat)
         if State.hoover >= 0 then
@@ -573,6 +587,24 @@ do
             --debugbox(CommandLine.text)
             if State.waitingforsavename == true then
                 save_n(State.waitingforsavename_n)
+                State.waitingforsavename = false
+            elseif State.waitingforalchcombine == true then
+                local first = true
+                local text = ""
+                local usedlocs = {}
+                for i in string.gmatch(CommandLine.text, "%d+") do
+                    if first == true then
+                        text = i.."."
+                        first = false
+                        table.insert(usedlocs, i)
+                    elseif has_value(usedlocs, i) == false then
+                        text = text.." + "..i.."."
+                        table.insert(usedlocs, i)
+                    end
+                end
+                debugbox(text)
+                State.printingalchinventorytext = "\n\n\n\n\n\n"..text
+                State.waitingforalchcombine = false
             end
         elseif key == "backspace"and State.hoover == -2 then
             if string.len(CommandLine.text) > 0 then
@@ -654,10 +686,11 @@ do
 
     local function startalchcombine()
         State.waitingforalchcombine=true
-        debugbox("Close this dialog. Hit enter. Type number+number. Hit enter.")
+        debugbox("Close this dialog. Hit enter. Type number+number+number+.. . Hit enter.")
     end
 
     local function startalchremove()
+        State.waitingforalchremove= true
         debugbox("Close this dialog. Hit enter. Type the number to delete. Hit enter.")
     end
 
@@ -688,6 +721,12 @@ do
                 refreshalchinventory()
             end
         end
+    end
+
+    local function alchscrollup()
+    end
+
+    local function alchscrolldown()
     end
 
     function love.load()
@@ -774,7 +813,11 @@ do
             {size=2, text="Combine", x = alchwpadding, y = 0*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startalchcombine},
             {size=2, text="Remove", x = alchwpadding, y = 1*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startalchremove},
             {size=2, text="Collect from ground", x = alchwpadding, y = 2*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchcollect},
-            {size=2, text="Inventory", x = alchwpadding, y = 3*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = refreshalchinventory}, {size=2, text="Back to Game", x = alchwpadding, y = 4*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = continuegame}}
+            {size=2, text="Inventory", x = alchwpadding, y = 3*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = refreshalchinventory}, {size=2, text="Back to Game", x = alchwpadding, y = 4*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = continuegame}, 
+            {size=2, text="Scroll Up", x = alchwpadding+alchbuttonw+ScreenWidth*ALCHEMYWINDOWSIZE-alchbuttonw, y = alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchscrollup},
+            {size=2, text="Scroll Down", x = alchwpadding+alchbuttonw+ScreenWidth*ALCHEMYWINDOWSIZE-alchbuttonw, y = alchhpadding+ScreenHeight*ALCHEMYWINDOWSIZE-alchbuttonh, width = alchbuttonw, height=alchbuttonh, call = alchscrolldown}}
+
+            --collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/AlchSquare, ScreenHeight/AlchSquare)
 
         if love.filesystem.getInfo(SAVENAMEFILE) == nil then
             local names = {}
@@ -1048,9 +1091,9 @@ do
         elseif State.leaf == 7 then
             gfx.setColor(0.3,0.3,0.3)
             local collectbutton = Buttons[State.leaf][1]
-            gfx.rectangle("fill",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/1.5, ScreenHeight/1.5)
+            gfx.rectangle("fill",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth*ALCHEMYWINDOWSIZE, ScreenHeight*ALCHEMYWINDOWSIZE)
             gfx.setColor(0.5,0,0)
-            gfx.rectangle("line",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/1.5, ScreenHeight/1.5)
+            gfx.rectangle("line",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth*ALCHEMYWINDOWSIZE , ScreenHeight*ALCHEMYWINDOWSIZE )
             gfx.setColor(1,0,0)
             gfx.push()
             local imagefile = State.alchbottle
@@ -1066,7 +1109,7 @@ do
             local docheight = imagefile:getHeight()
             local scaledoc = ScreenWidth/docwidth/20
             gfx.scale(scaledoc, scaledoc)
-            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scaledoc, (collectbutton.y+bottleheight*scalebottle)/scaledoc)
+            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scaledoc, (collectbutton.y+bottleheight*scalebottle)/scaledoc) -- good stretching
             gfx.pop()
             gfx.push()
             imagefile = State.alchankh
