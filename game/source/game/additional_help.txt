@@ -21,7 +21,7 @@ and folder love in the source distribution
 
 
 This game
-by hacker Purlov
+by Purlov
 newest GPL
 https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -60,14 +60,6 @@ MIT
 
 
 ----Graphics----
-
-
-Main Menu background money notes - graphics/100.jpg
-https://en.wikipedia.org/wiki/File:DAN-13-Danzig-100_Mark_(1922).jpg
-From user https://commons.wikimedia.org/wiki/User:Godot13 - Godot13
-Attribution National Numismatic Collection, National Museum of American History
-Creative Commons Attribution-Share Alike 4.0 International
-https://creativecommons.org/licenses/by-sa/4.0/deed.en
 
 
 Background love potion - graphics/potion.jpg
