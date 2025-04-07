@@ -834,7 +834,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png"), alchdoc= gfx.newImage("graphics/doc.png"), alchankh = gfx.newImage("graphics/ankh.png"), mainmenubgs = {}, mainmenubgslocation = {}, mainmenubgsamount= 10, mainmenurepeat = 20}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png"), alchdoc= gfx.newImage("graphics/doc.png"), alchankh = gfx.newImage("graphics/ankh.png"), mainmenubgs = {}, mainmenubgslocation = {}, mainmenubgsamount= 10, mainmenurepeat = 10}
 
         for i=1,State.mainmenubgsamount do
             State.mainmenubgs[i] = gfx.newImage("graphics/mainmenu/"..i..".png")
@@ -842,7 +842,7 @@ do
 
         for i=1,State.mainmenubgsamount do
             for j=1, State.mainmenurepeat do
-                State.mainmenubgslocation[j+(i-1)*20] = {i,randomgen:random(1,ScreenWidth-State.mainmenubgs[i]:getWidth()), randomgen:random(1,ScreenHeight-State.mainmenubgs[i]:getHeight())} -- here for now
+                State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat] = {i,randomgen:random(1,ScreenWidth-State.mainmenubgs[i]:getWidth()), randomgen:random(1,ScreenHeight-State.mainmenubgs[i]:getHeight())} -- here for now
             end
         end
 
@@ -1016,22 +1016,28 @@ do
             gfx.setColor(0.7,0.1,0.1)
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
             gfx.setColor(255, 255, 255, 255)
-            gfx.push()
+            --[[gfx.push()
             local scale = ScreenHeight/State.bg:getHeight()
             gfx.scale(scale, scale)
             gfx.draw(State.bg, 0,0)
-            gfx.pop()
-            local mx, my = translatexy(0, 0.1)
-            gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
-            local iconsize, __ = translatexy(0.1, 0)
+            gfx.pop()]]--
+            local iconsize, __ = translatexy(0.002, 0)
             gfx.push()
             gfx.scale(iconsize, iconsize)
             for i=1,State.mainmenubgsamount do
                 for j=1, State.mainmenurepeat do
-                    gfx.draw(State.mainmenubgs[i], State.mainmenubgslocation[i][2]/iconsize, State.mainmenubgslocation[i][3]/iconsize) -- here for now
+                    gfx.draw(State.mainmenubgs[i], State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat][2]/iconsize, State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat][3]/iconsize) -- here for now
                 end
             end
             gfx.pop()
+            local mx, my = translatexy(0, 0.1)
+            gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
+            --for i=1,State.mainmenubgsamount do
+            --    for j=1, State.mainmenurepeat do
+            --        State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat] = {i,randomgen:random(1,ScreenWidth-State.mainmenubgs[i]:getWidth()), randomgen:random(1,--ScreenHeight-State.mainmenubgs[i]:getHeight())} -- here for now
+            --    end
+           --end
+            
         elseif State.leaf == 2 then
             local xamount = math.floor(ScreenWidth/SQUARESIZE)
             local yamount = math.floor(ScreenHeight/SQUARESIZE)
