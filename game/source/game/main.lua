@@ -813,9 +813,8 @@ do
             {size=2, text="Combine", x = alchwpadding, y = 0*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startalchcombine},
             {size=2, text="Remove", x = alchwpadding, y = 1*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startalchremove},
             {size=2, text="Collect from ground", x = alchwpadding, y = 2*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchcollect},
-            {size=2, text="Inventory", x = alchwpadding, y = 3*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = refreshalchinventory}, {size=2, text="Back to Game", x = alchwpadding, y = 4*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = continuegame}, 
-            {size=2, text="Scroll Up", x = alchwpadding+alchbuttonw+ScreenWidth*ALCHEMYWINDOWSIZE-alchbuttonw, y = alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchscrollup},
-            {size=2, text="Scroll Down", x = alchwpadding+alchbuttonw+ScreenWidth*ALCHEMYWINDOWSIZE-alchbuttonw, y = alchhpadding+ScreenHeight*ALCHEMYWINDOWSIZE-alchbuttonh, width = alchbuttonw, height=alchbuttonh, call = alchscrolldown}}
+            {size=2, text="Inventory", x = alchwpadding, y = 3*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = refreshalchinventory}, {size=2, text="Back to Game", x = alchwpadding, y = 4*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = continuegame},
+            {size=2, text="Scroll Up", x = alchwpadding+alchbuttonw+ScreenWidth*ALCHEMYWINDOWSIZE-alchbuttonw, y = alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchscrollup}, {size=2, text="Scroll Down", x = alchwpadding+alchbuttonw+ScreenWidth*ALCHEMYWINDOWSIZE-alchbuttonw, y = alchhpadding+ScreenHeight*ALCHEMYWINDOWSIZE-alchbuttonh, width = alchbuttonw, height=alchbuttonh, call = alchscrolldown}}
 
             --collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/AlchSquare, ScreenHeight/AlchSquare)
 
@@ -835,7 +834,17 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png"), alchdoc= gfx.newImage("graphics/doc.png"), alchankh = gfx.newImage("graphics/ankh.png")}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), bg = gfx.newImage("graphics/100.jpg"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png"), alchdoc= gfx.newImage("graphics/doc.png"), alchankh = gfx.newImage("graphics/ankh.png"), mainmenubgs = {}, mainmenubgslocation = {}, mainmenubgsamount= 10, mainmenurepeat = 20}
+
+        for i=1,State.mainmenubgsamount do
+            State.mainmenubgs[i] = gfx.newImage("graphics/mainmenu/"..i..".png")
+        end
+
+        for i=1,State.mainmenubgsamount do
+            for j=1, State.mainmenurepeat do
+                State.mainmenubgslocation[j+(i-1)*20] = {i,randomgen:random(1,ScreenWidth-State.mainmenubgs[i]:getWidth()), randomgen:random(1,ScreenHeight-State.mainmenubgs[i]:getHeight())} -- here for now
+            end
+        end
 
         Hooveredx, Hooveredy = 0, 0
 
@@ -1014,6 +1023,15 @@ do
             gfx.pop()
             local mx, my = translatexy(0, 0.1)
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
+            local iconsize, __ = translatexy(0.1, 0)
+            gfx.push()
+            gfx.scale(iconsize, iconsize)
+            for i=1,State.mainmenubgsamount do
+                for j=1, State.mainmenurepeat do
+                    gfx.draw(State.mainmenubgs[i], State.mainmenubgslocation[i][2]/iconsize, State.mainmenubgslocation[i][3]/iconsize) -- here for now
+                end
+            end
+            gfx.pop()
         elseif State.leaf == 2 then
             local xamount = math.floor(ScreenWidth/SQUARESIZE)
             local yamount = math.floor(ScreenHeight/SQUARESIZE)
