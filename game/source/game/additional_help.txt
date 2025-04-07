@@ -63,7 +63,7 @@ MIT
 
 
 Background love potion - graphics/potion.jpg
-https://en.w ikipedia.org/wiki/File:Filtre_d%27Amour.jpg
+https://en.wikipedia.org/wiki/File:Filtre_d%27Amour.jpg
 From user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25
 Creative Commons Attribution-Share Alike 4.0 International
 https://creativecommons.org/licenses/by-sa/4.0/deed.en
@@ -108,5 +108,5 @@ From user https://opengameart.org/users/dustdfg - Yevhen Babiichuk (DustDFG)
 CC-BY-SA 4.0
 https://creativecommons.org/licenses/by-sa/4.0/
 
-Gold stuff in Main Manu background
+Gold stuff in the Main Menu background
 by Bonsaiheldin | http://bonsaiheld.org
