@@ -34,7 +34,7 @@ SAVENAMEFILE = "savenames"
 --STATEMENTS
 STARTING_RANDOMNESS = 300
 
-HELP_TEXT = 'Look at folder %APPDATA%/LOVE to save some space! This folder is \nfor starting directly from code.\n \nAnd look at folder %APPDATA%/gamename or simply /game. This folder is \nfor starting from the compiled executable.\n \nIf you delete the file "randomness" it is regenerated but edit its \ncontained number to avoid same map generation. Ideally it should be \naccumulating forever to avoid them.\n\nIn Linux look for these\n$XDG_DATA_HOME/love/ or ~/.local/share/love/\nlove may be replaced by game name or simply "game"\n\n\nAND NOW FOR LICENSES\n\n\nAdditional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game\nby Purlov\nnewest GPL\nhttps://www.gnu.org/licenses/gpl-3.0.html\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.wikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nWater tile - graphics/water.jpg\nhttps://opengameart.org/content/texture-water\nFrom user www.GodsAndIdols.com and https://opengameart.org/users/jattenalle\nCC-BY 3.0\nhttps://creativecommons.org/licenses/by/3.0/\n\n\nFlower tiles - graphics/flower%n.png\nI changed their colours somewhat\nhttps://opengameart.org/content/pixel-flower-icons\nFrom user https://opengameart.org/users/sicklyseraph - sicklyseraph\nCC-BY 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n\n\nRoad textures - graphics/road.png\nI am using the desert one\nhttps://opengameart.org/content/road-textures\nFrom user https://opengameart.org/users/dakal - dakal\nCC-BY-SA 3.0\nhttps://creativecommons.org/licenses/by-sa/3.0/\n\n\nRed outfit for main character - graphics/charright & left.png\nhttps://opengameart.org/content/occupational-icons\nFrom user https://opengameart.org/users/technopeasant - technopeasant\nTiles have been drawn by David E. Gervais, and are published under the Creative \nCommons license. You are free to copy, distribute and transmit those tiles \nas long as you credit David Gervais as their creator.\nCC-BY 3.0\nhttp://creativecommons.org/licenses/by/3.0/\n\n\nA sand road - graphics/road2.png\nhttps://opengameart.org/content/pixel-art-top-down-tileset\nFrom user https://opengameart.org/users/dustdfg - Yevhen Babiichuk (DustDFG)\nCC-BY-SA 4.0\nhttps://creativecommons.org/licenses/by-sa/4.0/\n\n\nGold stuff in the Main Menu background\nby Bonsaiheldin'
+HELP_TEXT = 'Look at folder %APPDATA%/LOVE to save some space! This folder is \nfor starting directly from code.\n \nAnd look at folder %APPDATA%/gamename or simply /game. This folder is \nfor starting from the compiled executable.\n \nIf you delete the file "randomness" it is regenerated but edit its \ncontained number to avoid same map generation. Ideally it should be \naccumulating forever to avoid them.\n\nIn Linux look for these\n$XDG_DATA_HOME/love/ or ~/.local/share/love/\nlove may be replaced by game name or simply "game"\n\n\nAND NOW FOR LICENSES\n\n\nAdditional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game\nby Purlov\nnewest GPL\nhttps://www.gnu.org/licenses/gpl-3.0.html\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.wikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nWater tile - graphics/water.jpg\nhttps://opengameart.org/content/texture-water\nFrom user www.GodsAndIdols.com and https://opengameart.org/users/jattenalle\nCC-BY 3.0\nhttps://creativecommons.org/licenses/by/3.0/\n\n\nFlower tiles - graphics/flower%n.png\nI changed their colours somewhat\nhttps://opengameart.org/content/pixel-flower-icons\nFrom user https://opengameart.org/users/sicklyseraph - sicklyseraph\nCC-BY 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n\n\nRoad textures - graphics/road.png\nI am using the desert one\nhttps://opengameart.org/content/road-textures\nFrom user https://opengameart.org/users/dakal - dakal\nCC-BY-SA 3.0\nhttps://creativecommons.org/licenses/by-sa/3.0/\n\n\nRed outfit for main character - graphics/charright & left.png\nhttps://opengameart.org/content/occupational-icons\nFrom user https://opengameart.org/users/technopeasant - technopeasant\nTiles have been drawn by David E. Gervais, and are published under the Creative \nCommons license. You are free to copy, distribute and transmit those tiles \nas long as you credit David Gervais as their creator.\nCC-BY 3.0\nhttp://creativecommons.org/licenses/by/3.0/\n\n\nA sand road - graphics/road2.png\nhttps://opengameart.org/content/pixel-art-top-down-tileset\nFrom user https://opengameart.org/users/dustdfg - Yevhen Babiichuk (DustDFG)\nCC-BY-SA 4.0\nhttps://creativecommons.org/licenses/by-sa/4.0/\n\n\nGold stuff in the Main Menu background\nby Bonsaiheldin\nPublic Domain'
 
 do
     local love = require("love")
@@ -126,9 +126,12 @@ do
     end
 
     local function save_file(i)
-        debugbox("Close this dialog, Press ENTER, Write Name, Press ENTER - Slot "..i)
-        State.waitingforsavename = true
-        State.waitingforsavename_n = i
+        local pressedbutton = love.window.showMessageBox("Want to save slot "..i.."?", "Old data will be lost.", {"OK", "No!", enterbutton = 2}, "warning", true)
+        if pressedbutton == 1 then
+            debugbox("Close this dialog, Press ENTER, Write Name, Press ENTER - Slot "..i)
+            State.waitingforsavename = true
+            State.waitingforsavename_n = i
+        end
     end
 
     local function calculate_prefix(px, py)
@@ -1108,8 +1111,6 @@ do
                     gfx.scale(scalec, scalec)
                     gfx.draw(imagefile, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec)
                     gfx.pop()
-                    --State.xprefix = math.max(px-MAP_W/2,1)
-                    --State.yprefix = math.max(py-MAP_H/2,1)
                 end
             end
         elseif State.leaf == 7 then
@@ -1120,10 +1121,11 @@ do
             gfx.rectangle("line",collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth*ALCHEMYWINDOWSIZE , ScreenHeight*ALCHEMYWINDOWSIZE )
             gfx.setColor(1,0,0)
             gfx.push()
+            local scalesquare = 1/20
             local imagefile = State.alchbottle
             local bottlewidth = imagefile:getWidth()
             local bottleheight = imagefile:getHeight()
-            local scalebottle = ScreenWidth/bottlewidth/20
+            local scalebottle = ScreenWidth/bottlewidth*scalesquare
             gfx.scale(scalebottle, scalebottle)
             gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scalebottle, collectbutton.y/scalebottle)
             gfx.pop()
@@ -1131,7 +1133,7 @@ do
             imagefile = State.alchdoc
             local docwidth = imagefile:getWidth()
             local docheight = imagefile:getHeight()
-            local scaledoc = ScreenWidth/docwidth/20
+            local scaledoc = ScreenWidth/docwidth*scalesquare
             gfx.scale(scaledoc, scaledoc)
             gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scaledoc, (collectbutton.y+bottleheight*scalebottle)/scaledoc) -- good stretching
             gfx.pop()
@@ -1139,14 +1141,17 @@ do
             imagefile = State.alchankh
             local ankhwidth = imagefile:getWidth()
             local ankhheight = imagefile:getHeight()
-            local scaleankh = ScreenWidth/ankhwidth/20
+            local scaleankh = ScreenWidth/ankhwidth*scalesquare
             gfx.scale(scaleankh, scaleankh)
-            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scaleankh, (collectbutton.y+ScreenHeight/1.5)/scaleankh-ankhheight)--good stretching
+            gfx.draw(imagefile, (collectbutton.x+collectbutton.width)/scaleankh, (collectbutton.y+ScreenHeight*ALCHEMYWINDOWSIZE)/scaleankh-ankhheight)--good stretching
             gfx.pop()
             if State.printingalchinventory == true then
                 gfx.setColor(1,0,0)
                 gfx.print(State.printingalchinventorytext, collectbutton.x+collectbutton.width+bottlewidth*scalebottle, collectbutton.y)
             end
+            gfx.setColor(0,0,0.8)
+            local linepadding = 1/4
+            gfx.line(collectbutton.x+collectbutton.width+ankhwidth*scaleankh/2, collectbutton.y + docheight*scaledoc + bottleheight*scalebottle + bottleheight*scalebottle*linepadding, collectbutton.x+collectbutton.width+ankhwidth*scaleankh/2, collectbutton.y+ScreenHeight*ALCHEMYWINDOWSIZE-ankhheight*scaleankh*(1+linepadding))
         end
 
         local len = table_len(Buttons[State.leaf])
