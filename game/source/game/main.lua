@@ -9,6 +9,7 @@ MAP_H = 512
 HOUSEAMOUNT = math.floor(MAP_W*0.5859375) --- 512 is 300
 RIVERAMOUNT = math.floor(MAP_W*0.015) --512 is 7
 SQUARESIZE = 20
+BIGSQUARESCALE = 1.3
 RIVERWIDTH = 5
 SCROLLLINESMAP = 2
 HOUSESIZE = 10
@@ -1105,14 +1106,14 @@ do
                     gfx.scale(scale, scale)
                     gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
                     gfx.pop()
-                    gfx.push()
-                    local imagefile = State.charchosen
-                    local scalec = ScreenWidth/xamount/imagefile:getWidth()
-                    gfx.scale(scalec, scalec)
-                    gfx.draw(imagefile, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec)
-                    gfx.pop()
                 end
             end
+            gfx.push()
+            local imagefile = State.charchosen
+            local scalec = ScreenWidth/xamount/imagefile:getWidth()*BIGSQUARESCALE
+            gfx.scale(scalec, scalec)
+            gfx.draw(imagefile, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec+0.5*SQUARESIZE/scalec-imagefile:getWidth()/2, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec+0.5*SQUARESIZE/scalec-imagefile:getHeight()/2)
+            gfx.pop()
         elseif State.leaf == 7 then
             gfx.setColor(0.3,0.3,0.3)
             local collectbutton = Buttons[State.leaf][1]
