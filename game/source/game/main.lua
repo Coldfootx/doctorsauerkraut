@@ -930,6 +930,11 @@ do
     end
 
     function love.update(dt)
+        local timeout = 1.0/FPS - dt
+        if timeout < 0 then
+            timeout = 0
+        end
+        love.timer.sleep(timeout)
 
         CommandLine.focustime = CommandLine.focustime - 1/FPS
         if CommandLine.focustime < 0 then
@@ -1000,13 +1005,6 @@ do
                 end
             end
         end
-
-        local timeout = 1.0/FPS - dt
-        if timeout < 0 then
-            timeout = 0
-        end
-
-        love.timer.sleep(timeout)
     end
 
     function love.textinput(text)
