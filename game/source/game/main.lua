@@ -740,6 +740,7 @@ do
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
         ScreenWidth, ScreenHeight = ScreenWidth*SCREENSPACE, ScreenHeight*SCREENSPACE
         love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0})
+        Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
         --initialize savedata
         local map = {}
@@ -1014,6 +1015,7 @@ do
     end
 
     function love.draw()
+        gfx.setCanvas(Canvas)
         if State.leaf == 1 then
             gfx.setColor(0.7,0.1,0.1)
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
@@ -1232,5 +1234,9 @@ do
         local posx, posy = getposfromhoover()
 
         print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", xpos="..Save.positionx.."|"..posx..", ypos="..Save.positiony.."|"..posy..", mousehoover="..Tiles[Save.map[posx][posy]].name)
+        
+        gfx.setCanvas()
+        gfx.setColor(1, 1, 1, 1)
+        gfx.draw(Canvas, 0,0)
     end
 end
