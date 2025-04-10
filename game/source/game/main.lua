@@ -1073,6 +1073,8 @@ do
             gfx.draw(imagefile, ScreenWidth/scale-imagefile:getWidth(), 0)
             gfx.pop()
         elseif State.leaf == 4 then
+            gfx.setColor(0,0,0,1)
+            gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
             gfx.setColor(0.7,0.1,0.1)
             gfx.push()
             local rotatefile = State.lovepotion
