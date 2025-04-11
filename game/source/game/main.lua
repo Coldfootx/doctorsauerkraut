@@ -3,6 +3,7 @@ SMALLFONT = 0.0125
 BIGFONT = 0.02
 BIGSQUARESCALE = 1.3
 BANNERH = 0.045
+LOGOW = 0.5
 ALCHEMYWINDOWSIZE = 1/1.5 -- times ScreenWidth and ScreenHeight, suorakulmio ei nelio
 
 MAP_W = 512
@@ -1018,8 +1019,12 @@ do
                 end
             end
             gfx.pop()
-            local mx, my = translatexy(0, 0.1)
-            gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
+            gfx.push()
+            local _, my = translatexy(0, 0.1)
+            local scale = ScreenWidth*LOGOW/State.logo:getWidth()
+            gfx.scale(scale, scale)
+            gfx.draw(State.logo, ScreenWidth/scale/2-State.logo:getWidth()/2, my)
+            gfx.pop()
         elseif State.leaf == 2 then
             local xamount = math.floor(ScreenWidth/SQUAREAMOUNT)+1
             local yamount = math.floor(ScreenHeight/SQUAREAMOUNT)+1
@@ -1195,7 +1200,7 @@ do
         gfx.rectangle("fill", CommandLine.x, CommandLine.y, CommandLine.width, CommandLine.height)
         gfx.setColor(255, 255, 255, 255)
         gfx.push()
-        local scale = CommandLine.height/CommandLine.button:getHeight()
+        scale = CommandLine.height/CommandLine.button:getHeight()
         gfx.scale(scale, scale)
         gfx.draw(CommandLine.button, CommandLine.x/scale + CommandLine.width/scale-CommandLine.button:getWidth(), CommandLine.y/scale)
         gfx.pop()
