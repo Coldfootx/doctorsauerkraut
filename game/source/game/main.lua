@@ -1,36 +1,36 @@
 SCREENSPACE = 0.88
 SMALLFONT = 0.0125
-SMALLFONTDRAWS = 3
 BIGFONT = 0.02
-SCROLLLINES = 9
+BIGSQUARESCALE = 1.3
+BANNERH = 0.045
+ALCHEMYWINDOWSIZE = 1/1.5 -- times ScreenWidth and ScreenHeight, suorakulmio ei nelio
 
 MAP_W = 512
 MAP_H = 512
+SMALLFONTDRAWS = 3
+SCROLLLINESMAP = 2
+SCROLLLINES = 9
+SQUAREAMOUNT = 20
+
+FPS = 75
+WALKSPEED = 1/FPS*10
+
 HOUSEAMOUNT = math.floor(MAP_W*0.5859375) --- 512 is 300
 RIVERAMOUNT = math.floor(MAP_W*0.015) --512 is 7
-SQUARESIZE = 20
-BIGSQUARESCALE = 1.3
 RIVERWIDTH = 5
-SCROLLLINESMAP = 2
 HOUSESIZE = 10
 HOUSESIZEVARY = 5
 LAKESIZE = 30
 LAKESIZEVARY = 10
-ALCHEMYWINDOWSIZE = 1/1.5 -- times ScreenWidth and ScreenHeight
 LAKEAMOUNT = math.floor(MAP_W*0.02)
 FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
-ROADAMOUNT = math.floor(MAP_W*0.022) -- both roads use this so its times two basically
-SAVEFILEAMOUNT = 10
-
-MAX_ALCH_ITEMS = 1337
-
-FPS = 75
-WALKSPEED = 1/FPS*10
+ROADAMOUNT = math.floor(MAP_W*0.022) -- both roads use this so its times two basically 1080/
 
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
 RANDOMNESSFILE = "randomness"
 SAVENAMEFILE = "savenames"
+SAVEFILEAMOUNT = 10
 
 --STATEMENTS
 STARTING_RANDOMNESS = 300
@@ -60,8 +60,8 @@ do
     Randomseed = choice
 
     local function savefile(save_number)
-        Save.positionx = State.xprefix + math.floor(ScreenWidth/SQUARESIZE/2)
-        Save.positiony = State.yprefix + math.floor(ScreenHeight/SQUARESIZE/2)
+        Save.positionx = State.xprefix + math.floor(ScreenWidth/SQUAREAMOUNT/2)
+        Save.positiony = State.yprefix + math.floor(ScreenHeight/SQUAREAMOUNT/2)
 
         local compressed = love.data.compress("string", COMPRESSION, lume.serialize(Save), 9)
 
@@ -136,8 +136,8 @@ do
     end
 
     local function calculate_prefix(px, py)
-        State.xprefix = px-math.floor(ScreenWidth/SQUARESIZE/2)
-        State.yprefix = py-math.floor(ScreenHeight/SQUARESIZE/2)
+        State.xprefix = px-math.floor(ScreenWidth/SQUAREAMOUNT/2)
+        State.yprefix = py-math.floor(ScreenHeight/SQUAREAMOUNT/2)
     end
 
     local function randomlocation()
@@ -683,7 +683,7 @@ do
         elseif found == false and State.hoover ~= -2 then
             State.hoover = 0
         end
-        Hooveredx, Hooveredy = math.floor(x/SQUARESIZE), math.floor(y/SQUARESIZE)
+        Hooveredx, Hooveredy = math.floor(x/SQUAREAMOUNT), math.floor(y/SQUAREAMOUNT)
         Currentx, Currenty = x,y
     end
 
@@ -722,8 +722,8 @@ do
     end
 
     local function alchcollect()
-        local centerw = math.floor(ScreenWidth/SQUARESIZE/2)
-        local centerh = math.floor(ScreenHeight/SQUARESIZE/2)
+        local centerw = math.floor(ScreenWidth/SQUAREAMOUNT/2)
+        local centerh = math.floor(ScreenHeight/SQUAREAMOUNT/2)
         for n=1,#TilestoAlch do
             local tile = Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh)]
             if tile == TilestoAlch[n][1] then
@@ -901,13 +901,13 @@ do
             end
         elseif x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height then
             State.hoover = -2
-        elseif x > ScreenWidth-State.banner:getHeight() and x < ScreenWidth and y > 0 and y < State.banner:getHeight() then
+        elseif x > ScreenWidth-ScreenHeight*BANNERH and x < ScreenWidth and y > 0 and y < ScreenHeight*BANNERH then
             if State.hoover == -2 then
                 State.hoover = 0
             else
                 quitmessage()
             end
-        elseif x > ScreenWidth-2*State.banner:getHeight() and x < ScreenWidth-State.banner:getHeight() and y > 0 and y < State.banner:getHeight() then
+        elseif x > ScreenWidth-2*ScreenHeight*BANNERH and x < ScreenWidth-ScreenHeight*BANNERH and y > 0 and y < ScreenHeight*BANNERH then
             if State.hoover == -2 then
                 State.hoover = 0
             else
@@ -946,7 +946,7 @@ do
                 end
                 if love.keyboard.isDown('s') then
                     State.yprefix = math.floor(State.yprefix + SCROLLLINESMAP)
-                    local check = math.floor(#Save.map[1]-ScreenHeight/SQUARESIZE)
+                    local check = math.floor(#Save.map[1]-ScreenHeight/SQUAREAMOUNT)
                     if State.yprefix > check then
                         State.yprefix = check
                     end
@@ -959,7 +959,7 @@ do
                 end
                 if love.keyboard.isDown('d') then
                     State.xprefix = math.floor(State.xprefix + SCROLLLINESMAP)
-                    local check = math.floor(#Save.map-ScreenWidth/SQUARESIZE)
+                    local check = math.floor(#Save.map-ScreenWidth/SQUAREAMOUNT)
                     if State.xprefix > check then
                         State.xprefix = check
                     end
@@ -968,8 +968,8 @@ do
                 State.walkingwait = State.walkingwait - dt
                 if State.walkingwait < 0 then
                     State.walkingwait = WALKSPEED
-                    local centerw = math.floor(ScreenWidth/SQUARESIZE/2)
-                    local centerh = math.floor(ScreenHeight/SQUARESIZE/2)
+                    local centerw = math.floor(ScreenWidth/SQUAREAMOUNT/2)
+                    local centerh = math.floor(ScreenHeight/SQUAREAMOUNT/2)
                     if love.keyboard.isDown('w') then
                         if Tiles[Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh-1, 1)]].obstacle == false then
                             State.yprefix = math.max(State.yprefix - 1,-centerh+1)
@@ -1021,8 +1021,8 @@ do
             local mx, my = translatexy(0, 0.1)
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
         elseif State.leaf == 2 then
-            local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
-            local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
+            local xamount = math.floor(ScreenWidth/SQUAREAMOUNT)+1
+            local yamount = math.floor(ScreenHeight/SQUAREAMOUNT)+1
             gfx.setColor(255, 255, 255, 255)
             for i=1, xamount do
                 for j=1, yamount do
@@ -1030,7 +1030,7 @@ do
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_W)][math.min(math.max(1,j+State.yprefix-1),MAP_H)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
-                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
+                    gfx.draw(imagefile, (i-1)*SQUAREAMOUNT/scale,(j-1)*SQUAREAMOUNT/scale)
                     gfx.pop()
                 end
             end
@@ -1075,8 +1075,8 @@ do
             gfx.rectangle("line", Buttons[State.leaf][2].x-beyondbuttonw, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height, Buttons[State.leaf][2].width+ 2*beyondbuttonw, Buttons[State.leaf][3].y-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height))
             gfx.print(State.help_text, Buttons[State.leaf][2].x-beyondbuttonw+State.helppadding, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height+State.helppadding)
         elseif State.leaf == 6 then
-            local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
-            local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
+            local xamount = math.floor(ScreenWidth/SQUAREAMOUNT)+1
+            local yamount = math.floor(ScreenHeight/SQUAREAMOUNT)+1
             gfx.setColor(255, 255, 255, 255)
             for i=1, xamount do
                 for j=1, yamount do
@@ -1084,7 +1084,7 @@ do
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_W)][math.min(math.max(1,j+State.yprefix-1),MAP_H)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
-                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
+                    gfx.draw(imagefile, (i-1)*SQUAREAMOUNT/scale,(j-1)*SQUAREAMOUNT/scale)
                     gfx.pop()
                 end
             end
@@ -1092,7 +1092,7 @@ do
             local imagefile = State.charchosen
             local scalec = ScreenWidth/xamount/imagefile:getWidth()*BIGSQUARESCALE
             gfx.scale(scalec, scalec)
-            gfx.draw(imagefile, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec+0.5*SQUARESIZE/scalec-imagefile:getWidth()/2, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec+0.5*SQUARESIZE/scalec-imagefile:getHeight()/2)
+            gfx.draw(imagefile, SQUAREAMOUNT*math.floor(ScreenWidth/2/SQUAREAMOUNT)/scalec+0.5*SQUAREAMOUNT/scalec-imagefile:getWidth()/2, SQUAREAMOUNT*math.floor(ScreenHeight/2/SQUAREAMOUNT)/scalec+0.5*SQUAREAMOUNT/scalec-imagefile:getHeight()/2)
             gfx.pop()
         elseif State.leaf == 7 then
             gfx.setColor(0.3,0.3,0.3)
@@ -1166,24 +1166,26 @@ do
         --first after custom leaves is banner
         gfx.setFont(SmallFont)
         gfx.setColor(255, 255, 255, 255)
-        for i=1,ScreenWidth do
-            gfx.draw(State.banner, i-1, 0)
+        gfx.push()
+        local theheight = ScreenHeight*BANNERH
+        local scale = theheight/State.banner:getHeight()
+        gfx.scale(scale, scale)
+        for i=0,ScreenWidth/scale/(State.banner:getWidth()) do
+            gfx.draw(State.banner, i*State.banner:getWidth(), 0)
         end
+        gfx.pop()
+        gfx.push()
+        scale = theheight/State.bannerx:getHeight()
+        gfx.scale(scale, scale)
+        local boxsize = State.bannerx:getWidth()
+        gfx.draw(State.bannerx, ScreenWidth/scale-boxsize, 0)
+        gfx.draw(State.bannerm, ScreenWidth/scale-2*boxsize, 0)
+        gfx.pop()
         local text = "Doctor Sauerkraut"
         gfx.setColor(1,1,1)
         for i=1, SMALLFONTDRAWS do
-            gfx.print(text, ScreenWidth/2.0 - SmallFont:getWidth(text)/2.0, State.banner:getHeight()/2.0-SmallFont:getHeight(text)/2.0)
+            gfx.print(text, ScreenWidth/2.0 - SmallFont:getWidth(text)/2.0, theheight/2.0-SmallFont:getHeight(text)/2.0)
         end
-        gfx.push()
-        local scale = State.banner:getHeight()/State.bannerx:getHeight()
-        gfx.scale(scale, scale)
-        gfx.draw(State.bannerx, ScreenWidth/scale-State.bannerx:getWidth(), 0)
-        gfx.pop()
-        gfx.push()
-        local scale = State.banner:getHeight()/State.bannerm:getHeight()
-        gfx.scale(scale, scale)
-        gfx.draw(State.bannerm, ScreenWidth/scale-2*State.bannerm:getWidth(), 0)
-        gfx.pop()
 
         if State.hoover < 0 then
             gfx.setColor(CommandLine.focusedcolor)
