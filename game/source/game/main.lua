@@ -516,7 +516,22 @@ do
         change_page(6)
     end
 
+    local function refreshalchinventory()
+        if #Save.alchinventory == 0 then
+            State.printingalchinventorytext = "Empty Alchemy Bag"
+        else
+            State.printingalchinventorytext = ""
+            for i=1, #Save.alchinventory do
+                if Save.alchinventory[i] ~= 0 then
+                    State.printingalchinventorytext = State.printingalchinventorytext..i..". "..AlchItems[Save.alchinventory[i]].name.."\n"
+                end
+            end
+        end
+        State.printingalchinventory = true
+    end
+
     local function newalchemy()
+        refreshalchinventory()
         change_page(7)
     end
 
@@ -704,20 +719,6 @@ do
     local function startalchremove()
         State.waitingforalchremove= true
         debugbox("Close this dialog. Hit enter. Type the number to delete. Hit enter.")
-    end
-
-    local function refreshalchinventory()
-        if #Save.alchinventory == 0 then
-            State.printingalchinventorytext = "Empty Alchemy Bag"
-        else
-            State.printingalchinventorytext = ""
-            for i=1, #Save.alchinventory do
-                if Save.alchinventory[i] ~= 0 then
-                    State.printingalchinventorytext = State.printingalchinventorytext..i..". "..AlchItems[Save.alchinventory[i]].name.."\n"
-                end
-            end
-        end
-        State.printingalchinventory = true
     end
 
     local function alchcollect()
