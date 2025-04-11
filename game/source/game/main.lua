@@ -1043,11 +1043,11 @@ do
            --end
             
         elseif State.leaf == 2 then
-            local xamount = math.floor(ScreenWidth/SQUARESIZE)
-            local yamount = math.floor(ScreenHeight/SQUARESIZE)
+            local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
+            local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
+            gfx.setColor(255, 255, 255, 255)
             for i=1, xamount do
                 for j=1, yamount do
-                    gfx.setColor(255, 255, 255, 255)
                     gfx.push()
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_W)][math.min(math.max(1,j+State.yprefix-1),MAP_H)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
@@ -1097,11 +1097,11 @@ do
             gfx.rectangle("line", Buttons[State.leaf][2].x-beyondbuttonw, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height, Buttons[State.leaf][2].width+ 2*beyondbuttonw, Buttons[State.leaf][3].y-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height))
             gfx.print(State.help_text, Buttons[State.leaf][2].x-beyondbuttonw+State.helppadding, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height+State.helppadding)
         elseif State.leaf == 6 then
-            local xamount = math.floor(ScreenWidth/SQUARESIZE)
-            local yamount = math.floor(ScreenHeight/SQUARESIZE)
+            local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
+            local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
+            gfx.setColor(255, 255, 255, 255)
             for i=1, xamount do
                 for j=1, yamount do
-                    gfx.setColor(255, 255, 255, 255)
                     gfx.push()
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_W)][math.min(math.max(1,j+State.yprefix-1),MAP_H)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
