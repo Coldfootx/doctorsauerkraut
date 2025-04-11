@@ -529,10 +529,8 @@ do
         for i=0, fits do
             sliced[i] = lines[prefix+i]
         end
-        --debugbox(sliced[2])
         local nstring = table.concat(sliced, "\n")
         State.savedhelpprefix = prefix
-        --debugbox(nstring)
         return nstring
     end
 
@@ -588,7 +586,6 @@ do
                 State.hoover = -2
             end
         elseif key == "return" and State.hoover == -2 then
-            --debugbox(CommandLine.text)
             if State.waitingforsavename == true then
                 save_n(State.waitingforsavename_n)
                 State.waitingforsavename = false
@@ -614,7 +611,6 @@ do
             if string.len(CommandLine.text) > 0 then
                 CommandLine.text = CommandLine.text:sub(1,utf8.offset(CommandLine.text, -1)-1)
             end
-           -- CommandLine.text = string.gsub(CommandLine.text,"%W",function(d)return tonumber(d) and d or "" end) 
         end
     end
 
@@ -752,12 +748,6 @@ do
         end
         Save = {map=map, npcs={}, positionx=  1, positiony= 1, alchinventory = {}}
 
-        --for i=1, MAX_ALCH_ITEMS do
-         --   Save.alchinventory[i] = 0
-        --end
-        
-        --tile = , posx, posy, favourite_thing
-
         local fontsize, y = translatexy(SMALLFONT,SMALLFONT)
         SmallFont = gfx.newFont(fontsize)
         fontsize, y = translatexy(BIGFONT, BIGFONT)
@@ -806,22 +796,16 @@ do
 
         local gamebuttonw, gamebuttonh = translatexy(0.115, 0.03)
         local wpadding, hpadding = translatexy(0,0.15)
-        --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
-        --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
         Buttons[6] = {{size=2, text="Alchemy", x = 0, y = 0*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = newalchemy}, {size=2, text="Back to Main", x = 0, y = 1*gamebuttonh+hpadding, width = gamebuttonw, height=gamebuttonh, call = backtomain}}
 
         local alchbuttonw, alchbuttonh = translatexy(0.13, 0.03)
         local alchwpadding, alchhpadding = translatexy(0.1,0.15)
-        --local helpbuttonstartx, gamebuttonstarty = translatexy(0, 0.1)
-        --local centeredx = ScreenWidth/2.0-helpbuttonw/2.0
         Buttons[7] = {
             {size=2, text="Combine", x = alchwpadding, y = 0*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startalchcombine},
             {size=2, text="Remove", x = alchwpadding, y = 1*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = startalchremove},
             {size=2, text="Collect from ground", x = alchwpadding, y = 2*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchcollect},
             {size=2, text="Inventory", x = alchwpadding, y = 3*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = refreshalchinventory}, {size=2, text="Back to Game", x = alchwpadding, y = 4*alchbuttonh+alchhpadding, width = alchbuttonw, height=alchbuttonh, call = continuegame},
             {size=2, text="Scroll Up", x = alchwpadding+alchbuttonw+ScreenWidth*ALCHEMYWINDOWSIZE-alchbuttonw, y = alchhpadding, width = alchbuttonw, height=alchbuttonh, call = alchscrollup}, {size=2, text="Scroll Down", x = alchwpadding+alchbuttonw+ScreenWidth*ALCHEMYWINDOWSIZE-alchbuttonw, y = alchhpadding+ScreenHeight*ALCHEMYWINDOWSIZE-alchbuttonh, width = alchbuttonw, height=alchbuttonh, call = alchscrolldown}}
-
-            --collectbutton.x+collectbutton.width, collectbutton.y, ScreenWidth/AlchSquare, ScreenHeight/AlchSquare)
 
         if love.filesystem.getInfo(SAVENAMEFILE) == nil then
             local names = {}
@@ -847,7 +831,7 @@ do
 
         for i=1,State.mainmenubgsamount do
             for j=1, State.mainmenurepeat do
-                State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat] = {i,randomgen:random(1,ScreenWidth-State.mainmenubgs[i]:getWidth()), randomgen:random(1,ScreenHeight-State.mainmenubgs[i]:getHeight())} -- here for now
+                State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat] = {i,randomgen:random(1,ScreenWidth-State.mainmenubgs[i]:getWidth()), randomgen:random(1,ScreenHeight-State.mainmenubgs[i]:getHeight())}
             end
         end
 
@@ -1020,28 +1004,17 @@ do
             gfx.setColor(0.7,0.1,0.1)
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
             gfx.setColor(255, 255, 255, 255)
-            --[[gfx.push()
-            local scale = ScreenHeight/State.bg:getHeight()
-            gfx.scale(scale, scale)
-            gfx.draw(State.bg, 0,0)
-            gfx.pop()]]--
             local iconsize, __ = translatexy(0.002, 0)
             gfx.push()
             gfx.scale(iconsize, iconsize)
             for i=1,State.mainmenubgsamount do
                 for j=1, State.mainmenurepeat do
-                    gfx.draw(State.mainmenubgs[i], State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat][2]/iconsize, State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat][3]/iconsize) -- here for now
+                    gfx.draw(State.mainmenubgs[i], State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat][2]/iconsize, State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat][3]/iconsize)
                 end
             end
             gfx.pop()
             local mx, my = translatexy(0, 0.1)
             gfx.draw(State.logo, ScreenWidth/2.0-State.logo:getWidth()/2.0, my)
-            --for i=1,State.mainmenubgsamount do
-            --    for j=1, State.mainmenurepeat do
-            --        State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat] = {i,randomgen:random(1,ScreenWidth-State.mainmenubgs[i]:getWidth()), randomgen:random(1,--ScreenHeight-State.mainmenubgs[i]:getHeight())} -- here for now
-            --    end
-           --end
-            
         elseif State.leaf == 2 then
             local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
             local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
