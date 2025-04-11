@@ -487,10 +487,22 @@ do
         randomlocation()
     end
 
+    local function init_save()
+        --initialize savedata
+        local map = {}
+        for i=1,MAP_W do
+            map[i] = {}
+            for j=1,MAP_H do
+                map[i][j] = 1
+            end
+        end
+        Save = {map=map, npcs={}, positionx = 1, positiony = 1, alchinventory = {}}
+    end
+
     local function newgame()
         local pressedbutton = love.window.showMessageBox("Remember to save map first", "Entering new game formats the current map in memory. Want to continue?", {"OK", "No!", enterbutton = 2}, "warning", true)
         if pressedbutton == 1 then
-            Save.map = format_map()
+            init_save()
             change_page(2)
         end
         
@@ -738,15 +750,7 @@ do
         love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0})
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
-        --initialize savedata
-        local map = {}
-        for i=1,MAP_W do
-            map[i] = {}     -- create x
-            for j=1,MAP_H do
-                map[i][j] = 1
-            end
-        end
-        Save = {map=map, npcs={}, positionx=  1, positiony= 1, alchinventory = {}}
+        init_save()
 
         local fontsize, y = translatexy(SMALLFONT,SMALLFONT)
         SmallFont = gfx.newFont(fontsize)
