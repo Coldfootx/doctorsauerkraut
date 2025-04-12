@@ -599,6 +599,7 @@ do
             if pressedbutton == 1 then
                 load_file(n)
                 calculate_prefix(Save.positionx, Save.positiony)
+                MapGenerated = true
                 debugbox("Loaded!")
                 change_page(6)
             end
