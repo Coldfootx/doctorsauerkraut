@@ -3,7 +3,7 @@ SMALLFONT = 0.0125
 BIGFONT = 0.02
 BIGSQUARESCALE = 1.3
 BANNERH = 0.045
-LOGOW = 0.5
+LOGOW = 0.55
 ALCHEMYWINDOWSIZE = 1/1.5 -- times ScreenWidth and ScreenHeight, suorakulmio ei nelio
 
 MAP_W = 512
@@ -16,6 +16,9 @@ SQUAREAMOUNT = 20
 FPS = 75
 WALKSPEED = 1/FPS*10
 
+BUTTONHOOVERCOLOR = {0.5,0,0}
+BUTTONNORMALCOLOR = {0.5,0.5,0.5}
+
 HOUSEAMOUNT = math.floor(MAP_W*0.5859375) --- 512 is 300
 RIVERAMOUNT = math.floor(MAP_W*0.015) --512 is 7
 RIVERWIDTH = 5
@@ -24,8 +27,8 @@ HOUSESIZEVARY = 5
 LAKESIZE = 30
 LAKESIZEVARY = 10
 LAKEAMOUNT = math.floor(MAP_W*0.02)
-FLOWERAMOUNT = math.floor(MAP_W*0.5)*100
-ROADAMOUNT = math.floor(MAP_W*0.022) -- both roads use this so its times two basically 1080/
+FLOWERAMOUNT = math.floor(MAP_W*0.5)*33
+ROADAMOUNT = math.floor(MAP_W*0.022)*2 -- both roads use this so its times two basically 1080/
 
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
@@ -315,19 +318,11 @@ do
             local fx = randomgen:random(MAP_W)
             local fy = randomgen:random(MAP_H)
             if Tiles[map[fx][fy]].obstacle == false and map[fx][fy] ~= 4 then
-                local choice = randomgen:random(6)
+                local choice = randomgen:random(2)
                 if choice == 1 then
                     map[fx][fy] = 7
                 elseif choice == 2 then
                     map[fx][fy] = 8
-                elseif choice == 3 then
-                    map[fx][fy] = 11
-                elseif choice == 4 then
-                    map[fx][fy] = 12
-                elseif choice == 5 then
-                    map[fx][fy] = 13
-                elseif choice == 6 then
-                    map[fx][fy] = 14
                 end
             end
         end
@@ -754,9 +749,9 @@ do
 
         init_save()
 
-        local fontsize, y = translatexy(SMALLFONT,SMALLFONT)
+        local fontsize, _ = translatexy(SMALLFONT,0)
         SmallFont = gfx.newFont(fontsize)
-        fontsize, y = translatexy(BIGFONT, BIGFONT)
+        fontsize, _ = translatexy(BIGFONT, 0)
         BigFont = gfx.newFont(fontsize)
 
         local newgamebuttonw, newgamebuttonh = translatexy(0.25, 0.07)
@@ -850,34 +845,20 @@ do
             {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
             {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false},
             {i = 6, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
-            {i = 7, name="Purple flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
-            {i = 8, name="Light blue flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
+            {i = 7, name="White flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
+            {i = 8, name="Black flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
             {i = 9, name="Sand road", file = gfx.newImage("graphics/road.png"), obstacle = false},
             {i = 10, name="Dark sand road", file = gfx.newImage("graphics/road2.png"), obstacle = false},
-            {i = 11, name="Red flower", file = gfx.newImage("graphics/flower3.png"), obstacle = false},
-            {i = 12, name="Yellow flower", file = gfx.newImage("graphics/flower4.png"), obstacle = false},
-            {i = 13, name="Pink flower", file = gfx.newImage("graphics/flower5.png"), obstacle = false},
-            {i = 14, name="White flower", file = gfx.newImage("graphics/flower6.png"), obstacle = false}
         }
 
         TilestoAlch = {
             {7,1},
-            {8,2},
-            {11,3},
-            {12,4},
-            {13,5},
-            {14,6},
-            {5,7}
+            {8,2}
         }
 
         AlchItems={
-            {i = 1, name="Purple flower", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
-            {i = 2, name="Light blue flower", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false},
-            {i = 3, name="Red flower", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = false},
-            {i = 4, name="Yellow flower", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
-            {i = 5, name="Pink flower", file = gfx.newImage("graphics/river.png"), obstacle = false},
-            {i = 6, name="White flower", file = gfx.newImage("graphics/water.jpg"), obstacle = false},
-            {i = 7, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = true}
+            {i = 1, name="White flower", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
+            {i = 2, name="Black flower", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false}
         }
 
         NPC_tiles ={
@@ -1007,7 +988,7 @@ do
     function love.draw()
         gfx.setCanvas(Canvas)
         if State.leaf == 1 then
-            gfx.setColor(0.5,0.5,0.5)
+            gfx.setColor(0.4,0.4,0.4)
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
             gfx.setColor(255, 255, 255, 255)
             local iconsize, __ = translatexy(0.002, 0)
@@ -1020,7 +1001,7 @@ do
             end
             gfx.pop()
             gfx.push()
-            local _, my = translatexy(0, 0.25)
+            local _, my = translatexy(0, 0.22)
             local scale = ScreenWidth*LOGOW/State.logo:getWidth()
             gfx.scale(scale, scale)
             gfx.draw(State.logo, ScreenWidth/scale/2-State.logo:getWidth()/2, my)
@@ -1154,16 +1135,16 @@ do
                 height = SmallFont:getHeight(button.text)
             end
             if State.hoover == i then
-                gfx.setColor(0,0,0)
+                gfx.setColor(BUTTONHOOVERCOLOR)
                 gfx.rectangle("fill", button.x, button.y, button.width, button.height)
-                gfx.setColor(1,1,1)
+                gfx.setColor(BUTTONNORMALCOLOR)
                 gfx.rectangle("line", button.x, button.y, button.width, button.height)
                 gfx.print(button.text, button.x+button.width/2.0-width/2.0, button.y+button.height/2.0-height/2.0)
             else
-                gfx.setColor(1,1,1)
+                gfx.setColor(BUTTONNORMALCOLOR)
                 gfx.rectangle("fill", button.x, button.y, button.width, button.height)
                 gfx.rectangle("line", button.x, button.y, button.width, button.height)
-                gfx.setColor(0,0,0)
+                gfx.setColor(BUTTONHOOVERCOLOR)
                 gfx.print(button.text, button.x+button.width/2.0-width/2.0, button.y+button.height/2.0-height/2.0)
             end
         end
