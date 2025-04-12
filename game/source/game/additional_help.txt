@@ -71,7 +71,7 @@ https://creativecommons.org/licenses/by-sa/4.0/deed.en
 
 Water tile - graphics/water.jpg
 https://opengameart.org/content/texture-water
-From user www.GodsAndIdols.com and https://opengameart.org/users/jattenalle
+www.GodsAndIdols.com and https://opengameart.org/users/jattenalle - Johannes Pihl
 CC-BY 3.0
 https://creativecommons.org/licenses/by/3.0/
 
@@ -79,7 +79,7 @@ https://creativecommons.org/licenses/by/3.0/
 Flower tiles - graphics/flower%n.png
 I changed their colours somewhat
 https://opengameart.org/content/pixel-flower-icons
-From user https://opengameart.org/users/sicklyseraph - sicklyseraph
+From user https://opengameart.org/users/sicklyseraph - Josephine (sicklyseraph)
 CC-BY 4.0
 https://creativecommons.org/licenses/by/4.0/
 
@@ -94,7 +94,7 @@ https://creativecommons.org/licenses/by-sa/3.0/
 
 Red outfit for main character - graphics/charright & left.png
 https://opengameart.org/content/occupational-icons
-From user https://opengameart.org/users/technopeasant - technopeasant
+https://opengameart.org/users/technopeasant - Graham L. Wilson (technopeasant)
 Tiles have been drawn by David E. Gervais, and are published under the Creative 
 Commons license. You are free to copy, distribute and transmit those tiles 
 as long as you credit David Gervais as their creator.
@@ -112,4 +112,15 @@ https://creativecommons.org/licenses/by-sa/4.0/
 Gold stuff in the Main Menu background
 https://opengameart.org/content/gold-treasure-icons-16x16s
 From user https://opengameart.org/users/bonsaiheldin - Bonsaiheldin
+Public Domain
+
+A water tile
+https://opengameart.org/content/water
+By Aswin Vos. https://opengameart.org/users/aswin909
+CC BY-SA 3.0
+https://creativecommons.org/licenses/by-sa/3.0/
+
+A water tile
+https://opengameart.org/content/water-texture-pack
+From user https://opengameart.org/users/proxy-games - Proxy Games
 Public Domain
