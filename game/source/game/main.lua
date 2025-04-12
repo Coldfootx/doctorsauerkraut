@@ -14,6 +14,7 @@ SQUAREAMOUNT = 20
 
 FPS = 75
 WALKSPEED = 1/FPS*10
+WATERSPARKLESPEED = FPS*0.001
 
 BUTTONHOOVERCOLOR = {0.5,0,0}
 BUTTONNORMALCOLOR = {0.5,0.5,0.5}
@@ -159,7 +160,7 @@ do
     local function format_map()
         local map = {}
         for i=1,MAP_SQUARE do
-            map[i] = {}     -- create x
+            map[i] = {}
             for j=1,MAP_SQUARE do
                 map[i][j] = randomgen:random(2)
             end
@@ -190,15 +191,18 @@ do
                 --print("(", x + xc, ",", y + yc, ")")
                 --print("(",-x + xc,",", y + yc, ")")
                 --print("(",x + xc,",", -y + yc ,")")
-                --print("(",-x + xc, ",", -y + yc, ")")
-                map[math.min(x+xc, MAP_SQUARE)][math.min(y+yc, MAP_SQUARE)] = 6
-                map[math.max(-x+xc,1)][math.min(y+yc, MAP_SQUARE)] = 6
-                map[math.min(x+xc, MAP_SQUARE)][math.max(-y+yc,1)] = 6
-                map[math.max(-x+xc,1)][math.max(-y+yc,1)] = 6
+                --print("(",-x + xc, ",", -y + yc, ")"
 
                 for ix = math.max(-x+xc,1), math.min(x+xc, MAP_SQUARE) do
                     for iy = math.max(-y+yc,1), math.min(y+yc, MAP_SQUARE) do
-                        map[ix][iy] = 6
+                        choice = randomgen:random(3)
+                        if choice == 1 then
+                            map[ix][iy] = 11
+                        elseif choice == 2 then
+                            map[ix][iy] = 12
+                        else
+                            map[ix][iy] = 13
+                        end
                     end
                 end
 
@@ -231,12 +235,12 @@ do
                 endpointy = MAP_SQUARE
             end
             for i=housex, endpointx do
-                if map[i][housey] ==6 or map[i][endpointy] == 6 then
+                if map[i][housey] == 11 or map[i][endpointy] == 11 or map[i][housey] == 12 or map[i][endpointy] == 12 or map[i][housey] == 13 or map[i][endpointy] == 13 then
                     obstacle = true
                 end
                 for y = housey+1, endpointy-1 do
                     for x = i+1, i+endpointx-1 do
-                        if map[i][y] == 6 then
+                        if map[i][y] == 11 or map[i][y] == 12 or map[i][y] == 13 then
                             obstacle = true
                         end
                     end
@@ -367,7 +371,8 @@ do
             for n=1, 999999 do
                 if suunta == 1 then
                     local cxtest = math.min(cx+1, MAP_SQUARE)
-                    if Tiles[map[cxtest][cy]].obstacle == false then
+                    local tile = map[cxtest][cy]
+                    if Tiles[tile].obstacle == false or tile == 11 or tile == 12 or tile == 13  then
                         cx = cxtest
                         map[cx][cy] = 9
                     else
@@ -375,7 +380,8 @@ do
                     end
                 elseif suunta == -1 then
                     local cxtest = math.max(cx-1, 1)
-                    if Tiles[map[cxtest][cy]].obstacle == false then
+                    local tile = map[cxtest][cy]
+                    if Tiles[tile].obstacle == false or tile == 11 or tile == 12 or tile == 13  then
                         cx = cxtest
                         map[cx][cy] = 9
                     else
@@ -383,7 +389,8 @@ do
                     end
                 elseif suunta == 2 then
                     local cytest = math.min(cy+1, MAP_SQUARE)
-                    if Tiles[map[cx][cytest]].obstacle == false then
+                    local tile = map[cx][cytest]
+                    if Tiles[tile].obstacle == false or tile == 11 or tile == 12 or tile == 13 then
                         cy = cytest
                         map[cx][cy] = 9
                     else
@@ -391,7 +398,8 @@ do
                     end
                 elseif suunta == -2 then
                     local cytest = math.max(cy-1, 1)
-                    if Tiles[map[cx][cytest]].obstacle == false then
+                    local tile = map[cx][cytest]
+                    if Tiles[tile].obstacle == false or tile == 11 or tile == 12 or tile == 13 then
                         cy = cytest
                         map[cx][cy] = 9
                     else
@@ -443,7 +451,8 @@ do
             for n=1, 999999 do
                 if suunta == 1 then
                     local cxtest = math.min(cx+1, MAP_SQUARE)
-                    if Tiles[map[cxtest][cy]].obstacle == false then
+                    local tile = map[cxtest][cy]
+                    if Tiles[tile].obstacle == false or tile == 11 or tile == 12 or tile == 13  then
                         cx = cxtest
                         map[cx][cy] = 10
                     else
@@ -451,7 +460,8 @@ do
                     end
                 elseif suunta == -1 then
                     local cxtest = math.max(cx-1, 1)
-                    if Tiles[map[cxtest][cy]].obstacle == false then
+                    local tile = map[cxtest][cy]
+                    if Tiles[tile].obstacle == false or tile == 11 or tile == 12 or tile == 13  then
                         cx = cxtest
                         map[cx][cy] = 10
                     else
@@ -459,7 +469,8 @@ do
                     end
                 elseif suunta == 2 then
                     local cytest = math.min(cy+1, MAP_SQUARE)
-                    if Tiles[map[cx][cytest]].obstacle == false then
+                    local tile = map[cx][cytest]
+                    if Tiles[tile].obstacle == false or tile == 11 or tile == 12 or tile == 13 then
                         cy = cytest
                         map[cx][cy] = 10
                     else
@@ -467,7 +478,8 @@ do
                     end
                 elseif suunta == -2 then
                     local cytest = math.max(cy-1, 1)
-                    if Tiles[map[cx][cytest]].obstacle == false then
+                    local tile = map[cx][cytest]
+                    if Tiles[tile].obstacle == false or tile == 11 or tile == 12 or tile == 13 then
                         cy = cytest
                         map[cx][cy] = 10
                     else
@@ -478,12 +490,14 @@ do
         end
 
         Save.map = map
+        MapGenerated = true
 
         randomlocation()
     end
 
     local function init_save()
         --initialize savedata
+        MapGenerated = false
         local map = {}
         for i=1,MAP_SQUARE do
             map[i] = {}
@@ -823,7 +837,7 @@ do
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
         
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png"), alchdoc= gfx.newImage("graphics/doc.png"), alchankh = gfx.newImage("graphics/ankh.png"), mainmenubgs = {}, mainmenubgslocation = {}, mainmenubgsamount= 10, mainmenurepeat = 10}
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png"), alchdoc= gfx.newImage("graphics/doc.png"), alchankh = gfx.newImage("graphics/ankh.png"), mainmenubgs = {}, mainmenubgslocation = {}, mainmenubgsamount= 10, mainmenurepeat = 10,  watersparklecur = 0}
 
         for i=1,State.mainmenubgsamount do
             State.mainmenubgs[i] = gfx.newImage("graphics/mainmenu/"..i..".png")
@@ -843,14 +857,14 @@ do
             {i = 3, name="Wooden wall", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
             {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
             {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false},
-            {i = 6, name="Water", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
+            {i = 6, name="Empty", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
             {i = 7, name="White flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
             {i = 8, name="Black flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
             {i = 9, name="Sand road", file = gfx.newImage("graphics/road.png"), obstacle = false},
             {i = 10, name="Dark sand road", file = gfx.newImage("graphics/road2.png"), obstacle = false},
-            {i = 11, name="Water animation 1", file = gfx.newImage("graphics/water.jpg"), obstacle = false},
-            {i = 12, name="Water animation 2", file = gfx.newImage("graphics/water2.jpg"), obstacle = false},
-            {i = 13, name="Water animation 3", file = gfx.newImage("graphics/water3.jpg"), obstacle = false}
+            {i = 11, name="Water 1", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
+            {i = 12, name="Water 2", file = gfx.newImage("graphics/water2.jpg"), obstacle = true},
+            {i = 13, name="Water 3", file = gfx.newImage("graphics/water3.jpg"), obstacle = true}
         }
 
         TilestoAlch = {
@@ -909,6 +923,28 @@ do
             timeout = 0
         end
         love.timer.sleep(timeout)
+
+        if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
+            State.watersparklecur = State.watersparklecur - dt
+            if State.watersparklecur < 0 then
+                State.waterparklecur = WATERSPARKLESPEED
+
+                local x, y, value
+                repeat
+                    x = randomgen:random(MAP_SQUARE)
+                    y = randomgen:random(MAP_SQUARE)
+                    value = Save.map[x][y]
+                until value == 11 or value == 12 or value == 13
+                local randomchoice = randomgen:random(3)
+                if randomchoice == 1 then
+                    Save.map[x][y] = 11
+                elseif  randomchoice == 2 then
+                    Save.map[x][y] = 12
+                else
+                    Save.map[x][y] = 13
+                end
+            end
+        end
 
         CommandLine.focustime = CommandLine.focustime - 1/FPS
         if CommandLine.focustime < 0 then
