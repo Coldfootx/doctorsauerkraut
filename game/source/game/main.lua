@@ -1007,7 +1007,7 @@ do
     function love.draw()
         gfx.setCanvas(Canvas)
         if State.leaf == 1 then
-            gfx.setColor(0.7,0.1,0.1)
+            gfx.setColor(0.5,0.5,0.5)
             gfx.rectangle("fill", 0, 0, ScreenWidth, ScreenHeight)
             gfx.setColor(255, 255, 255, 255)
             local iconsize, __ = translatexy(0.002, 0)
@@ -1020,7 +1020,7 @@ do
             end
             gfx.pop()
             gfx.push()
-            local _, my = translatexy(0, 0.1)
+            local _, my = translatexy(0, 0.25)
             local scale = ScreenWidth*LOGOW/State.logo:getWidth()
             gfx.scale(scale, scale)
             gfx.draw(State.logo, ScreenWidth/scale/2-State.logo:getWidth()/2, my)
