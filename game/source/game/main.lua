@@ -925,7 +925,7 @@ do
         end
         love.timer.sleep(timeout)
 
-        if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
+        --[[if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
             State.watersparklecur = State.watersparklecur - 1/FPS
             if State.watersparklecur <= 0 then
                 State.waterparklecur = WATERSPARKLESPEED
@@ -944,7 +944,7 @@ do
                     Save.map[x][y] = 13
                 end
             end
-        end
+        end]]--
 
         CommandLine.focustime = CommandLine.focustime - 1/FPS
         if CommandLine.focustime <= 0 then
