@@ -925,26 +925,29 @@ do
         end
         love.timer.sleep(timeout)
 
-        --[[if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
+        if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
             State.watersparklecur = State.watersparklecur - 1/FPS
             if State.watersparklecur <= 0 then
                 State.waterparklecur = WATERSPARKLESPEED
-                local x, y, value
-                repeat
-                    x = randomgen:random(MAP_SQUARE)
-                    y = randomgen:random(MAP_SQUARE)
-                    value = Save.map[x][y]
-                until value == 11 or value == 12 or value == 13
-                local randomchoice = randomgen:random(3)
-                if randomchoice == 1 then
-                    Save.map[x][y] = 11
-                elseif  randomchoice == 2 then
-                    Save.map[x][y] = 12
-                else
-                    Save.map[x][y] = 13
+
+                for n=1,4 do
+                    local x, y, value
+                    repeat
+                        x = randomgen:random(MAP_SQUARE)
+                        y = randomgen:random(MAP_SQUARE)
+                        value = Save.map[x][y]
+                    until value == 11 or value == 12 or value == 13
+                    local randomchoice = randomgen:random(3)
+                    if randomchoice == 1 then
+                        Save.map[x][y] = 11
+                    elseif  randomchoice == 2 then
+                        Save.map[x][y] = 12
+                    else
+                        Save.map[x][y] = 13
+                    end
                 end
             end
-        end]]--
+        end
 
         CommandLine.focustime = CommandLine.focustime - 1/FPS
         if CommandLine.focustime <= 0 then
