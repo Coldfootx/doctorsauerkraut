@@ -8,7 +8,7 @@ ALCHEMYWINDOWSIZE = 1/1.5 -- times ScreenWidth and ScreenHeight, suorakulmio ei 
 
 MAP_SQUARE = 512
 SMALLFONTDRAWS = 3
-SCROLLLINESMAP = 2
+SCROLLLINESMAP = 1
 SCROLLLINES = 9
 SQUAREAMOUNT = 20
 
@@ -925,7 +925,7 @@ do
         end
         love.timer.sleep(timeout)
 
-        if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
+        --[[if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
             State.watersparklecur = State.watersparklecur - 1/FPS
             if State.watersparklecur <= 0 then
                 State.waterparklecur = WATERSPARKLESPEED
@@ -947,7 +947,7 @@ do
                     end
                 end
             end
-        end
+        end]]--
 
         CommandLine.focustime = CommandLine.focustime - 1/FPS
         if CommandLine.focustime <= 0 then
