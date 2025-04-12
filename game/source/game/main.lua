@@ -12,7 +12,7 @@ SCROLLLINESMAP = 2
 SCROLLLINES = 9
 SQUAREAMOUNT = 20
 
-FPS = 67
+FPS = 75
 WALKSPEED = 1/FPS*16
 WATERSPARKLESPEED = 1/FPS
 
@@ -929,22 +929,19 @@ do
             State.watersparklecur = State.watersparklecur - 1/FPS
             if State.watersparklecur <= 0 then
                 State.waterparklecur = WATERSPARKLESPEED
-
-                for n=1,4 do
-                    local x, y, value
-                    repeat
-                        x = randomgen:random(MAP_SQUARE)
-                        y = randomgen:random(MAP_SQUARE)
-                        value = Save.map[x][y]
-                    until value == 11 or value == 12 or value == 13
-                    local randomchoice = randomgen:random(3)
-                    if randomchoice == 1 then
-                        Save.map[x][y] = 11
-                    elseif  randomchoice == 2 then
-                        Save.map[x][y] = 12
-                    else
-                        Save.map[x][y] = 13
-                    end
+                local x, y, value
+                repeat
+                    x = randomgen:random(MAP_SQUARE)
+                    y = randomgen:random(MAP_SQUARE)
+                    value = Save.map[x][y]
+                until value == 11 or value == 12 or value == 13
+                local randomchoice = randomgen:random(3)
+                if randomchoice == 1 then
+                    Save.map[x][y] = 11
+                elseif  randomchoice == 2 then
+                    Save.map[x][y] = 12
+                else
+                    Save.map[x][y] = 13
                 end
             end
         end
