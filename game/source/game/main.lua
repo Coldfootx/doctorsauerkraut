@@ -12,9 +12,9 @@ SCROLLLINESMAP = 2
 SCROLLLINES = 9
 SQUAREAMOUNT = 20
 
-FPS = 75
-WALKSPEED = 1/FPS*10
-WATERSPARKLESPEED = FPS*0.001
+FPS = 67
+WALKSPEED = 1/FPS*16
+WATERSPARKLESPEED = 1/FPS
 
 BUTTONHOOVERCOLOR = {0.5,0,0}
 BUTTONNORMALCOLOR = {0.5,0.5,0.5}
@@ -27,7 +27,7 @@ HOUSESIZEVARY = 5
 LAKESIZE = 30
 LAKESIZEVARY = 10
 LAKEAMOUNT = math.floor(MAP_SQUARE*0.025)
-FLOWERAMOUNT = math.floor(MAP_SQUARE*0.5)*25
+FLOWERAMOUNT = math.floor(MAP_SQUARE*0.5)*16
 ROADAMOUNT = math.floor(MAP_SQUARE*0.022)*2 -- both roads use this so its times two basically 1080/
 
 SAVEFILE = "savefile" -- +n
@@ -926,29 +926,31 @@ do
         love.timer.sleep(timeout)
 
         if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
-            State.watersparklecur = State.watersparklecur - dt
-            if State.watersparklecur < 0 then
+            State.watersparklecur = State.watersparklecur - 1/FPS
+            if State.watersparklecur <= 0 then
                 State.waterparklecur = WATERSPARKLESPEED
 
-                local x, y, value
-                repeat
-                    x = randomgen:random(MAP_SQUARE)
-                    y = randomgen:random(MAP_SQUARE)
-                    value = Save.map[x][y]
-                until value == 11 or value == 12 or value == 13
-                local randomchoice = randomgen:random(3)
-                if randomchoice == 1 then
-                    Save.map[x][y] = 11
-                elseif  randomchoice == 2 then
-                    Save.map[x][y] = 12
-                else
-                    Save.map[x][y] = 13
+                for n=1,4 do
+                    local x, y, value
+                    repeat
+                        x = randomgen:random(MAP_SQUARE)
+                        y = randomgen:random(MAP_SQUARE)
+                        value = Save.map[x][y]
+                    until value == 11 or value == 12 or value == 13
+                    local randomchoice = randomgen:random(3)
+                    if randomchoice == 1 then
+                        Save.map[x][y] = 11
+                    elseif  randomchoice == 2 then
+                        Save.map[x][y] = 12
+                    else
+                        Save.map[x][y] = 13
+                    end
                 end
             end
         end
 
         CommandLine.focustime = CommandLine.focustime - 1/FPS
-        if CommandLine.focustime < 0 then
+        if CommandLine.focustime <= 0 then
             CommandLine.focustime= CommandLine.focusmax
             if CommandLine.focusswitch == true then
                 CommandLine.focusswitch = false
@@ -986,8 +988,8 @@ do
                     end
                 end
             elseif State.leaf == 6 then
-                State.walkingwait = State.walkingwait - dt
-                if State.walkingwait < 0 then
+                State.walkingwait = State.walkingwait - 1/FPS
+                if State.walkingwait <= 0 then
                     State.walkingwait = WALKSPEED
                     local centerw = math.floor(ScreenWidth/SQUAREAMOUNT/2)
                     local centerh = math.floor(ScreenHeight/SQUAREAMOUNT/2)
