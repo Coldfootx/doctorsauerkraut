@@ -26,7 +26,7 @@ HOUSESIZE = 10
 HOUSESIZEVARY = 5
 LAKESIZE = 30
 LAKESIZEVARY = 10
-LAKEAMOUNT = math.floor(MAP_W*0.02)
+LAKEAMOUNT = math.floor(MAP_W*0.025)
 FLOWERAMOUNT = math.floor(MAP_W*0.5)*33
 ROADAMOUNT = math.floor(MAP_W*0.022)*2 -- both roads use this so its times two basically 1080/
 
@@ -849,6 +849,9 @@ do
             {i = 8, name="Black flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
             {i = 9, name="Sand road", file = gfx.newImage("graphics/road.png"), obstacle = false},
             {i = 10, name="Dark sand road", file = gfx.newImage("graphics/road2.png"), obstacle = false},
+            {i = 11, name="Water animation 1", file = gfx.newImage("graphics/water.jpg"), obstacle = false},
+            {i = 12, name="Water animation 2", file = gfx.newImage("graphics/water2.jpg"), obstacle = false},
+            {i = 13, name="Water animation 3", file = gfx.newImage("graphics/water3.jpg"), obstacle = false}
         }
 
         TilestoAlch = {
