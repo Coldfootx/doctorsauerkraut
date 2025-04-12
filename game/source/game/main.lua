@@ -6,8 +6,7 @@ BANNERH = 0.045
 LOGOW = 0.55
 ALCHEMYWINDOWSIZE = 1/1.5 -- times ScreenWidth and ScreenHeight, suorakulmio ei nelio
 
-MAP_W = 512
-MAP_H = 512
+MAP_SQUARE = 512
 SMALLFONTDRAWS = 3
 SCROLLLINESMAP = 2
 SCROLLLINES = 9
@@ -19,16 +18,16 @@ WALKSPEED = 1/FPS*10
 BUTTONHOOVERCOLOR = {0.5,0,0}
 BUTTONNORMALCOLOR = {0.5,0.5,0.5}
 
-HOUSEAMOUNT = math.floor(MAP_W*0.5859375) --- 512 is 300
-RIVERAMOUNT = math.floor(MAP_W*0.015) --512 is 7
+HOUSEAMOUNT = math.floor(MAP_SQUARE*0.5859375) --- 512 is 300
+RIVERAMOUNT = math.floor(MAP_SQUARE*0.015) --512 is 7
 RIVERWIDTH = 5
 HOUSESIZE = 10
 HOUSESIZEVARY = 5
 LAKESIZE = 30
 LAKESIZEVARY = 10
-LAKEAMOUNT = math.floor(MAP_W*0.025)
-FLOWERAMOUNT = math.floor(MAP_W*0.5)*33
-ROADAMOUNT = math.floor(MAP_W*0.022)*2 -- both roads use this so its times two basically 1080/
+LAKEAMOUNT = math.floor(MAP_SQUARE*0.025)
+FLOWERAMOUNT = math.floor(MAP_SQUARE*0.5)*25
+ROADAMOUNT = math.floor(MAP_SQUARE*0.022)*2 -- both roads use this so its times two basically 1080/
 
 SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
@@ -147,8 +146,8 @@ do
     local function randomlocation()
         local px, py
         repeat
-            px = randomgen:random(MAP_W-RIVERWIDTH-1)
-            py = randomgen:random(MAP_H)
+            px = randomgen:random(MAP_SQUARE-RIVERWIDTH-1)
+            py = randomgen:random(MAP_SQUARE)
         until Tiles[Save.map[px][py]].obstacle == false
         calculate_prefix(px,py)
     end
@@ -159,9 +158,9 @@ do
 
     local function format_map()
         local map = {}
-        for i=1,MAP_W do
+        for i=1,MAP_SQUARE do
             map[i] = {}     -- create x
-            for j=1,MAP_H do
+            for j=1,MAP_SQUARE do
                 map[i][j] = randomgen:random(2)
             end
         end
@@ -175,8 +174,8 @@ do
             -- This code is partly contributed by chandan_jnu
             local rx = randomgen:random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
             local ry = randomgen:random(LAKESIZE-LAKESIZEVARY, LAKESIZE+LAKESIZEVARY)
-            local xc = randomgen:random(1,MAP_W)
-            local yc = randomgen:random(1,MAP_H)
+            local xc = randomgen:random(1,MAP_SQUARE)
+            local yc = randomgen:random(1,MAP_SQUARE)
 
             local x = 0;
             local y = ry
@@ -192,13 +191,13 @@ do
                 --print("(",-x + xc,",", y + yc, ")")
                 --print("(",x + xc,",", -y + yc ,")")
                 --print("(",-x + xc, ",", -y + yc, ")")
-                map[math.min(x+xc, MAP_W)][math.min(y+yc, MAP_H)] = 6
-                map[math.max(-x+xc,1)][math.min(y+yc, MAP_H)] = 6
-                map[math.min(x+xc, MAP_W)][math.max(-y+yc,1)] = 6
+                map[math.min(x+xc, MAP_SQUARE)][math.min(y+yc, MAP_SQUARE)] = 6
+                map[math.max(-x+xc,1)][math.min(y+yc, MAP_SQUARE)] = 6
+                map[math.min(x+xc, MAP_SQUARE)][math.max(-y+yc,1)] = 6
                 map[math.max(-x+xc,1)][math.max(-y+yc,1)] = 6
 
-                for ix = math.max(-x+xc,1), math.min(x+xc, MAP_W) do
-                    for iy = math.max(-y+yc,1), math.min(y+yc, MAP_H) do
+                for ix = math.max(-x+xc,1), math.min(x+xc, MAP_SQUARE) do
+                    for iy = math.max(-y+yc,1), math.min(y+yc, MAP_SQUARE) do
                         map[ix][iy] = 6
                     end
                 end
@@ -219,17 +218,17 @@ do
         end
 
         for times=1, math.floor(HOUSEAMOUNT) do
-            local housex, housey = randomgen:random(MAP_W), randomgen:random(MAP_H)
+            local housex, housey = randomgen:random(MAP_SQUARE), randomgen:random(MAP_SQUARE)
             local housew, househ = randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY), randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY)
             local endpointx = housex+housew
             local endpointy = housey+househ
 
             local obstacle = false
-            if endpointx > MAP_W then
-                endpointx = MAP_W
+            if endpointx > MAP_SQUARE then
+                endpointx = MAP_SQUARE
             end
-            if endpointy > MAP_H then
-                endpointy = MAP_H
+            if endpointy > MAP_SQUARE then
+                endpointy = MAP_SQUARE
             end
             for i=housex, endpointx do
                 if map[i][housey] ==6 or map[i][endpointy] == 6 then
@@ -246,11 +245,11 @@ do
 
             if obstacle == false then
 
-                if endpointx > MAP_W then
-                    endpointx = MAP_W
+                if endpointx > MAP_SQUARE then
+                    endpointx = MAP_SQUARE
                 end
-                if endpointy > MAP_H then
-                    endpointy = MAP_H
+                if endpointy > MAP_SQUARE then
+                    endpointy = MAP_SQUARE
                 end
                 for i=housex, endpointx do
                     map[i][housey] = 3
@@ -285,24 +284,24 @@ do
         end
 
         for n=1,RIVERAMOUNT do
-            local xposition = randomgen:random(1,MAP_W)
+            local xposition = randomgen:random(1,MAP_SQUARE)
             local yposition = 1
-            for j = yposition, MAP_H do
+            for j = yposition, MAP_SQUARE do
                 local amountfree = 0
-                for i = xposition, MAP_W do
+                for i = xposition, MAP_SQUARE do
                     if Tiles[map[i][j]].obstacle == false or map[i][j] == 6 then
                         amountfree = amountfree + 1
                         if amountfree == RIVERWIDTH then
                             local xstart = math.max(i - RIVERWIDTH, 1)
                             for ii = xstart, i do
-                                map[math.min(ii+1,MAP_W)][j] = 5
+                                map[math.min(ii+1,MAP_SQUARE)][j] = 5
                             end
                             xposition = xstart + 1
                             break
                         end
                     else
                         local jdlimit = math.max(j-RIVERWIDTH, 1)+1
-                        local xdlimit = math.min(i+RIVERWIDTH+1, MAP_W)
+                        local xdlimit = math.min(i+RIVERWIDTH+1, MAP_SQUARE)
                         for jd = jdlimit, j do
                             for xd = i,xdlimit do
                                 map[xd][jd-1] = 5
@@ -315,8 +314,8 @@ do
         end
 
         for n=1, FLOWERAMOUNT do
-            local fx = randomgen:random(MAP_W)
-            local fy = randomgen:random(MAP_H)
+            local fx = randomgen:random(MAP_SQUARE)
+            local fy = randomgen:random(MAP_SQUARE)
             if Tiles[map[fx][fy]].obstacle == false and map[fx][fy] ~= 4 then
                 local choice = randomgen:random(2)
                 if choice == 1 then
@@ -334,19 +333,19 @@ do
             local suunta
             if random == 1 then
                 cx = 1
-                cy = randomgen:random(MAP_H-1)
+                cy = randomgen:random(MAP_SQUARE-1)
                 suunta = 1
             elseif random == 2 then
-                cx = MAP_W-1
-                cy = randomgen:random(MAP_H-1)
+                cx = MAP_SQUARE-1
+                cy = randomgen:random(MAP_SQUARE-1)
                 suunta = -1
             elseif random == 3 then
-                cx = randomgen:random(MAP_W-1)
+                cx = randomgen:random(MAP_SQUARE-1)
                 cy = 1
                 suunta = 2
             elseif random == 4 then
-                cx = randomgen:random(MAP_W-1)
-                cy = MAP_H-1
+                cx = randomgen:random(MAP_SQUARE-1)
+                cy = MAP_SQUARE-1
                 suunta = -2
             end
 
@@ -367,7 +366,7 @@ do
 
             for n=1, 999999 do
                 if suunta == 1 then
-                    local cxtest = math.min(cx+1, MAP_W)
+                    local cxtest = math.min(cx+1, MAP_SQUARE)
                     if Tiles[map[cxtest][cy]].obstacle == false then
                         cx = cxtest
                         map[cx][cy] = 9
@@ -383,7 +382,7 @@ do
                         suunta = randomsuunta()
                     end
                 elseif suunta == 2 then
-                    local cytest = math.min(cy+1, MAP_H)
+                    local cytest = math.min(cy+1, MAP_SQUARE)
                     if Tiles[map[cx][cytest]].obstacle == false then
                         cy = cytest
                         map[cx][cy] = 9
@@ -410,19 +409,19 @@ do
             local suunta
             if random == 1 then
                 cx = 1
-                cy = randomgen:random(MAP_H-1)
+                cy = randomgen:random(MAP_SQUARE-1)
                 suunta = 1
             elseif random == 2 then
-                cx = MAP_W-1
-                cy = randomgen:random(MAP_H-1)
+                cx = MAP_SQUARE-1
+                cy = randomgen:random(MAP_SQUARE-1)
                 suunta = -1
             elseif random == 3 then
-                cx = randomgen:random(MAP_W-1)
+                cx = randomgen:random(MAP_SQUARE-1)
                 cy = 1
                 suunta = 2
             elseif random == 4 then
-                cx = randomgen:random(MAP_W-1)
-                cy = MAP_H-1
+                cx = randomgen:random(MAP_SQUARE-1)
+                cy = MAP_SQUARE-1
                 suunta = -2
             end
 
@@ -443,7 +442,7 @@ do
 
             for n=1, 999999 do
                 if suunta == 1 then
-                    local cxtest = math.min(cx+1, MAP_W)
+                    local cxtest = math.min(cx+1, MAP_SQUARE)
                     if Tiles[map[cxtest][cy]].obstacle == false then
                         cx = cxtest
                         map[cx][cy] = 10
@@ -459,7 +458,7 @@ do
                         suunta = randomsuunta()
                     end
                 elseif suunta == 2 then
-                    local cytest = math.min(cy+1, MAP_H)
+                    local cytest = math.min(cy+1, MAP_SQUARE)
                     if Tiles[map[cx][cytest]].obstacle == false then
                         cy = cytest
                         map[cx][cy] = 10
@@ -486,9 +485,9 @@ do
     local function init_save()
         --initialize savedata
         local map = {}
-        for i=1,MAP_W do
+        for i=1,MAP_SQUARE do
             map[i] = {}
-            for j=1,MAP_H do
+            for j=1,MAP_SQUARE do
                 map[i][j] = 1
             end
         end
@@ -702,8 +701,8 @@ do
     end
 
     local function getposfromhoover()
-        local posx = math.min(math.max(State.xprefix+Hooveredx,1), MAP_W)
-        local posy = math.min(math.max(State.yprefix+Hooveredy,1), MAP_H)
+        local posx = math.min(math.max(State.xprefix+Hooveredx,1), MAP_SQUARE)
+        local posy = math.min(math.max(State.yprefix+Hooveredy,1), MAP_SQUARE)
         return posx, posy
     end
 
@@ -961,8 +960,8 @@ do
                         end
                     end
                     if love.keyboard.isDown('s') then
-                        if Tiles[Save.map[State.xprefix+centerw][math.min(State.yprefix+centerh+1,MAP_H)]].obstacle == false then
-                            State.yprefix = math.min(State.yprefix + 1, MAP_H-centerh-1)
+                        if Tiles[Save.map[State.xprefix+centerw][math.min(State.yprefix+centerh+1,MAP_SQUARE)]].obstacle == false then
+                            State.yprefix = math.min(State.yprefix + 1, MAP_SQUARE-centerh-1)
                         end
                     end
                     if love.keyboard.isDown('a') then
@@ -972,8 +971,8 @@ do
                         end
                     end
                     if love.keyboard.isDown('d') then
-                        if Tiles[Save.map[math.min(State.xprefix+centerw+1, MAP_W)][State.yprefix+centerh]].obstacle == false then
-                            State.xprefix = math.min(State.xprefix + 1,MAP_W-centerw-1)
+                        if Tiles[Save.map[math.min(State.xprefix+centerw+1, MAP_SQUARE)][State.yprefix+centerh]].obstacle == false then
+                            State.xprefix = math.min(State.xprefix + 1,MAP_SQUARE-centerw-1)
                             State.charchosen = State.charright
                         end
                     end
@@ -1016,7 +1015,7 @@ do
             for i=1, xamount do
                 for j=1, yamount do
                     gfx.push()
-                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_W)][math.min(math.max(1,j+State.yprefix-1),MAP_H)]].file
+                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_SQUARE)][math.min(math.max(1,j+State.yprefix-1),MAP_SQUARE)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
                     gfx.draw(imagefile, (i-1)*SQUAREAMOUNT/scale,(j-1)*SQUAREAMOUNT/scale)
@@ -1070,7 +1069,7 @@ do
             for i=1, xamount do
                 for j=1, yamount do
                     gfx.push()
-                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_W)][math.min(math.max(1,j+State.yprefix-1),MAP_H)]].file
+                    local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_SQUARE)][math.min(math.max(1,j+State.yprefix-1),MAP_SQUARE)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
                     gfx.draw(imagefile, (i-1)*SQUAREAMOUNT/scale,(j-1)*SQUAREAMOUNT/scale)
