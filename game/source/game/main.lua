@@ -917,6 +917,12 @@ do
     end
 
     function love.update(dt)
+        local timeout = 1.0/FPS - dt
+        if timeout < 0 then
+            timeout = 0
+        end
+        love.timer.sleep(timeout)
+        
         if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
             State.watersparklecur = State.watersparklecur - dt
             if State.watersparklecur <= 0 then
@@ -1013,11 +1019,6 @@ do
                 end
             end
         end
-        local timeout = 1.0/FPS - dt
-        if timeout < 0 then
-            timeout = 0
-        end
-        love.timer.sleep(timeout)
     end
 
     function love.textinput(text)
