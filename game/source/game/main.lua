@@ -13,7 +13,7 @@ SCROLLLINES = 9
 SQUAREAMOUNT = 20
 
 FPS = 75
-WALKSPEED = 1/FPS*13
+WALKSPEED = 1/FPS*14
 WATERSPARKLESPEED = 1/FPS
 
 BUTTONHOOVERCOLOR = {0.5,0,0}
@@ -600,7 +600,6 @@ do
                 load_file(n)
                 calculate_prefix(Save.positionx, Save.positiony)
                 MapGenerated = true
-                debugbox("Loaded!")
                 change_page(6)
             end
         end
@@ -618,31 +617,30 @@ do
     
 
     function love.keypressed(key, scancode, isrepeat)
-        if State.hoover >= 0 then
-            if key == "return" then
+        if key == "return" then
+            if State.hoover >= 0 then
                 State.hoover = -2
-            end
-        elseif key == "return" and State.hoover == -2 then
-            if State.waitingforsavename == true then
-                save_n(State.waitingforsavename_n)
-                State.waitingforsavename = false
-            elseif State.waitingforalchcombine == true then
-                local first = true
-                local text = ""
-                local usedlocs = {}
-                for i in string.gmatch(CommandLine.text, "%d+") do
-                    if first == true then
-                        text = i.."."
-                        first = false
-                        table.insert(usedlocs, i)
-                    elseif has_value(usedlocs, i) == false then
-                        text = text.." + "..i.."."
-                        table.insert(usedlocs, i)
+            elseif State.hoover == -2 then
+                if State.waitingforsavename == true then
+                    save_n(State.waitingforsavename_n)
+                    State.waitingforsavename = false
+                elseif State.waitingforalchcombine == true then
+                    local first = true
+                    local text = ""
+                    local usedlocs = {}
+                    for i in string.gmatch(CommandLine.text, "%d+") do
+                        if first == true then
+                            text = i.."."
+                            first = false
+                            table.insert(usedlocs, i)
+                        elseif has_value(usedlocs, i) == false then
+                            text = text.." + "..i.."."
+                            table.insert(usedlocs, i)
+                        end
                     end
+                    State.printingalchinventorytext = "\n\n\n\n\n\n"..text
+                    State.waitingforalchcombine = false
                 end
-                debugbox(text)
-                State.printingalchinventorytext = "\n\n\n\n\n\n"..text
-                State.waitingforalchcombine = false
             end
         elseif key == "backspace"and State.hoover == -2 then
             if string.len(CommandLine.text) > 0 then
@@ -753,12 +751,12 @@ do
     end
 
     function love.load()
-        love.window.setVSync(1)
-        love.window.setTitle("Doctor Sauerkraut")
-        love.keyboard.setKeyRepeat(true)
+       --love.window.setVSync(0)
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
         ScreenWidth, ScreenHeight = ScreenWidth*SCREENSPACE, ScreenHeight*SCREENSPACE
-        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0})
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0, vsync=0})
+        love.window.setTitle("Doctor Sauerkraut")
+        love.keyboard.setKeyRepeat(true)
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
         init_save()
@@ -923,21 +921,24 @@ do
             State.watersparklecur = State.watersparklecur - dt
             if State.watersparklecur <= 0 then
                 State.waterparklecur = WATERSPARKLESPEED
-
-                for n=1,4 do
-                    local x, y, value
-                    repeat
-                        x = randomgen:random(MAP_SQUARE)
-                        y = randomgen:random(MAP_SQUARE)
+                
+                local value
+                local randomchoice
+                for x=1,MAP_SQUARE do
+                    for y=1,MAP_SQUARE do
                         value = Save.map[x][y]
-                    until value == 11 or value == 12 or value == 13
-                    local randomchoice = randomgen:random(3)
-                    if randomchoice == 1 then
-                        Save.map[x][y] = 11
-                    elseif  randomchoice == 2 then
-                        Save.map[x][y] = 12
-                    else
-                        Save.map[x][y] = 13
+                        if value == 11 or value == 12 or value == 13 then
+                            if randomgen:random(1666) == 1 then
+                                randomchoice = randomgen:random(3)
+                                if randomchoice == 1 then
+                                    Save.map[x][y] = 11
+                                elseif  randomchoice == 2 then
+                                    Save.map[x][y] = 12
+                                else
+                                    Save.map[x][y] = 13
+                                end
+                            end
+                        end
                     end
                 end
             end
@@ -987,23 +988,23 @@ do
                     State.walkingwait = WALKSPEED
                     local centerw = math.floor(ScreenWidth/SQUAREAMOUNT/2)
                     local centerh = math.floor(ScreenHeight/SQUAREAMOUNT/2)
-                    if love.keyboard.isDown('w') then
+                    if love.keyboard.isDown("w") then
                         if Tiles[Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh-1, 1)]].obstacle == false then
                             State.yprefix = math.max(State.yprefix - 1,-centerh+1)
                         end
                     end
-                    if love.keyboard.isDown('s') then
+                    if love.keyboard.isDown("s") then
                         if Tiles[Save.map[State.xprefix+centerw][math.min(State.yprefix+centerh+1,MAP_SQUARE)]].obstacle == false then
                             State.yprefix = math.min(State.yprefix + 1, MAP_SQUARE-centerh-1)
                         end
                     end
-                    if love.keyboard.isDown('a') then
+                    if love.keyboard.isDown("a") then
                         if Tiles[Save.map[math.max(State.xprefix+centerw-1, 1)][State.yprefix+centerh]].obstacle == false then
                             State.xprefix = math.max(State.xprefix - 1,-centerw+1)
                             State.charchosen = State.charleft
                         end
                     end
-                    if love.keyboard.isDown('d') then
+                    if love.keyboard.isDown("d") then
                         if Tiles[Save.map[math.min(State.xprefix+centerw+1, MAP_SQUARE)][State.yprefix+centerh]].obstacle == false then
                             State.xprefix = math.min(State.xprefix + 1,MAP_SQUARE-centerw-1)
                             State.charchosen = State.charright
