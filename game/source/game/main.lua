@@ -10,7 +10,7 @@ MAP_SQUARE = 512
 SMALLFONTDRAWS = 3
 SCROLLLINESMAP = 1
 SCROLLLINES = 9
-SQUAREAMOUNT = 20
+SQUAREAMOUNT = 0
 
 FPS = 75
 WALKSPEED = 1/FPS*13
@@ -759,6 +759,8 @@ do
         love.keyboard.setKeyRepeat(true)
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
+        SQUAREAMOUNT = math.floor(ScreenWidth/77)
+
         init_save()
 
         local fontsize, _ = translatexy(SMALLFONT,0)
@@ -930,11 +932,11 @@ do
                 
                 local value
                 local randomchoice
-                for x=1,MAP_SQUARE do
-                    for y=1,MAP_SQUARE do
+                for x=math.max(State.xprefix-6,1),math.min(math.floor(State.xprefix+ScreenWidth/SQUAREAMOUNT+6), MAP_SQUARE) do
+                    for y=math.max(State.yprefix-6,1),math.min(math.floor(State.yprefix+ScreenHeight/SQUAREAMOUNT+6), MAP_SQUARE) do
                         value = Save.map[x][y]
                         if value == 11 or value == 12 or value == 13 then
-                            if randomgen:random(1666) == 1 then
+                            if randomgen:random(124) == 1 then
                                 randomchoice = randomgen:random(3)
                                 if randomchoice == 1 then
                                     Save.map[x][y] = 11
