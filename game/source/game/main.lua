@@ -13,7 +13,7 @@ SCROLLLINES = 9
 SQUAREAMOUNT = 0
 
 FPS = 75
-WALKSPEED = 1/FPS*13
+WALKSPEED = 1/FPS*10
 WATERSPARKLESPEED = 1/FPS
 
 BUTTONHOOVERCOLOR = {0.5,0,0}
@@ -759,7 +759,7 @@ do
         love.keyboard.setKeyRepeat(true)
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
-        SQUAREAMOUNT = math.floor(ScreenWidth/77)
+        SQUAREAMOUNT = math.floor(ScreenWidth/66)
 
         init_save()
 
