@@ -13,7 +13,7 @@ SCROLLLINES = 9
 SQUAREAMOUNT = 20
 
 FPS = 75
-WALKSPEED = 1/FPS*14
+WALKSPEED = 1/FPS*13
 WATERSPARKLESPEED = 1/FPS
 
 BUTTONHOOVERCOLOR = {0.5,0,0}
@@ -754,7 +754,7 @@ do
        --love.window.setVSync(0)
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
         ScreenWidth, ScreenHeight = ScreenWidth*SCREENSPACE, ScreenHeight*SCREENSPACE
-        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0, vsync=0})
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0, vsync=1})
         love.window.setTitle("Doctor Sauerkraut")
         love.keyboard.setKeyRepeat(true)
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
@@ -917,10 +917,16 @@ do
     end
 
     function love.update(dt)
+        local timeout = 1.0/FPS - dt
+        if timeout < 0 then
+            timeout = 0
+        end
+        love.timer.sleep(timeout)
+
         if (State.leaf == 2 or State.leaf == 6) and MapGenerated then
-            State.watersparklecur = State.watersparklecur - dt
+            State.watersparklecur = State.watersparklecur - 1/FPS
             if State.watersparklecur <= 0 then
-                State.waterparklecur = WATERSPARKLESPEED
+                State.watersparklecur = WATERSPARKLESPEED
                 
                 local value
                 local randomchoice
@@ -944,7 +950,7 @@ do
             end
         end
 
-        CommandLine.focustime = CommandLine.focustime - dt
+        CommandLine.focustime = CommandLine.focustime - 1/FPS
         if CommandLine.focustime <= 0 then
             CommandLine.focustime= CommandLine.focusmax
             if CommandLine.focusswitch == true then
@@ -983,7 +989,7 @@ do
                     end
                 end
             elseif State.leaf == 6 then
-                State.walkingwait = State.walkingwait - dt
+                State.walkingwait = State.walkingwait - 1/FPS
                 if State.walkingwait <= 0 then
                     State.walkingwait = WALKSPEED
                     local centerw = math.floor(ScreenWidth/SQUAREAMOUNT/2)
@@ -1013,11 +1019,6 @@ do
                 end
             end
         end
-        local timeout = 1.0/FPS - dt
-        if timeout < 0 then
-            timeout = 0
-        end
-        love.timer.sleep(timeout)
     end
 
     function love.textinput(text)
