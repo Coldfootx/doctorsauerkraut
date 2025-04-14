@@ -1,7 +1,7 @@
 ABOUT COMMANDS
 
 
-To make a command. Hit enter, write command to the command line, hit enter
+To make a command. Hit enter, write a command to the command line, hit enter
 Or activate the command line with the mouse
 
 
