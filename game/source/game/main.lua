@@ -1,3 +1,5 @@
+GAMENAME = "Doctor Sauerkraut"
+
 DEFSCREENSPACE = 88 -- a percentage, /100 . default 88
 SMALLFONT = 0.0125
 BIGFONT = 0.02
@@ -687,6 +689,10 @@ do
     end
 
     local function refresh_state()
+        love.window.setTitle(GAMENAME)
+        love.window.setVSync(1)
+        love.keyboard.setKeyRepeat(true)
+
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
         calculate_shifting_constants()
@@ -765,8 +771,6 @@ do
 
         local commandlinewidth=ScreenWidth/1.4
         CommandLine = {width=commandlinewidth, height=SmallFont:getHeight("debug"), x=ScreenWidth/2.0-commandlinewidth/2.0, y=ScreenHeight-ScreenHeight/10.0, button=gfx.newImage("graphics/enterbutton.png"), color = {1, 1, 1, 1}, focusedcolor = {0.2, 0.2, 0.2, 1}, focuspostfix="x_", focusswitch = true, focustime=0.7, focusmax = 0.7, text="dr"}
-        
-        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png"), alchdoc= gfx.newImage("graphics/doc.png"), alchankh = gfx.newImage("graphics/ankh.png"), mainmenubgs = {}, mainmenubgslocation = {}, mainmenubgsamount= 10, mainmenurepeat = 10,  watersparklecur = 0}
 
         for i=1,State.mainmenubgsamount do
             State.mainmenubgs[i] = gfx.newImage("graphics/mainmenu/"..i..".png")
@@ -777,8 +781,6 @@ do
                 State.mainmenubgslocation[j+(i-1)*State.mainmenurepeat] = {i,randomgen:random(1,ScreenWidth-State.mainmenubgs[i]:getWidth()), randomgen:random(1,ScreenHeight-State.mainmenubgs[i]:getHeight())}
             end
         end
-
-        Hooveredx, Hooveredy = 0, 0
     end
 
     local function set_screen_dim(percent, overwrite)
@@ -797,7 +799,6 @@ do
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
         ScreenWidth, ScreenHeight = ScreenWidth*percent, ScreenHeight*percent
         love.window.setMode(ScreenWidth, ScreenHeight, {resizable = true, borderless= true, y=ScreenHeight/percent*(1-percent)/2.0, x=ScreenWidth/percent*(1-percent)/2.0})
-        refresh_state()
     end
 
     local function separate_spaces(s)
@@ -836,6 +837,7 @@ do
                     local arguments = separate_spaces(CommandLine.text)
                     if arguments[1] == "scale" then
                         set_screen_dim(arguments[2], true)
+                        refresh_state()
                     end
                 end
             end
@@ -895,11 +897,9 @@ do
     function love.load()
         init_save()
 
-        love.window.setTitle("Doctor Sauerkraut")
-        love.window.setVSync(1)
-        love.keyboard.setKeyRepeat(true)
-
         set_screen_dim(DEFSCREENSPACE, false)
+
+        State = {leaf = 1, oldleaf = 1, hoover = 0, logo = gfx.newImage("graphics/logo.png"), banner = gfx.newImage("graphics/banner.png"), bannerx = gfx.newImage("graphics/red.png"), bannerm = gfx.newImage("graphics/yellow.png"), helpbg = gfx.newImage("graphics/forest.png"), helppadding = ScreenWidth*0.2*0.1, savedhelpprefix=0, xprefix=0, yprefix=0, walkingwait = WALKSPEED, charleft = gfx.newImage("graphics/charleft.png"), charright = gfx.newImage("graphics/charright.png"), charchosen = gfx.newImage("graphics/charright.png"), lovepotion=gfx.newImage("graphics/potion.jpg"), waitingforsavename = false, waitingforsavename_n = 0, printingalchinventory = false, printingalchinventorytext = "Refresh inventory", waitingforalchcombine = false, waitingforalchremove=false, alchbottle = gfx.newImage("graphics/bottle.png"), alchdoc= gfx.newImage("graphics/doc.png"), alchankh = gfx.newImage("graphics/ankh.png"), mainmenubgs = {}, mainmenubgslocation = {}, mainmenubgsamount= 10, mainmenurepeat = 10,  watersparklecur = 0}
 
         Tiles={
             {i = 1, name="Sparse grass", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
@@ -934,6 +934,10 @@ do
             {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")},
             {i = 3, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")}
         }
+
+        Hooveredx, Hooveredy = 0, 0
+
+        refresh_state()
         --jata magneetti
         --for i=0, 999 do
         --    MapTotal = generate_map()
