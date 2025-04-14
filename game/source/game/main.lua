@@ -626,50 +626,6 @@ do
     
         return false
     end
-    
-
-    function love.keypressed(key, scancode, isrepeat)
-        if key == "return" then
-            if State.hoover >= 0 then
-                State.hoover = -2
-            elseif State.hoover == -2 then
-                if State.waitingforsavename == true then
-                    save_n(State.waitingforsavename_n)
-                    State.waitingforsavename = false
-                elseif State.waitingforalchcombine == true then
-                    local first = true
-                    local text = ""
-                    local usedlocs = {}
-                    for i in string.gmatch(CommandLine.text, "%d+") do
-                        if first == true then
-                            text = i.."."
-                            first = false
-                            table.insert(usedlocs, i)
-                        elseif has_value(usedlocs, i) == false then
-                            text = text.." + "..i.."."
-                            table.insert(usedlocs, i)
-                        end
-                    end
-                    State.printingalchinventorytext = "\n\n\n\n\n\n"..text
-                    State.waitingforalchcombine = false
-                end
-            end
-        elseif key == "backspace"and State.hoover == -2 then
-            if string.len(CommandLine.text) > 0 then
-                CommandLine.text = CommandLine.text:sub(1,utf8.offset(CommandLine.text, -1)-1)
-            end
-        end
-    end
-
-    function love.keyreleased(key, scancode, isrepeat)
-        if  key == "escape" then
-            if State.leaf == 1 and State.oldleaf == 1 then
-                quitmessage()
-            else
-                change_page(State.oldleaf)
-            end
-        end
-    end
 
     local function translatexy(x1, y1)
         x1 = x1*ScreenWidth
@@ -677,34 +633,8 @@ do
         return x1, y1
     end
 
-    local function print_to_debug(text)
-        local width, height = translatexy(0.01, 0.97)
-        gfx.setColor(1,1,1)
-        gfx.rectangle("fill",width,height,SmallFont:getWidth(text),SmallFont:getHeight(text))
-        gfx.setFont(SmallFont)
-        gfx.setColor(1,0,0)
-        for i=1, SMALLFONTDRAWS do
-            gfx.print(text, width, height)
-        end
-    end
-
-    local function generate_npc()
-    end
-
-    local function mousepressed(x, y, mouse_button)
-        Buttons[State.leaf][State.hoover].call()
-    end
-
-    function love.mousemoved(x, y, dx, dy, istouch )
-        local found = false
-        found = find_hoovered_button(x, y)
-        if found == false and x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height and State.hoover ~= -2 then
-            State.hoover = -1
-        elseif found == false and State.hoover ~= -2 then
-            State.hoover = 0
-        end
-        Hooveredx, Hooveredy = math.floor(x/SQUARESIZE), math.floor(y/SQUARESIZE)
-        Currentx, Currenty = x,y
+    local function calculate_shifting_constants() -- when u scale
+        SQUARESIZE = math.floor(ScreenWidth/TILEAMOUNT_W) -- /n is the amount of tiles
     end
 
     local function backtomain()
@@ -723,12 +653,6 @@ do
     local function scrollhelpdown()
         State.savedhelpprefix = State.savedhelpprefix + SCROLLLINES
         State.help_text = load_help_text(State.savedhelpprefix)
-    end
-
-    local function getposfromhoover()
-        local posx = math.min(math.max(State.xprefix+Hooveredx,1), MAP_SQUARE)
-        local posy = math.min(math.max(State.yprefix+Hooveredy,1), MAP_SQUARE)
-        return posx, posy
     end
 
     local function startalchcombine()
@@ -762,39 +686,10 @@ do
     local function alchscrolldown()
     end
 
-    local function calculate_shifting_constants() -- when u scale
-        SQUARESIZE = math.floor(ScreenWidth/TILEAMOUNT_W) -- /n is the amount of tiles
-    end
-
-    local function set_screen_dim(percent, overwrite)
-        if overwrite then
-            love.filesystem.write(SCREENDIMFILE, tostring(percent))
-        else
-            if love.filesystem.getInfo(SCREENDIMFILE) == nil then
-                love.filesystem.write(SCREENDIMFILE, tostring(percent))
-            else
-                local contents, size = love.filesystem.read(SCREENDIMFILE)
-                percent = tonumber(contents)
-            end
-        end
-        DEFSCREENSPACE = percent
-        percent = percent / 100.0
-        ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
-        ScreenWidth, ScreenHeight = ScreenWidth*percent, ScreenHeight*percent
-        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight/percent*(1-percent)/2.0, x=ScreenWidth/percent*(1-percent)/2.0})
-    end
-
-    function love.load()
-        set_screen_dim(DEFSCREENSPACE, false)
-
-        love.window.setTitle("Doctor Sauerkraut")
-        love.window.setVSync(1)
-        love.keyboard.setKeyRepeat(true)
+    local function refresh_state()
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
         calculate_shifting_constants()
-
-        init_save()
 
         local fontsize, _ = translatexy(SMALLFONT,0)
         SmallFont = gfx.newFont(fontsize)
@@ -884,6 +779,127 @@ do
         end
 
         Hooveredx, Hooveredy = 0, 0
+    end
+
+    local function set_screen_dim(percent, overwrite)
+        if overwrite then
+            love.filesystem.write(SCREENDIMFILE, tostring(percent))
+        else
+            if love.filesystem.getInfo(SCREENDIMFILE) == nil then
+                love.filesystem.write(SCREENDIMFILE, tostring(percent))
+            else
+                local contents, size = love.filesystem.read(SCREENDIMFILE)
+                percent = tonumber(contents)
+            end
+        end
+        DEFSCREENSPACE = percent
+        percent = percent / 100.0
+        ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
+        ScreenWidth, ScreenHeight = ScreenWidth*percent, ScreenHeight*percent
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable = true, borderless= true, y=ScreenHeight/percent*(1-percent)/2.0, x=ScreenWidth/percent*(1-percent)/2.0})
+        refresh_state()
+    end
+
+    local function separate_spaces(s)
+        local chunks = {}
+        for substring in s:gmatch("%S+") do
+            table.insert(chunks, substring)
+        end
+        return chunks
+    end
+
+    function love.keypressed(key, scancode, isrepeat)
+        if key == "return" then
+            if State.hoover >= 0 then
+                State.hoover = -2
+            elseif State.hoover == -2 then
+                if State.waitingforsavename == true then
+                    save_n(State.waitingforsavename_n)
+                    State.waitingforsavename = false
+                elseif State.waitingforalchcombine == true then
+                    local first = true
+                    local text = ""
+                    local usedlocs = {}
+                    for i in string.gmatch(CommandLine.text, "%d+") do
+                        if first == true then
+                            text = i.."."
+                            first = false
+                            table.insert(usedlocs, i)
+                        elseif has_value(usedlocs, i) == false then
+                            text = text.." + "..i.."."
+                            table.insert(usedlocs, i)
+                        end
+                    end
+                    State.printingalchinventorytext = "\n\n\n\n\n\n"..text
+                    State.waitingforalchcombine = false
+                else
+                    local arguments = separate_spaces(CommandLine.text)
+                    if arguments[1] == "scale" then
+                        set_screen_dim(arguments[2], true)
+                    end
+                end
+            end
+        elseif key == "backspace"and State.hoover == -2 then
+            if string.len(CommandLine.text) > 0 then
+                CommandLine.text = CommandLine.text:sub(1,utf8.offset(CommandLine.text, -1)-1)
+            end
+        end
+    end
+
+    function love.keyreleased(key, scancode, isrepeat)
+        if  key == "escape" then
+            if State.leaf == 1 and State.oldleaf == 1 then
+                quitmessage()
+            else
+                change_page(State.oldleaf)
+            end
+        end
+    end
+
+    local function print_to_debug(text)
+        local width, height = translatexy(0.01, 0.97)
+        gfx.setColor(1,1,1)
+        gfx.rectangle("fill",width,height,SmallFont:getWidth(text),SmallFont:getHeight(text))
+        gfx.setFont(SmallFont)
+        gfx.setColor(1,0,0)
+        for i=1, SMALLFONTDRAWS do
+            gfx.print(text, width, height)
+        end
+    end
+
+    local function generate_npc()
+    end
+
+    local function mousepressed(x, y, mouse_button)
+        Buttons[State.leaf][State.hoover].call()
+    end
+
+    function love.mousemoved(x, y, dx, dy, istouch )
+        local found = false
+        found = find_hoovered_button(x, y)
+        if found == false and x > CommandLine.x and x < CommandLine.x + CommandLine.width and y > CommandLine.y and y < CommandLine.y + CommandLine.height and State.hoover ~= -2 then
+            State.hoover = -1
+        elseif found == false and State.hoover ~= -2 then
+            State.hoover = 0
+        end
+        Hooveredx, Hooveredy = math.floor(x/SQUARESIZE), math.floor(y/SQUARESIZE)
+        Currentx, Currenty = x,y
+    end
+
+    local function getposfromhoover()
+        local posx = math.min(math.max(State.xprefix+Hooveredx,1), MAP_SQUARE)
+        local posy = math.min(math.max(State.yprefix+Hooveredy,1), MAP_SQUARE)
+        return posx, posy
+    end
+
+    function love.load()
+        init_save()
+
+        love.window.setTitle("Doctor Sauerkraut")
+        love.window.setVSync(1)
+        love.keyboard.setKeyRepeat(true)
+
+        set_screen_dim(DEFSCREENSPACE, false)
 
         Tiles={
             {i = 1, name="Sparse grass", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
@@ -918,8 +934,6 @@ do
             {i = 2, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")},
             {i = 3, name="Dense grass", file = gfx.newImage("graphics/dense_grass.png")}
         }
-
-        randomlocation()
         --jata magneetti
         --for i=0, 999 do
         --    MapTotal = generate_map()
