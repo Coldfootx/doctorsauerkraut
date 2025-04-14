@@ -1,4 +1,4 @@
-SCREENSPACE = 0.88
+DEFSCREENSPACE = 88 -- a percentage, /100 . default 88
 SMALLFONT = 0.0125
 BIGFONT = 0.02
 BIGSQUARESCALE = 1.3
@@ -39,12 +39,13 @@ SAVEFILE = "savefile" -- +n
 COMPRESSION = "zlib"
 RANDOMNESSFILE = "randomness"
 SAVENAMEFILE = "savenames"
+SCREENDIMFILE = "screenpercentage"
 SAVEFILEAMOUNT = 10
 
 --STATEMENTS
 STARTING_RANDOMNESS = 300
 
-HELP_TEXT = 'Look at folder %APPDATA%/LOVE to save some space! This folder is \nfor starting directly from code.\n \nAnd look at folder %APPDATA%/gamename or simply /game. This folder is \nfor starting from the compiled executable.\n \nIf you delete the file "randomness" it is regenerated but edit its \ncontained number to avoid same map generation. Ideally it should be \naccumulating forever to avoid them.\n\nIn Linux look for these\n$XDG_DATA_HOME/love/ or ~/.local/share/love/\nlove may be replaced by game name or simply "game"\n\n\nAND NOW FOR LICENSES\n\n\nAdditional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game\nby Purlov\nnewest GPL\nhttps://www.gnu.org/licenses/gpl-3.0.html\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.wikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nWater tile - graphics/water.jpg\nhttps://opengameart.org/content/texture-water\nwww.GodsAndIdols.com and https://opengameart.org/users/jattenalle - Johannes Pihl\nCC-BY 3.0\nhttps://creativecommons.org/licenses/by/3.0/\n\n\nFlower tiles - graphics/flower%n.png\nI changed their colours somewhat\nhttps://opengameart.org/content/pixel-flower-icons\nFrom user https://opengameart.org/users/sicklyseraph - Josephine (sicklyseraph)\nCC-BY 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n\n\nRoad textures - graphics/road.png\nI am using the desert one\nhttps://opengameart.org/content/road-textures\nFrom user https://opengameart.org/users/dakal - dakal\nCC-BY-SA 3.0\nhttps://creativecommons.org/licenses/by-sa/3.0/\n\n\nRed outfit for main character - graphics/charright & left.png\nhttps://opengameart.org/content/occupational-icons\nhttps://opengameart.org/users/technopeasant - Graham L. Wilson (technopeasant)\nTiles have been drawn by David E. Gervais, and are published under the Creative \nCommons license. You are free to copy, distribute and transmit those tiles \nas long as you credit David Gervais as their creator.\nCC-BY 3.0\nhttp://creativecommons.org/licenses/by/3.0/\n\n\nA sand road - graphics/road2.png\nhttps://opengameart.org/content/pixel-art-top-down-tileset\nFrom user https://opengameart.org/users/dustdfg - Yevhen Babiichuk (DustDFG)\nCC-BY-SA 4.0\nhttps://creativecommons.org/licenses/by-sa/4.0/\n\n\nGold stuff in the Main Menu background\nhttps://opengameart.org/content/gold-treasure-icons-16x16s\nFrom user https://opengameart.org/users/bonsaiheldin - Bonsaiheldin\nPublic Domain\n\n\nA water tile\nhttps://opengameart.org/content/water\nBy Aswin Vos. https://opengameart.org/users/aswin909\nCC BY-SA 3.0\nhttps://creativecommons.org/licenses/by-sa/3.0/\n\n\nA water tile\nhttps://opengameart.org/content/water-texture-pack\nFrom user https://opengameart.org/users/proxy-games - Proxy Games\nPublic Domain'
+HELP_TEXT = 'ABOUT COMMANDS\n\n\nTo make a command. Hit enter, write command to the command line, hit enter\nOr activate the command line with the mouse\n\n\nUse the command "scale n" to set the screen size to n percent. \nThe value is saved. The default is 88\n\n\nSOMETHING ABOUT CLUTTER\n\n\nLook at folder %APPDATA%/LOVE to save some space! This folder is \nfor starting directly from code.\n \n\nAnd look at folder %APPDATA%/gamename or simply /game. This folder is \nfor starting from the compiled executable.\n \n\nIf you delete the file "randomness" it is regenerated but edit its \ncontained number to avoid same map generation. Ideally it should be \naccumulating forever to avoid them.\n\n\nIn Linux look for these\n$XDG_DATA_HOME/love/ or ~/.local/share/love/\nlove may be replaced by game name or simply "game"\n\n\nAND NOW FOR LICENSES\n\n\nAdditional licenses not mentioned in the license file in the game folder \nand folder love in the source distribution\n\n\nThis game\nby Purlov\nnewest GPL\nhttps://www.gnu.org/licenses/gpl-3.0.html\n\n\n----Libraries----\n\n\nlume\nA collection of functions for Lua, geared towards game development.\nUsing it for serializing data before compression.\nhttps://github.com/rxi/lume\nMIT \n--\n-- lume\n--\n-- Copyright (c) 2020 rxi\n--\n-- Permission is hereby granted, free of charge, to any person obtaining a copy of\n-- this software and associated documentation files (the "Software"), to deal in\n-- the Software without restriction, including without limitation the rights to\n-- use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies\n-- of the Software, and to permit persons to whom the Software is furnished to do\n-- so, subject to the following conditions:\n--\n-- The above copyright notice and this permission notice shall be included in all\n-- copies or substantial portions of the Software.\n--\n-- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n-- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n-- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n-- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n-- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n-- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n-- SOFTWARE.\n--\n\n\n----Graphics----\n\n\nBackground love potion - graphics/potion.jpg\nhttps://en.wikipedia.org/wiki/File:Filtre_d%27Amour.jpg\nFrom user https://commons.wikimedia.org/wiki/User:Arnaud_25 - Arnaud_25\nCreative Commons Attribution-Share Alike 4.0 International\nhttps://creativecommons.org/licenses/by-sa/4.0/deed.en\n\n\nWater tile - graphics/water.jpg\nhttps://opengameart.org/content/texture-water\nwww.GodsAndIdols.com and https://opengameart.org/users/jattenalle - Johannes Pihl\nCC-BY 3.0\nhttps://creativecommons.org/licenses/by/3.0/\n\n\nFlower tiles - graphics/flower%n.png\nI changed their colours somewhat\nhttps://opengameart.org/content/pixel-flower-icons\nFrom user https://opengameart.org/users/sicklyseraph - Josephine (sicklyseraph)\nCC-BY 4.0\nhttps://creativecommons.org/licenses/by/4.0/\n\n\nRoad textures - graphics/road.png\nI am using the desert one\nhttps://opengameart.org/content/road-textures\nFrom user https://opengameart.org/users/dakal - dakal\nCC-BY-SA 3.0\nhttps://creativecommons.org/licenses/by-sa/3.0/\n\n\nRed outfit for main character - graphics/charright & left.png\nhttps://opengameart.org/content/occupational-icons\nhttps://opengameart.org/users/technopeasant - Graham L. Wilson (technopeasant)\nTiles have been drawn by David E. Gervais, and are published under the Creative \nCommons license. You are free to copy, distribute and transmit those tiles \nas long as you credit David Gervais as their creator.\nCC-BY 3.0\nhttp://creativecommons.org/licenses/by/3.0/\n\n\nA sand road - graphics/road2.png\nhttps://opengameart.org/content/pixel-art-top-down-tileset\nFrom user https://opengameart.org/users/dustdfg - Yevhen Babiichuk (DustDFG)\nCC-BY-SA 4.0\nhttps://creativecommons.org/licenses/by-sa/4.0/\n\n\nGold stuff in the Main Menu background\nhttps://opengameart.org/content/gold-treasure-icons-16x16s\nFrom user https://opengameart.org/users/bonsaiheldin - Bonsaiheldin\nPublic Domain\n\n\nA water tile\nhttps://opengameart.org/content/water\nBy Aswin Vos. https://opengameart.org/users/aswin909\nCC BY-SA 3.0\nhttps://creativecommons.org/licenses/by-sa/3.0/\n\n\nA water tile\nhttps://opengameart.org/content/water-texture-pack\nFrom user https://opengameart.org/users/proxy-games - Proxy Games\nPublic Domain'
 
 do
     local love = require("love")
@@ -765,12 +766,29 @@ do
         SQUARESIZE = math.floor(ScreenWidth/TILEAMOUNT_W) -- /n is the amount of tiles
     end
 
-    function love.load()
-       --love.window.setVSync(0)
+    local function set_screen_dim(percent, overwrite)
+        if overwrite then
+            love.filesystem.write(SCREENDIMFILE, tostring(percent))
+        else
+            if love.filesystem.getInfo(SCREENDIMFILE) == nil then
+                love.filesystem.write(SCREENDIMFILE, tostring(percent))
+            else
+                local contents, size = love.filesystem.read(SCREENDIMFILE)
+                percent = tonumber(contents)
+            end
+        end
+        DEFSCREENSPACE = percent
+        percent = percent / 100.0
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
-        ScreenWidth, ScreenHeight = ScreenWidth*SCREENSPACE, ScreenHeight*SCREENSPACE
-        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight*(1-SCREENSPACE)/2.0, x=ScreenWidth*(1-SCREENSPACE)/2.0, vsync=1})
+        ScreenWidth, ScreenHeight = ScreenWidth*percent, ScreenHeight*percent
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable =false, borderless= true, y=ScreenHeight/percent*(1-percent)/2.0, x=ScreenWidth/percent*(1-percent)/2.0})
+    end
+
+    function love.load()
+        set_screen_dim(DEFSCREENSPACE, false)
+
         love.window.setTitle("Doctor Sauerkraut")
+        love.window.setVSync(1)
         love.keyboard.setKeyRepeat(true)
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
@@ -1062,10 +1080,10 @@ do
             end
             gfx.pop()
             gfx.push()
-            local _, my = translatexy(0, 0.22)
-            local scale = ScreenWidth*LOGOW/State.logo:getWidth()
-            gfx.scale(scale, scale)
-            gfx.draw(State.logo, ScreenWidth/scale/2-State.logo:getWidth()/2, my)
+            local _, my = translatexy(0, 0.166)
+            local scalex = ScreenWidth*LOGOW/State.logo:getWidth()
+            gfx.scale(scalex, scalex)
+            gfx.draw(State.logo, ScreenWidth/scalex/2-State.logo:getWidth()/2,my/scalex-State.logo:getHeight()/2)
             gfx.pop()
         elseif State.leaf == 2 then
             local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
