@@ -226,7 +226,7 @@ do
             end
         end
 
-        for times=1, math.floor(HOUSEAMOUNT) do
+        for times=1, HOUSEAMOUNT do
             local housex, housey = randomgen:random(MAP_SQUARE), randomgen:random(MAP_SQUARE)
             local housew, househ = randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY), randomgen:random(HOUSESIZE-HOUSESIZEVARY,HOUSESIZE+HOUSESIZEVARY)
             local endpointx = housex+housew
@@ -261,8 +261,12 @@ do
                     endpointy = MAP_SQUARE
                 end
                 for i=housex, endpointx do
-                    map[i][housey] = 3
-                    map[i][endpointy] = 3
+                    if map[i][housey] ~= 4 then
+                        map[i][housey] = 3
+                    end
+                    if map[i][endpointy] ~= 4 then
+                        map[i][endpointy] = 3
+                    end
                     for y = housey+1, endpointy-1 do
                         for x = i+1, i+endpointx-1 do
                             map[i][y] = 4
@@ -270,8 +274,12 @@ do
                     end
                 end
                 for j=housey, endpointy do
-                    map[housex][j] = 3
-                    map[endpointx][j] = 3
+                    if map[housex][j] == 4 then
+                        map[housex][j] = 3
+                    end
+                    if map[endpointx][j] == 4 then
+                        map[endpointx][j] = 3
+                    end
                 end
                 local whichwall = randomgen:random(4)
                 if whichwall == 1 then
@@ -326,11 +334,13 @@ do
             local fx = randomgen:random(MAP_SQUARE)
             local fy = randomgen:random(MAP_SQUARE)
             if Tiles[map[fx][fy]].obstacle == false and map[fx][fy] ~= 4 then
-                local choice = randomgen:random(2)
+                local choice = randomgen:random(3)
                 if choice == 1 then
                     map[fx][fy] = 7
                 elseif choice == 2 then
                     map[fx][fy] = 8
+                else
+                    map[fx][fy] = 6
                 end
             end
         end
@@ -867,7 +877,7 @@ do
             {i = 3, name="Wooden wall", file = gfx.newImage("graphics/wooden_wall.png"), obstacle = true},
             {i = 4, name="Wooden floor", file = gfx.newImage("graphics/wooden_floor.png"), obstacle = false},
             {i = 5, name="River", file = gfx.newImage("graphics/river.png"), obstacle = false},
-            {i = 6, name="Empty", file = gfx.newImage("graphics/water.jpg"), obstacle = true},
+            {i = 6, name="Red flower", file = gfx.newImage("graphics/flower3.png"), obstacle = false},
             {i = 7, name="White flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
             {i = 8, name="Black flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
             {i = 9, name="Sand road", file = gfx.newImage("graphics/road.png"), obstacle = false},
