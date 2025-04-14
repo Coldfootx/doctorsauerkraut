@@ -1049,26 +1049,58 @@ do
                     State.walkingwait = WALKSPEED
                     local centerw = math.floor(ScreenWidth/SQUARESIZE/2)
                     local centerh = math.floor(ScreenHeight/SQUARESIZE/2)
-                    if love.keyboard.isDown("w") then
-                        if Tiles[Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh-1, 1)]].obstacle == false then
+                    local wentthrough = false
+                    if love.keyboard.isDown("w") and love.keyboard.isDown("d") then
+                        if Tiles[Save.map[math.min(State.xprefix+centerw+1, MAP_SQUARE)][math.max(State.yprefix+centerh-1, 1)]].obstacle == false then
                             State.yprefix = math.max(State.yprefix - 1,-centerh+1)
-                        end
-                    end
-                    if love.keyboard.isDown("s") then
-                        if Tiles[Save.map[State.xprefix+centerw][math.min(State.yprefix+centerh+1,MAP_SQUARE)]].obstacle == false then
-                            State.yprefix = math.min(State.yprefix + 1, MAP_SQUARE-centerh-1)
-                        end
-                    end
-                    if love.keyboard.isDown("a") then
-                        if Tiles[Save.map[math.max(State.xprefix+centerw-1, 1)][State.yprefix+centerh]].obstacle == false then
-                            State.xprefix = math.max(State.xprefix - 1,-centerw+1)
-                            State.charchosen = State.charleft
-                        end
-                    end
-                    if love.keyboard.isDown("d") then
-                        if Tiles[Save.map[math.min(State.xprefix+centerw+1, MAP_SQUARE)][State.yprefix+centerh]].obstacle == false then
                             State.xprefix = math.min(State.xprefix + 1,MAP_SQUARE-centerw-1)
                             State.charchosen = State.charright
+                            wentthrough = true
+                        end
+                    elseif love.keyboard.isDown("w") and love.keyboard.isDown("a") then
+                        if Tiles[Save.map[math.max(State.xprefix+centerw-1, 1)][math.max(State.yprefix+centerh-1, 1)]].obstacle == false then
+                            State.yprefix = math.max(State.yprefix - 1,-centerh+1)
+                            State.xprefix = math.max(State.xprefix - 1,-centerw+1)
+                            State.charchosen = State.charleft
+                            wentthrough = true
+                        end
+                    elseif love.keyboard.isDown("s") and love.keyboard.isDown("d") then
+                        if Tiles[Save.map[math.min(State.xprefix+centerw+1, MAP_SQUARE)][math.min(State.yprefix+centerh+1,MAP_SQUARE)]].obstacle == false then
+                            State.yprefix = math.min(State.yprefix + 1, MAP_SQUARE-centerh-1)
+                            State.xprefix = math.min(State.xprefix + 1,MAP_SQUARE-centerw-1)
+                            State.charchosen = State.charright
+                            wentthrough = true
+                        end
+                    elseif love.keyboard.isDown("s") and love.keyboard.isDown("a") then
+                        if Tiles[Save.map[math.max(State.xprefix+centerw-1, 1)][math.min(State.yprefix+centerh+1,MAP_SQUARE)]].obstacle == false then
+                            State.yprefix = math.min(State.yprefix + 1, MAP_SQUARE-centerh-1)
+                            State.xprefix = math.max(State.xprefix - 1,-centerw+1)
+                            State.charchosen = State.charleft
+                            wentthrough = true
+                        end
+                    end
+                    if wentthrough == false then
+                        if love.keyboard.isDown("w") then
+                            if Tiles[Save.map[State.xprefix+centerw][math.max(State.yprefix+centerh-1, 1)]].obstacle == false then
+                                State.yprefix = math.max(State.yprefix - 1,-centerh+1)
+                            end
+                        end
+                        if love.keyboard.isDown("s") then
+                            if Tiles[Save.map[State.xprefix+centerw][math.min(State.yprefix+centerh+1,MAP_SQUARE)]].obstacle == false then
+                                State.yprefix = math.min(State.yprefix + 1, MAP_SQUARE-centerh-1)
+                            end
+                        end
+                        if love.keyboard.isDown("a") then
+                            if Tiles[Save.map[math.max(State.xprefix+centerw-1, 1)][State.yprefix+centerh]].obstacle == false then
+                                State.xprefix = math.max(State.xprefix - 1,-centerw+1)
+                                State.charchosen = State.charleft
+                            end
+                        end
+                        if love.keyboard.isDown("d") then
+                            if Tiles[Save.map[math.min(State.xprefix+centerw+1, MAP_SQUARE)][State.yprefix+centerh]].obstacle == false then
+                                State.xprefix = math.min(State.xprefix + 1,MAP_SQUARE-centerw-1)
+                                State.charchosen = State.charright
+                            end
                         end
                     end
                 end
