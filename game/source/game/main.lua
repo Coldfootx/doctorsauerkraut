@@ -148,8 +148,8 @@ do
     end
 
     local function calculate_prefix(px, py)
-        State.xprefix = px-math.floor(ScreenWidth/SQUARESIZE/2)
-        State.yprefix = py-math.floor(ScreenHeight/SQUARESIZE/2)
+        State.xprefix = math.floor(px)-math.floor(ScreenWidth/SQUARESIZE/2)
+        State.yprefix = math.floor(py)-math.floor(ScreenHeight/SQUARESIZE/2)
     end
 
     local function randomlocation()
@@ -615,6 +615,7 @@ do
                 calculate_prefix(Save.positionx, Save.positiony)
                 MapGenerated = true
                 change_page(6)
+                State.oldleaf = 1
             end
         end
     end
@@ -636,7 +637,7 @@ do
     end
 
     local function calculate_shifting_constants() -- when u scale
-        SQUARESIZE = math.floor(ScreenWidth/TILEAMOUNT_W) -- /n is the amount of tiles
+        SQUARESIZE = math.floor(ScreenWidth/TILEAMOUNT_W)+1 -- /n is the amount of tiles
     end
 
     local function backtomain()
@@ -696,7 +697,7 @@ do
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
         calculate_shifting_constants()
-
+        
         local fontsize, _ = translatexy(SMALLFONT,0)
         SmallFont = gfx.newFont(fontsize)
         fontsize, _ = translatexy(BIGFONT, 0)
@@ -783,6 +784,12 @@ do
         end
     end
 
+    local function getposfromhoover()
+        local posx = math.min(math.max(State.xprefix+Hooveredx,1), MAP_SQUARE)
+        local posy = math.min(math.max(State.yprefix+Hooveredy,1), MAP_SQUARE)
+        return posx, posy
+    end
+
     local function set_screen_dim(percent, overwrite)
         if overwrite then
             love.filesystem.write(SCREENDIMFILE, tostring(percent))
@@ -797,8 +804,8 @@ do
         DEFSCREENSPACE = percent
         percent = percent / 100.0
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
-        ScreenWidth, ScreenHeight = ScreenWidth*percent, ScreenHeight*percent
-        love.window.setMode(ScreenWidth, ScreenHeight, {resizable = true, borderless= true, y=ScreenHeight/percent*(1-percent)/2.0, x=ScreenWidth/percent*(1-percent)/2.0})
+        ScreenWidth, ScreenHeight = math.floor(ScreenWidth*percent), math.floor(ScreenHeight*percent)
+        love.window.setMode(ScreenWidth, ScreenHeight, {resizable = false, borderless = true, y=ScreenHeight/percent*(1-percent)/2.0, x=ScreenWidth/percent*(1-percent)/2.0})
     end
 
     local function separate_spaces(s)
@@ -835,9 +842,12 @@ do
                     State.waitingforalchcombine = false
                 else
                     local arguments = separate_spaces(CommandLine.text)
-                    if arguments[1] == "scale" and type(tonumber(arguments[2])) == "number" then
-                        set_screen_dim(tonumber(arguments[2]), true)
-                        refresh_state()
+                    if #arguments > 0 then
+                        local command = string.lower(arguments[1])
+                        if command == "scale" and type(tonumber(arguments[2])) == "number" then
+                            set_screen_dim(tonumber(arguments[2]), true)
+                            refresh_state()
+                        end
                     end
                 end
             end
@@ -886,12 +896,6 @@ do
         end
         Hooveredx, Hooveredy = math.floor(x/SQUARESIZE), math.floor(y/SQUARESIZE)
         Currentx, Currenty = x,y
-    end
-
-    local function getposfromhoover()
-        local posx = math.min(math.max(State.xprefix+Hooveredx,1), MAP_SQUARE)
-        local posy = math.min(math.max(State.yprefix+Hooveredy,1), MAP_SQUARE)
-        return posx, posy
     end
 
     function love.load()
@@ -1136,11 +1140,11 @@ do
             gfx.draw(State.logo, ScreenWidth/scalex/2-State.logo:getWidth()/2,my/scalex-State.logo:getHeight()/2)
             gfx.pop()
         elseif State.leaf == 2 then
-            local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
-            local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
+            local xamount = ScreenWidth/SQUARESIZE
+            local yamount = ScreenHeight/SQUARESIZE
             gfx.setColor(255, 255, 255, 255)
-            for i=1, xamount do
-                for j=1, yamount do
+            for i=1, math.floor(xamount)+1 do
+                for j=1, math.floor(yamount)+1 do
                     gfx.push()
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_SQUARE)][math.min(math.max(1,j+State.yprefix-1),MAP_SQUARE)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
@@ -1190,11 +1194,11 @@ do
             gfx.rectangle("line", Buttons[State.leaf][2].x-beyondbuttonw, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height, Buttons[State.leaf][2].width+ 2*beyondbuttonw, Buttons[State.leaf][3].y-(Buttons[State.leaf][2].y+Buttons[State.leaf][2].height))
             gfx.print(State.help_text, Buttons[State.leaf][2].x-beyondbuttonw+State.helppadding, Buttons[State.leaf][2].y+Buttons[State.leaf][2].height+State.helppadding)
         elseif State.leaf == 6 then
-            local xamount = math.floor(ScreenWidth/SQUARESIZE)+1
-            local yamount = math.floor(ScreenHeight/SQUARESIZE)+1
+            local xamount = ScreenWidth/SQUARESIZE
+            local yamount = ScreenHeight/SQUARESIZE
             gfx.setColor(255, 255, 255, 255)
-            for i=1, xamount do
-                for j=1, yamount do
+            for i=1, math.floor(xamount)+1 do
+                for j=1, math.floor(yamount)+1 do
                     gfx.push()
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_SQUARE)][math.min(math.max(1,j+State.yprefix-1),MAP_SQUARE)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
@@ -1330,7 +1334,7 @@ do
 
         local posx, posy = getposfromhoover()
 
-        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", xpos="..Save.positionx.."|"..posx..", ypos="..Save.positiony.."|"..posy..", mousehoover="..Tiles[Save.map[posx][posy]].name..", wateranimationspeed="..WATERANIMATIONSPEED)
+        print_to_debug(ScreenWidth.."x"..ScreenHeight..", vsync="..love.window.getVSync()..", fps="..love.timer.getFPS()..", mem="..string.format("%.3f", collectgarbage("count")/1000.0).."MB, randomseed="..Randomseed..", xpos="..Save.positionx.."|"..posx..", ypos="..Save.positiony.."|"..posy..", mousehoover="..Tiles[Save.map[posx][posy]].name..", SQUARESIZE="..SQUARESIZE)
         
         gfx.setCanvas()
         gfx.setColor(1, 1, 1, 1)
