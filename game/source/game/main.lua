@@ -12,14 +12,14 @@ MAP_SQUARE = 512
 SMALLFONTDRAWS = 3
 SCROLLLINESMAP = 2
 SCROLLLINES = 9
-TILEAMOUNT = 66
+TILEAMOUNT_W = 66
 SQUARESIZE = 0
 
 -- lower speed value is faster
 FPS = 75
 WALKSPEED = 1/FPS*10
 WATERSPARKLESPEED = 1/FPS
-WATERANIMATIONSPEED = math.floor(TILEAMOUNT*1.89)
+WATERANIMATIONSPEED = math.floor(TILEAMOUNT_W*1.89)
 
 BUTTONHOOVERCOLOR = {0.5,0,0}
 BUTTONNORMALCOLOR = {0.5,0.5,0.5}
@@ -274,12 +274,8 @@ do
                     end
                 end
                 for j=housey, endpointy do
-                    if map[housex][j] == 4 then
-                        map[housex][j] = 3
-                    end
-                    if map[endpointx][j] == 4 then
-                        map[endpointx][j] = 3
-                    end
+                    map[housex][j] = 3
+                    map[endpointx][j] = 3
                 end
                 local whichwall = randomgen:random(4)
                 if whichwall == 1 then
@@ -766,7 +762,7 @@ do
     end
 
     local function calculate_shifting_constants() -- when u scale
-        SQUARESIZE = math.floor(ScreenWidth/TILEAMOUNT) -- /n is the amount of tiles
+        SQUARESIZE = math.floor(ScreenWidth/TILEAMOUNT_W) -- /n is the amount of tiles
     end
 
     function love.load()
@@ -889,12 +885,14 @@ do
 
         TilestoAlch = {
             {7,1},
-            {8,2}
+            {8,2},
+            {6,3}
         }
 
         AlchItems={
-            {i = 1, name="White flower", file = gfx.newImage("graphics/sparse_grass.png"), obstacle = false},
-            {i = 2, name="Black flower", file = gfx.newImage("graphics/dense_grass.png"), obstacle = false}
+            {i = 1, name="White flower", file = gfx.newImage("graphics/flower1.png"), obstacle = false},
+            {i = 2, name="Black flower", file = gfx.newImage("graphics/flower2.png"), obstacle = false},
+            {i = 3, name="Red flower", file = gfx.newImage("graphics/flower3.png"), obstacle = false}
         }
 
         NPC_tiles ={
