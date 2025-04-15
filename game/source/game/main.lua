@@ -1144,14 +1144,15 @@ do
         elseif State.leaf == 2 then
             local xamount = ScreenWidth/SQUARESIZE
             local yamount = ScreenHeight/SQUARESIZE
+            local squarerounded = math.floor(SQUARESIZE+0.5)
             gfx.setColor(255, 255, 255, 255)
-            for i=1, math.floor(xamount+0.5) do
-                for j=1, math.floor(yamount+0.5) do
+            for i=1, math.floor(xamount+0.5)+2 do
+                for j=1, math.floor(yamount+0.5)+2 do
                     gfx.push()
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_SQUARE)][math.min(math.max(1,j+State.yprefix-1),MAP_SQUARE)]].file
-                    local scale = ScreenWidth/xamount/imagefile:getWidth()
+                    local scale = ScreenWidth/xamount/math.floor(imagefile:getWidth()+0.5)
                     gfx.scale(scale, scale)
-                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale, (j-1)*SQUARESIZE/scale)
+                    gfx.draw(imagefile, (i-1)*squarerounded/scale, (j-1)*squarerounded/scale)
                     gfx.pop()
                 end
             end
@@ -1198,22 +1199,23 @@ do
         elseif State.leaf == 6 then
             local xamount = ScreenWidth/SQUARESIZE
             local yamount = ScreenHeight/SQUARESIZE
+            local squarerounded = math.floor(SQUARESIZE+0.5)
             gfx.setColor(255, 255, 255, 255)
-            for i=1, math.floor(xamount+0.5) do
-                for j=1, math.floor(yamount+0.5) do
+            for i=1, math.floor(xamount+0.5)+2 do
+                for j=1, math.floor(yamount+0.5)+2 do
                     gfx.push()
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_SQUARE)][math.min(math.max(1,j+State.yprefix-1),MAP_SQUARE)]].file
-                    local scale = ScreenWidth/xamount/imagefile:getWidth()
+                    local scale = ScreenWidth/xamount/math.floor(imagefile:getWidth()+0.5)
                     gfx.scale(scale, scale)
-                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale, (j-1)*SQUARESIZE/scale)
+                    gfx.draw(imagefile, (i-1)*squarerounded/scale, (j-1)*squarerounded/scale)
                     gfx.pop()
                 end
             end
             gfx.push()
             local imagefile = State.charchosen
-            local scalec = ScreenWidth/xamount/imagefile:getWidth()*BIGSQUARESCALE
+            local scalec = ScreenWidth/xamount/math.floor(imagefile:getWidth()+0.5)*BIGSQUARESCALE
             gfx.scale(scalec, scalec)
-            gfx.draw(imagefile, SQUARESIZE*math.floor(ScreenWidth/2/SQUARESIZE)/scalec+0.5*SQUARESIZE/scalec-imagefile:getWidth()/2, SQUARESIZE*math.floor(ScreenHeight/2/SQUARESIZE)/scalec+0.5*SQUARESIZE/scalec-imagefile:getHeight()/2)
+            gfx.draw(imagefile, squarerounded*math.floor(ScreenWidth/2/SQUARESIZE)/scalec+0.5*squarerounded/scalec-imagefile:getWidth()/2, squarerounded*math.floor(ScreenHeight/2/SQUARESIZE)/scalec+0.5*squarerounded/scalec-imagefile:getHeight()/2)
             gfx.pop()
         elseif State.leaf == 7 then
             gfx.setColor(0.3,0.3,0.3)
