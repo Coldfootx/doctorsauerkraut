@@ -72,8 +72,8 @@ do
     Randomseed = choice
 
     local function savefile(save_number)
-        Save.positionx = State.xprefix + math.floor(ScreenWidth/SQUARESIZE/2)
-        Save.positiony = State.yprefix + math.floor(ScreenHeight/SQUARESIZE/2)
+        Save.positionx = math.floor(State.xprefix + ScreenWidth/SQUARESIZE/2+0.5)
+        Save.positiony = math.floor(State.yprefix + ScreenHeight/SQUARESIZE/2+0.5)
 
         local compressed = love.data.compress("string", COMPRESSION, lume.serialize(Save), 9)
 
@@ -148,8 +148,8 @@ do
     end
 
     local function calculate_prefix(px, py)
-        State.xprefix = math.floor(px)-math.floor(ScreenWidth/SQUARESIZE/2)
-        State.yprefix = math.floor(py)-math.floor(ScreenHeight/SQUARESIZE/2)
+        State.xprefix = math.floor(px-ScreenWidth/SQUARESIZE/2+0.5)
+        State.yprefix = math.floor(py-ScreenHeight/SQUARESIZE/2+0.5)
     end
 
     local function randomlocation()
@@ -506,7 +506,7 @@ do
         Save.map = map
         MapGenerated = true
 
-        randomlocation()
+        --randomlocation()
     end
 
     local function init_save()
@@ -637,7 +637,7 @@ do
     end
 
     local function calculate_shifting_constants() -- when u scale
-        SQUARESIZE = math.floor(ScreenWidth/TILEAMOUNT_W)+1 -- /n is the amount of tiles
+        SQUARESIZE = ScreenWidth/TILEAMOUNT_W -- /n is the amount of tiles
     end
 
     local function backtomain()
@@ -697,6 +697,8 @@ do
         Canvas = gfx.newCanvas(ScreenWidth, ScreenHeight)
 
         calculate_shifting_constants()
+        local correctsquare = ScreenWidth/TILEAMOUNT_W
+        calculate_prefix(State.xprefix+ScreenWidth/correctsquare/2, State.yprefix+ScreenHeight/correctsquare/2)
         
         local fontsize, _ = translatexy(SMALLFONT,0)
         SmallFont = gfx.newFont(fontsize)
@@ -804,7 +806,7 @@ do
         DEFSCREENSPACE = percent
         percent = percent / 100.0
         ScreenWidth, ScreenHeight = love.window.getDesktopDimensions()
-        ScreenWidth, ScreenHeight = math.floor(ScreenWidth*percent), math.floor(ScreenHeight*percent)
+        ScreenWidth, ScreenHeight = ScreenWidth*percent, ScreenHeight*percent
         love.window.setMode(ScreenWidth, ScreenHeight, {resizable = false, borderless = true, y=ScreenHeight/percent*(1-percent)/2.0, x=ScreenWidth/percent*(1-percent)/2.0})
     end
 
@@ -1143,13 +1145,13 @@ do
             local xamount = ScreenWidth/SQUARESIZE
             local yamount = ScreenHeight/SQUARESIZE
             gfx.setColor(255, 255, 255, 255)
-            for i=1, math.floor(xamount)+1 do
-                for j=1, math.floor(yamount)+1 do
+            for i=1, math.floor(xamount+0.5) do
+                for j=1, math.floor(yamount+0.5) do
                     gfx.push()
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_SQUARE)][math.min(math.max(1,j+State.yprefix-1),MAP_SQUARE)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
-                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
+                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale, (j-1)*SQUARESIZE/scale)
                     gfx.pop()
                 end
             end
@@ -1197,13 +1199,13 @@ do
             local xamount = ScreenWidth/SQUARESIZE
             local yamount = ScreenHeight/SQUARESIZE
             gfx.setColor(255, 255, 255, 255)
-            for i=1, math.floor(xamount)+1 do
-                for j=1, math.floor(yamount)+1 do
+            for i=1, math.floor(xamount+0.5) do
+                for j=1, math.floor(yamount+0.5) do
                     gfx.push()
                     local imagefile = Tiles[Save.map[math.min(math.max(1,i+State.xprefix-1),MAP_SQUARE)][math.min(math.max(1,j+State.yprefix-1),MAP_SQUARE)]].file
                     local scale = ScreenWidth/xamount/imagefile:getWidth()
                     gfx.scale(scale, scale)
-                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale,(j-1)*SQUARESIZE/scale)
+                    gfx.draw(imagefile, (i-1)*SQUARESIZE/scale, (j-1)*SQUARESIZE/scale)
                     gfx.pop()
                 end
             end
